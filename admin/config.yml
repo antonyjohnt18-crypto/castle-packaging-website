@@ -1,0 +1,48 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: ""
+public_folder: "/"
+
+collections:
+  - name: "company"
+    label: "Company & Contact Info"
+    files:
+      - file: "castle-website-data-company.json"
+        label: "Contact & Company Details"
+        name: "company"
+        fields:
+          - { label: "Company Name", name: "companyName", widget: "string" }
+          - { label: "Address Lines (one per line)", name: "addressLines", widget: "list" }
+          - { label: "Phone (how it's shown)", name: "phoneDisplay", widget: "string", hint: "e.g. +91 96115 35171" }
+          - { label: "Phone (for the click-to-call link)", name: "phoneDial", widget: "string", hint: "No spaces, e.g. +919611535171" }
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "GSTIN", name: "gstin", widget: "string" }
+          - { label: "WhatsApp Number", name: "whatsappNumber", widget: "string", hint: "Country code + number, no + or spaces, e.g. 919611535171" }
+          - { label: "Instagram URL", name: "instagram", widget: "string" }
+          - { label: "Facebook URL", name: "facebook", widget: "string" }
+          - { label: "Twitter / X URL", name: "twitter", widget: "string" }
+
+  - name: "products"
+    label: "Products"
+    files:
+      - file: "castle-website-data-products.json"
+        label: "Product Catalog"
+        name: "productCatalog"
+        fields:
+          - label: "Products"
+            name: "products"
+            widget: "list"
+            summary: "{{name}}"
+            fields:
+              - { label: "Internal ID (no spaces, keep unique)", name: "id", widget: "string" }
+              - { label: "Product Name", name: "name", widget: "string" }
+              - { label: "Variant / Category Label", name: "variant", widget: "string", hint: "e.g. Kraft Paper, or Semi Soft · Soft · Virgin Cellulose Fibre" }
+              - label: "Accent Color"
+                name: "variantColor"
+                widget: "select"
+                options: ["gold", "sage", "kraft"]
+                hint: "Just a visual accent color for the label on the site"
+              - { label: "Description", name: "description", widget: "text" }
+              - { label: "Photo", name: "image", widget: "image" }
