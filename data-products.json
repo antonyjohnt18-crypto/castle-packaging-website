@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "id": "kraft",
+      "name": "Paper Bags — Kraft",
+      "variant": "Kraft Paper",
+      "variantColor": "kraft",
+      "description": "Sturdy kraft paper bags suited for retail, grocery and general carry-bag use. Custom sizes and printing available.",
+      "image": "castle-website-photo-bag-kraft.png"
+    },
+    {
+      "id": "recycled",
+      "name": "Paper Bags — Recycled",
+      "variant": "Recycled Paper",
+      "variantColor": "sage",
+      "description": "Made from recycled paper stock for businesses that want a lower environmental footprint without compromising strength.",
+      "image": "castle-website-photo-bag-recycled.png"
+    },
+    {
+      "id": "virgin",
+      "name": "Paper Bags — Virgin",
+      "variant": "Virgin Paper",
+      "variantColor": "gold",
+      "description": "Premium virgin paper bags for a cleaner, brighter finish — ideal when print clarity and presentation matter most.",
+      "image": "castle-website-photo-bag-virgin.png"
+    },
+    {
+      "id": "covers",
+      "name": "Paper Covers",
+      "variant": "All Sizes",
+      "variantColor": "sage",
+      "description": "Paper covers for packing and wrapping needs, available in a range of sizes with custom printing on request.",
+      "image": "castle-website-photo-covers.png"
+    },
+    {
+      "id": "cups",
+      "name": "Paper Cups",
+      "variant": "Multiple Sizes",
+      "variantColor": "kraft",
+      "description": "Paper cups for beverages and food service, available in multiple sizes with optional custom branding.",
+      "image": "castle-website-photo-cups.png"
+    },
+    {
+      "id": "tissues",
+      "name": "Paper Tissues",
+      "variant": "Semi Soft · Soft · Virgin Cellulose Fibre",
+      "variantColor": "gold",
+      "description": "Paper tissues across semi soft, soft and virgin cellulose fibre grades, suited for HORECA, retail and institutional use.",
+      "image": "castle-website-photo-tissues.png"
+    }
+  ]
+}
