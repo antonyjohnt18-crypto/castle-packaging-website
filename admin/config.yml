@@ -92,9 +92,5 @@ collections:
               - { label: "Title", name: "title", widget: "string" }
               - { label: "Date (shown as typed, e.g. 21 Jul 2026)", name: "date", widget: "string" }
               - { label: "Short Text", name: "excerpt", widget: "text" }
-              - label: "Photos (optional, add 1 or 2)"
-                name: "images"
-                widget: "list"
-                required: false
-                fields:
-                  - { label: "Image", name: "src", widget: "image" }
+              - { label: "Photo 1 (optional)", name: "image1", widget: "image", required: false }
+              - { label: "Photo 2 (optional)", name: "image2", widget: "image", required: false }
