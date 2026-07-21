@@ -4,13 +4,15 @@
       "id": "site-launch",
       "title": "Castle Packaging website is now live",
       "date": "21 Jul 2026",
-      "excerpt": "We've launched our new website with an easy way to browse our products, request quotes, and get in touch. We'll post updates here as we add new products and services — check back anytime."
+      "excerpt": "We've launched our new website with an easy way to browse our products, request quotes, and get in touch. We'll post updates here as we add new products and services — check back anytime.",
+      "images": []
     },
     {
       "id": "custom-printing",
       "title": "Custom printing available on all products",
       "date": "15 Jul 2026",
-      "excerpt": "Custom printing is now available across our full range — paper bags, covers, cups and tissues. Share your artwork and quantity requirement and we'll get back to you with pricing."
+      "excerpt": "Custom printing is now available across our full range — paper bags, covers, cups and tissues. Share your artwork and quantity requirement and we'll get back to you with pricing.",
+      "images": []
     }
   ]
 }

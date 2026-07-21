@@ -66,11 +66,21 @@
       .then(function (d) {
         if (!d || !d.posts || !d.posts.length) return;
         var html = d.posts.map(function (p) {
+          var imgs = (p.images || []).filter(Boolean);
+          var visual = '';
+          if (imgs.length === 1) {
+            visual = '<div class="news-visual"><img src="' + imgs[0] + '" alt="' + p.title + '"></div>';
+          } else if (imgs.length > 1) {
+            visual = '<div class="news-visual two-up"><img src="' + imgs[0] + '" alt="' + p.title + '"><img src="' + imgs[1] + '" alt="' + p.title + '"></div>';
+          }
           return (
             '<div class="card news-card">' +
-              '<p class="news-date">' + p.date + '</p>' +
-              '<h3>' + p.title + '</h3>' +
-              '<p>' + p.excerpt + '</p>' +
+              visual +
+              '<div class="news-card-body">' +
+                '<p class="news-date">' + p.date + '</p>' +
+                '<h3>' + p.title + '</h3>' +
+                '<p>' + p.excerpt + '</p>' +
+              '</div>' +
             '</div>'
           );
         }).join('');
