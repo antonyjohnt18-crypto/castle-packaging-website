@@ -96,4 +96,5 @@ collections:
                 name: "images"
                 widget: "list"
                 required: false
-                field: { label: "Image", name: "src", widget: "image" }
+                fields:
+                  - { label: "Image", name: "src", widget: "image" }
