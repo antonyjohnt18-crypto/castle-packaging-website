@@ -59,6 +59,20 @@
       .catch(function () { /* keep static fallback cards */ });
   }
 
+  fetch('data-pages.json', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (p) {
+      if (!p) return;
+      ['home', 'about', 'quote'].forEach(function (page) {
+        var section = p[page];
+        if (!section) return;
+        Object.keys(section).forEach(function (key) {
+          setText('[data-cms="pages.' + page + '.' + key + '"]', section[key]);
+        });
+      });
+    })
+    .catch(function () { /* keep static fallback content */ });
+
   var newsGrid = document.querySelector('[data-cms-collection="news"]');
   if (newsGrid) {
     fetch('data-news.json', { cache: 'no-store' })
