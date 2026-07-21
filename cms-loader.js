@@ -66,7 +66,7 @@
       .then(function (d) {
         if (!d || !d.posts || !d.posts.length) return;
         var html = d.posts.map(function (p) {
-          var imgs = (p.images || []).map(function (im) { return im && im.src; }).filter(Boolean);
+          var imgs = [p.image1, p.image2].filter(Boolean);
           var visual = '';
           if (imgs.length === 1) {
             visual = '<div class="news-visual"><img src="' + imgs[0] + '" alt="' + p.title + '"></div>';
