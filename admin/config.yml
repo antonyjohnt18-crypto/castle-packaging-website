@@ -75,3 +75,20 @@ collections:
                 hint: "Just a visual accent color for the label on the site"
               - { label: "Description", name: "description", widget: "text" }
               - { label: "Photo", name: "image", widget: "image" }
+
+  - name: "news"
+    label: "News & Updates"
+    files:
+      - file: "data-news.json"
+        label: "News Posts"
+        name: "newsPosts"
+        fields:
+          - label: "Posts"
+            name: "posts"
+            widget: "list"
+            summary: "{{title}}"
+            fields:
+              - { label: "Internal ID (no spaces, keep unique)", name: "id", widget: "string" }
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Date (shown as typed, e.g. 21 Jul 2026)", name: "date", widget: "string" }
+              - { label: "Short Text", name: "excerpt", widget: "text" }
