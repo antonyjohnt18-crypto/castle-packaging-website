@@ -31,8 +31,8 @@ logo_url: https://decapbridge.com/decapcms-with-bridge.svg
 # Add site links in Decap CMS (optional)
 site_url: https://willowy-axolotl-5288ff.netlify.app
 
-media_folder: ""
-public_folder: "/"
+media_folder: "uploads"
+public_folder: "/uploads"
 
 collections:
   - name: "company"
