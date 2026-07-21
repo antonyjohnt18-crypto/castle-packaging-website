@@ -1,5 +1,5 @@
 // Castle Packaging — CMS content loader
-// Reads castle-website-data-company.json and castle-website-data-products.json
+// Reads data-company.json and data-products.json
 // and injects their values into elements marked with data-cms / data-cms-href / data-cms-html.
 // The HTML already contains today's content as a fallback, so if these fetches fail
 // (e.g. opened as a local file:// page without a server) the site still looks correct —
@@ -15,7 +15,7 @@
     document.querySelectorAll(selector).forEach(function (el) { el.setAttribute('href', value); });
   }
 
-  fetch('castle-website-data-company.json', { cache: 'no-store' })
+  fetch('data-company.json', { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (c) {
       if (!c) return;
@@ -37,7 +37,7 @@
 
   var grid = document.querySelector('[data-cms-collection="products"]');
   if (grid) {
-    fetch('castle-website-data-products.json', { cache: 'no-store' })
+    fetch('data-products.json', { cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (d) {
         if (!d || !d.products || !d.products.length) return;
@@ -55,6 +55,26 @@
           );
         }).join('');
         grid.innerHTML = html;
+      })
+      .catch(function () { /* keep static fallback cards */ });
+  }
+
+  var newsGrid = document.querySelector('[data-cms-collection="news"]');
+  if (newsGrid) {
+    fetch('data-news.json', { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || !d.posts || !d.posts.length) return;
+        var html = d.posts.map(function (p) {
+          return (
+            '<div class="card news-card">' +
+              '<p class="news-date">' + p.date + '</p>' +
+              '<h3>' + p.title + '</h3>' +
+              '<p>' + p.excerpt + '</p>' +
+            '</div>'
+          );
+        }).join('');
+        newsGrid.innerHTML = html;
       })
       .catch(function () { /* keep static fallback cards */ });
   }

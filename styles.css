@@ -218,6 +218,12 @@ footer.site-footer { background: var(--ink); color: #C9C0AE; padding: 52px 24px 
 .value-list .card { display: flex; gap: 16px; align-items: flex-start; }
 .badge-gst { display: inline-block; background: var(--bg-alt); color: var(--ink); font-size: 12px; font-weight: bold; padding: 5px 12px; border-radius: 6px; margin-top: 8px; }
 
+/* ---------- News ---------- */
+.news-card { display: flex; flex-direction: column; }
+.news-card .news-date { font-size: 12px; font-weight: bold; color: var(--gold-deep); text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 8px; }
+.news-card h3 { font-size: 17px; margin: 0 0 10px; color: var(--ink); }
+.news-card p:not(.news-date) { font-size: 13.5px; color: var(--muted); margin: 0; }
+
 /* colorful top-border variant for simple info cards */
 .card.stripe-gold { border-top: 3px solid var(--gold); }
 .card.stripe-sage { border-top: 3px solid var(--sage); }
