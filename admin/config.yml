@@ -35,6 +35,52 @@ media_folder: "uploads"
 public_folder: "/uploads"
 
 collections:
+  - name: "pages"
+    label: "Website Text"
+    files:
+      - file: "data-pages.json"
+        label: "Home / About / Quote Page Text"
+        name: "pagesText"
+        fields:
+          - label: "Home Page"
+            name: "home"
+            widget: "object"
+            fields:
+              - { label: "Hero Headline", name: "heroHeadline", widget: "string" }
+              - { label: "Hero Subtext", name: "heroLead", widget: "text" }
+              - { label: "Feature 1 Title", name: "feature1Title", widget: "string" }
+              - { label: "Feature 1 Text", name: "feature1Text", widget: "text" }
+              - { label: "Feature 2 Title", name: "feature2Title", widget: "string" }
+              - { label: "Feature 2 Text", name: "feature2Text", widget: "text" }
+              - { label: "Feature 3 Title", name: "feature3Title", widget: "string" }
+              - { label: "Feature 3 Text", name: "feature3Text", widget: "text" }
+              - { label: "Bottom Banner Headline", name: "ctaHeadline", widget: "string" }
+              - { label: "Bottom Banner Text", name: "ctaText", widget: "text" }
+          - label: "About Page"
+            name: "about"
+            widget: "object"
+            fields:
+              - { label: "\"Who We Are\" Headline", name: "whoWeAreHeadline", widget: "string" }
+              - { label: "\"Who We Are\" Text", name: "whoWeAreText", widget: "text" }
+              - { label: "\"What We Manufacture\" Title", name: "manufactureTitle", widget: "string" }
+              - { label: "\"What We Manufacture\" Text", name: "manufactureText", widget: "text" }
+              - { label: "\"Who We Serve\" Title", name: "serveTitle", widget: "string" }
+              - { label: "\"Who We Serve\" Text", name: "serveText", widget: "text" }
+              - { label: "Mission Statement", name: "missionText", widget: "text" }
+              - { label: "Vision Statement", name: "visionText", widget: "text" }
+              - { label: "Value 1 Title", name: "value1Title", widget: "string" }
+              - { label: "Value 1 Text", name: "value1Text", widget: "text" }
+              - { label: "Value 2 Title", name: "value2Title", widget: "string" }
+              - { label: "Value 2 Text", name: "value2Text", widget: "text" }
+              - { label: "Value 3 Title", name: "value3Title", widget: "string" }
+              - { label: "Value 3 Text", name: "value3Text", widget: "text" }
+          - label: "Request a Quote Page"
+            name: "quote"
+            widget: "object"
+            fields:
+              - { label: "Headline", name: "headline", widget: "string" }
+              - { label: "Subtext", name: "subtext", widget: "text" }
+
   - name: "company"
     label: "Company & Contact Info"
     files:
