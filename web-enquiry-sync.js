@@ -3,10 +3,14 @@
 // When firebase-site-config.js has real values in it, this writes a copy
 // of every Quote Request submission straight into the Business Suite
 // app's Firestore database (a new "Website Enquiries" inbox on the Leads
-// page picks these up). Until then, it quietly does nothing — the form
-// keeps behaving exactly as it always has, including your existing
-// Netlify email notification, which this never replaces or interferes
-// with; it only adds a second, faster path into the app itself.
+// page picks these up), then sends the visitor to the thank-you page.
+//
+// This used to also POST the form to "/" so Netlify's own built-in form
+// handler would send an email notification. That only works on Netlify —
+// now that the site is hosted on DigitalOcean, that POST has nowhere to
+// go and was causing a routing error on submission. Firestore (synced
+// into the Leads page) is now the only submission path; nothing is lost
+// since every enquiry already showed up there first.
 //
 // This file only runs on quote.html (it exits immediately if #quoteForm
 // isn't on the page), and only ever intercepts the form's submission once
@@ -42,31 +46,13 @@ document.addEventListener('DOMContentLoaded', function () {
     return el ? String(el.value || '').trim() : '';
   }
 
-  // Netlify's own AJAJ pattern for a JS-driven form submission: POST the
-  // form-encoded fields to "/" so its build-time form handler still picks
-  // it up (same email notification as always), then we navigate to the
-  // thank-you page ourselves instead of a full-page native form POST.
-  function encodeFormData() {
-    const data = new FormData(form);
-    const params = new URLSearchParams();
-    for (const pair of data.entries()) params.append(pair[0], pair[1]);
-    return params.toString();
-  }
-
-  function submitNatively() {
-    // Fallback if the AJAJ submission below fails for any reason — behaves
-    // exactly like the form did before this file ever existed.
-    form.removeEventListener('submit', onSubmit);
-    form.submit();
-  }
-
   async function onSubmit(e) {
     e.preventDefault();
 
-    // Netlify's honeypot: a real visitor never fills this in. A filled
+    // Honeypot field: a real visitor never fills this in. A filled
     // bot-field means a bot submitted the form — skip creating a sync
-    // entry for it, but don't otherwise interfere with Netlify's own
-    // submission/spam handling below.
+    // entry for it, but still send them on to the thank-you page below
+    // so a bot can't tell its submission was ignored.
     const isBot = fieldVal('bot-field');
     if (!isBot) {
       const entry = {
@@ -96,16 +82,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    try {
-      await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encodeFormData(),
-      });
-      window.location.href = form.getAttribute('action') || '/thank-you.html';
-    } catch (err) {
-      submitNatively();
-    }
+    // The Firestore write above (or its 3-second timeout) has already
+    // happened by this point — either way, send the visitor on to the
+    // thank-you page. No further network request needed.
+    window.location.href = form.getAttribute('action') || '/thank-you.html';
   }
 
   form.addEventListener('submit', onSubmit);
