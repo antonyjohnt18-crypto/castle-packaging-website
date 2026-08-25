@@ -19,28 +19,28 @@ Editing only works once the site is live on the internet — opening the HTML fi
 
 ## Step 1 — Rename the files
 
-Right now every file is named with a `castle-website-` prefix (a workaround from how I built these). Before uploading, rename them by removing that prefix, and put two files into a new subfolder called `admin`:
+Right now every file is named with a `` prefix (a workaround from how I built these). Before uploading, rename them by removing that prefix, and put two files into a new subfolder called `admin`:
 
 | Current name | Rename to |
 |---|---|
-| castle-website-index.html | index.html |
-| castle-website-about.html | about.html |
-| castle-website-products.html | products.html |
-| castle-website-custom-order.html | custom-order.html |
-| castle-website-quote.html | quote.html |
-| castle-website-contact.html | contact.html |
-| castle-website-styles.css | styles.css |
-| castle-website-site.js | site.js |
-| castle-website-cms-loader.js | cms-loader.js |
-| castle-website-data-company.json | data-company.json |
-| castle-website-data-products.json | data-products.json |
-| castle-website-favicon.png | favicon.png |
-| castle-website-logo-*.png | logo-*.png |
-| castle-website-photo-*.png/.jpg | photo-*.png/.jpg |
-| castle-website-sitemap.xml | sitemap.xml |
-| castle-website-robots.txt | robots.txt |
-| **castle-website-admin-index.html** | **admin/index.html** (new subfolder) |
-| **castle-website-admin-config.yml** | **admin/config.yml** (same subfolder) |
+| index.html | index.html |
+| about.html | about.html |
+| products.html | products.html |
+| custom-order.html | custom-order.html |
+| quote.html | quote.html |
+| contact.html | contact.html |
+| styles.css | styles.css |
+| site.js | site.js |
+| cms-loader.js | cms-loader.js |
+| data-company.json | data-company.json |
+| data-products.json | data-products.json |
+| favicon.png | favicon.png |
+| logo-*.png | logo-*.png |
+| photo-*.png/.jpg | photo-*.png/.jpg |
+| sitemap.xml | sitemap.xml |
+| robots.txt | robots.txt |
+| **admin-index.html** | **admin/index.html** (new subfolder) |
+| **admin-config.yml** | **admin/config.yml** (same subfolder) |
 
 Important: every HTML/CSS/JS/JSON file links to the others by these exact filenames, so rename all of them together, then quickly double-check the site still opens correctly by double-clicking `index.html`.
 
