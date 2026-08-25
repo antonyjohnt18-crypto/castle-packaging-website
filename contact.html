@@ -103,7 +103,7 @@
     <span class="kicker">Get In Touch</span>
     <h2>Send us a message</h2>
   </div>
-  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="site-form">
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="site-form" id="contactForm">
     <input type="hidden" name="form-name" value="contact">
     <p class="honeypot"><label>Don't fill this out: <input name="bot-field"></label></p>
     <div class="form-grid">
@@ -176,6 +176,8 @@
 
 <script src="site.js"></script>
 <script src="cms-loader.js"></script>
+<script src="firebase-site-config.js"></script>
+<script type="module" src="contact-enquiry-sync.js"></script>
 <script src="chat-config.js"></script>
 <script src="chat-widget.js"></script>
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
