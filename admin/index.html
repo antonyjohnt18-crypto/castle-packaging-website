@@ -8,19 +8,14 @@
   <link href="config.yml" rel="cms-config-url">
 </head>
 <body>
-  <!-- Netlify Identity handles login; Decap CMS is the editing interface -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <!-- Login is handled by DecapBridge (see admin/config.yml's backend:
+       auth_type: pkce, base_url: https://auth.decapbridge.com) — Decap CMS
+       shows its own login button and talks to DecapBridge/GitHub directly,
+       independent of whatever host is serving this site. The old Netlify
+       Identity widget script that used to sit here was leftover from
+       before DecapBridge was set up; it did nothing once PKCE auth took
+       over, and was removed 26 Aug 2026 during the Netlify -> DigitalOcean
+       hosting migration cleanup. -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", function (user) {
-        if (!user) {
-          window.netlifyIdentity.on("login", function () {
-            document.location.href = "/admin/";
-          });
-        }
-      });
-    }
-  </script>
 </body>
 </html>
