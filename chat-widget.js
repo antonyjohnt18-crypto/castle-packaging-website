@@ -9,7 +9,7 @@
 // (it resets on navigation/reload, same as any normal page). A session
 // counter in sessionStorage caps how many messages one visitor can send
 // per browser tab, as a simple cost-control measure independent of the
-// shared-secret check the Function itself does.
+// shared-secret check the backend /chat route itself does.
 
 (function () {
   var MAX_MESSAGES_PER_SESSION = 15;
@@ -136,7 +136,7 @@
       body.scrollTop = body.scrollHeight;
 
       try {
-        var res = await fetch('/.netlify/functions/chat', {
+        var res = await fetch(window.CPChatConfig.apiBaseUrl + '/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ secret: window.CPChatConfig.sharedSecret, messages: history }),
