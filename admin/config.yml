@@ -120,6 +120,7 @@ collections:
                 options: ["gold", "sage", "kraft"]
                 hint: "Just a visual accent color for the label on the site"
               - { label: "Description", name: "description", widget: "text" }
+              - { label: "Sold By / Size Range (optional)", name: "soldBy", widget: "string", required: false, hint: "A short line like \"Sold per kg · Custom sizes available\" — no prices or minimum order numbers here, those stay in quote conversations." }
               - { label: "Photo", name: "image", widget: "image" }
 
   - name: "news"
