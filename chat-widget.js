@@ -83,7 +83,7 @@
       // form never shrinks the conversation view — the panel just grows to
       // make room for it. If the form collapses to its short "saved" state
       // later, .cp-chat-body's flex:1 automatically reclaims that space.
-      '.cp-chat-panel{position:fixed;bottom:88px;right:22px;width:400px;max-width:calc(100vw - 32px);height:700px;max-height:calc(100vh - 110px);background:#fff;border-radius:14px;box-shadow:0 10px 34px rgba(0,0,0,0.28);z-index:61;display:none;flex-direction:column;overflow:hidden;font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;}',
+      '.cp-chat-panel{position:fixed;bottom:88px;right:22px;width:400px;max-width:calc(100vw - 32px);height:710px;max-height:calc(100vh - 100px);background:#fff;border-radius:14px;box-shadow:0 10px 34px rgba(0,0,0,0.28);z-index:61;display:none;flex-direction:column;overflow:hidden;font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;}',
       '.cp-chat-panel.open{display:flex;}',
       '.cp-chat-head{background:var(--ink,#17130D);color:#fff;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;}',
       '.cp-chat-head strong{font-size:14px;}',
