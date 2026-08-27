@@ -75,6 +75,19 @@ nav.main-nav a:hover, nav.main-nav a[aria-current="page"] { color: var(--gold-de
   .nav-toggle { display: block; }
 }
 
+/* Narrow phones: the WhatsApp button drops its label at 860px (above) and
+   becomes a compact icon, but "Get a Quote" keeps its text (it's the main
+   CTA, an icon alone wouldn't say what it does) — so without shrinking
+   things a bit here, that button's text wraps to two lines and towers over
+   the WhatsApp icon next to it. This tightens the header just enough that
+   "Get a Quote" fits on one line at a similar height to the WhatsApp icon. */
+@media (max-width: 480px) {
+  .header-inner { padding: 12px 16px; gap: 10px; }
+  .brand-logo { height: 36px; }
+  .header-cta { gap: 6px; }
+  .header-cta .btn { padding: 8px 14px; font-size: 13px; }
+}
+
 /* ---------- Hero ---------- */
 .hero { background: linear-gradient(120deg, #FBF8F2 0%, var(--sage-light) 58%, var(--gold-light) 100%); padding: 76px 24px 70px; }
 .hero-inner { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
