@@ -50,6 +50,7 @@
                 '<h3>' + p.name + '</h3>' +
                 '<div class="variants' + variantClass + '">' + p.variant + '</div>' +
                 '<p>' + p.description + '</p>' +
+                (p.soldBy ? '<p class="product-soldby">' + p.soldBy + '</p>' : '') +
               '</div>' +
             '</div>'
           );

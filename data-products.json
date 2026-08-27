@@ -6,6 +6,7 @@
       "variant": "Kraft Paper",
       "variantColor": "kraft",
       "description": "Sturdy kraft paper bags suited for retail, grocery and general carry-bag use. Custom sizes and printing available.",
+      "soldBy": "Sold per piece · Custom sizes from W10×H16cm up to W42×H60cm",
       "image": "photo-bag-kraft.png"
     },
     {
@@ -14,6 +15,7 @@
       "variant": "Recycled Paper",
       "variantColor": "sage",
       "description": "Made from recycled paper stock for businesses that want a lower environmental footprint without compromising strength.",
+      "soldBy": "Sold per piece · Custom sizes from W10×H16cm up to W42×H60cm",
       "image": "photo-bag-recycled.png"
     },
     {
@@ -22,6 +24,7 @@
       "variant": "Virgin Paper",
       "variantColor": "gold",
       "description": "Premium virgin paper bags for a cleaner, brighter finish — ideal when print clarity and presentation matter most.",
+      "soldBy": "Sold per piece · Custom sizes from W10×H16cm up to W42×H60cm",
       "image": "photo-bag-virgin.png"
     },
     {
@@ -30,6 +33,7 @@
       "variant": "All Sizes",
       "variantColor": "sage",
       "description": "Paper covers for packing and wrapping needs, available in a range of sizes with custom printing on request.",
+      "soldBy": "Sold per kg · Custom sizes available",
       "image": "photo-covers.png"
     },
     {
@@ -38,15 +42,26 @@
       "variant": "Multiple Sizes",
       "variantColor": "kraft",
       "description": "Paper cups for beverages and food service, available in multiple sizes with optional custom branding.",
+      "soldBy": "Sold per packet (60 cups/packet)",
       "image": "photo-cups.png"
     },
     {
       "id": "tissues",
       "name": "Paper Tissues",
-      "variant": "Semi Soft · Soft · Virgin Cellulose Fibre",
+      "variant": "Hard · Semi Soft · Soft · Virgin Cellulose Fibre",
       "variantColor": "gold",
-      "description": "Paper tissues across semi soft, soft and virgin cellulose fibre grades, suited for HORECA, retail and institutional use.",
+      "description": "Paper tissues across hard, semi soft, soft and virgin cellulose fibre grades, suited for HORECA, retail and institutional use.",
+      "soldBy": "Sold per packet (70 pulls/packet) · Multiple sizes across 4 grades",
       "image": "photo-tissues.png"
+    },
+    {
+      "id": "printing-service",
+      "name": "Printing Service",
+      "variant": "On Your Own Bags, Covers or Flyers",
+      "variantColor": "sage",
+      "description": "Already have paper bags, covers, non-woven bags or flyers? We can print your logo and branding on them using 2-colour flexographic printing — no manufacturing required, just bring what you'd like printed.",
+      "soldBy": "Priced per piece and per colour",
+      "image": "photo-printing-service.png"
     }
   ]
 }
