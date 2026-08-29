@@ -28,6 +28,91 @@
   var CONTACT_SAVED_KEY = 'cp_chat_contact_saved';
   var CHAT_HISTORY_TTL_MS = 3 * 24 * 60 * 60 * 1000; // 3 days
 
+  // ---------- conversation tracking (separate from the sessionId above) ----------
+  // sessionId/HISTORY_KEY above are about the VISITOR's own experience —
+  // resuming a chat panel that looks the same for up to 3 days. This is a
+  // separate concept for the ERP's "Chat Sessions" staff page: one row per
+  // actual sitting at the keyboard, so a visitor who chats today and comes
+  // back in 3 days to continue (still same sessionId, same visible history)
+  // shows up as TWO conversations there, not one giant one spanning days.
+  // A conversation "closes" after CONVERSATION_IDLE_MS of no messages; the
+  // next message after that mints a fresh conversationId instead of
+  // reusing the old one.
+  var CONVERSATION_ID_KEY = 'cp_chat_conversation_id';
+  var CONVERSATION_LAST_ACTIVE_KEY = 'cp_chat_conversation_last_active';
+  // Index into HISTORY_KEY's array marking where the CURRENT conversation
+  // starts — history itself can span days (see CHAT_HISTORY_TTL_MS above),
+  // so this is what lets sendMessage() below send the backend only "this
+  // conversation's own messages" for the Chat Sessions transcript, without
+  // dragging in everything said in an earlier, already-idle conversation.
+  var CONVERSATION_START_INDEX_KEY = 'cp_chat_conversation_start_index';
+  var CONVERSATION_IDLE_MS = 15 * 60 * 1000; // 15 minutes
+
+  // First-touch attribution (how this visitor arrived) uses the browser's
+  // native sessionStorage rather than localStorage: it already does exactly
+  // what's needed here — persists across page navigations in this same tab,
+  // but clears when the tab closes — so document.referrer/UTM params get
+  // captured once, on the visitor's actual entry page, rather than
+  // re-captured on every internal page view (which would just show the
+  // previous castlepkg.com page as the "referrer" instead of e.g. Google).
+  var FIRST_TOUCH_KEY = 'cp_chat_first_touch';
+  function getFirstTouch() {
+    try {
+      var raw = sessionStorage.getItem(FIRST_TOUCH_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    var params;
+    try { params = new URLSearchParams(window.location.search); } catch (e) { params = null; }
+    function utm(name) { return (params && params.get(name)) || ''; }
+    var touch = {
+      referrer: (document.referrer || '').slice(0, 500),
+      landingPage: (window.location.pathname || '').slice(0, 200),
+      utmSource: utm('utm_source').slice(0, 100),
+      utmMedium: utm('utm_medium').slice(0, 100),
+      utmCampaign: utm('utm_campaign').slice(0, 100),
+      utmTerm: utm('utm_term').slice(0, 100),
+      utmContent: utm('utm_content').slice(0, 100),
+    };
+    try { sessionStorage.setItem(FIRST_TOUCH_KEY, JSON.stringify(touch)); } catch (e) { /* ignore */ }
+    return touch;
+  }
+
+  function deviceType() {
+    return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent || '') ? 'mobile' : 'desktop';
+  }
+
+  // Returns the current conversationId, minting a fresh one (and re-reading
+  // first-touch attribution) if there wasn't one yet or the last message in
+  // it was more than CONVERSATION_IDLE_MS ago. Call this right before every
+  // /chat or /chat/contact request — it also bumps the "last active" clock,
+  // which is what the idle check above is based on.
+  function ensureConversation() {
+    var lastActive = Number(localStorage.getItem(CONVERSATION_LAST_ACTIVE_KEY) || '0');
+    var id = localStorage.getItem(CONVERSATION_ID_KEY);
+    var isNew = false;
+    if (!id || !lastActive || (Date.now() - lastActive) > CONVERSATION_IDLE_MS) {
+      id = 'cv' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem(CONVERSATION_ID_KEY, id);
+      isNew = true;
+    }
+    localStorage.setItem(CONVERSATION_LAST_ACTIVE_KEY, String(Date.now()));
+    var touch = getFirstTouch();
+    return {
+      conversationId: id,
+      isNew: isNew,
+      meta: {
+        referrer: touch.referrer,
+        landingPage: touch.landingPage,
+        utmSource: touch.utmSource,
+        utmMedium: touch.utmMedium,
+        utmCampaign: touch.utmCampaign,
+        utmTerm: touch.utmTerm,
+        utmContent: touch.utmContent,
+        deviceType: deviceType(),
+      },
+    };
+  }
+
   // Same format check the backend uses (see server/routes/chat.js's
   // isPlausiblePhone) — duplicated here so a visitor gets instant feedback
   // without waiting on a network round trip for something this simple. The
@@ -201,10 +286,11 @@
         saveBtn.textContent = 'Saving…';
 
         try {
+          var conv = ensureConversation();
           var res = await fetch(window.CPChatConfig.apiBaseUrl + '/chat/contact', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ secret: window.CPChatConfig.sharedSecret, sessionId: sessionId, name: name, phone: phone, email: email, pincode: pincode }),
+            body: JSON.stringify({ secret: window.CPChatConfig.sharedSecret, sessionId: sessionId, name: name, phone: phone, email: email, pincode: pincode, conversationId: conv.conversationId, meta: conv.meta }),
           });
           var data = await res.json();
           if (!res.ok || !data.ok) throw new Error(data.error || 'Something went wrong — please try again.');
@@ -292,6 +378,13 @@
       // stay collapsed claiming details are saved when this new session
       // actually has none yet.
       localStorage.removeItem(CONTACT_SAVED_KEY);
+      // Also force a fresh conversationId on the next message, rather than
+      // letting a restart within the 15-minute idle window keep appending
+      // to what — from the staff Chat Sessions page's point of view — is a
+      // clearly a deliberately-new conversation.
+      localStorage.removeItem(CONVERSATION_ID_KEY);
+      localStorage.removeItem(CONVERSATION_LAST_ACTIVE_KEY);
+      localStorage.removeItem(CONVERSATION_START_INDEX_KEY);
       history = [];
       sessionId = getSessionId();
       body.innerHTML = '';
@@ -325,10 +418,20 @@
       body.scrollTop = body.scrollHeight;
 
       try {
+        var conv = ensureConversation();
+        if (conv.isNew) {
+          // history already has this turn's user message pushed onto it
+          // (a few lines up) — mark the conversation as starting there, so
+          // conversationMessages below is just this message onward, not
+          // everything said in whatever conversation was idle before it.
+          localStorage.setItem(CONVERSATION_START_INDEX_KEY, String(history.length - 1));
+        }
+        var convStartIdx = Number(localStorage.getItem(CONVERSATION_START_INDEX_KEY) || '0');
+        var conversationMessages = history.slice(convStartIdx);
         var res = await fetch(window.CPChatConfig.apiBaseUrl + '/chat', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ secret: window.CPChatConfig.sharedSecret, messages: history, sessionId: sessionId }),
+          body: JSON.stringify({ secret: window.CPChatConfig.sharedSecret, messages: history, sessionId: sessionId, conversationId: conv.conversationId, conversationMessages: conversationMessages, meta: conv.meta }),
         });
         var data = await res.json();
         typing.remove();
