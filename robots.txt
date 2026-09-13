@@ -1,4 +1,28 @@
 User-agent: *
 Allow: /
 
+# Explicitly allowed AI crawlers/answer engines — the wildcard rule above
+# already permits everything, these lines just make the intent unambiguous
+# so nothing here is ever mistaken for a block.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://www.castlepkg.com/sitemap.xml
