@@ -58,3 +58,7 @@ After deploying, hard-verify in-browser: this site registers a service worker, w
 | `data-company.json`, `data-products.json`, `data-news.json`, `data-pages.json` | CMS-editable content |
 | `chat-widget.js`, `chat-config.js` | Chatbot widget, backed by the ERP repo's `server/routes/chat.js` |
 | `web-enquiry-sync.js`, `contact-enquiry-sync.js` | Write straight into the ERP's `webEnquiries` Firestore collection |
+
+## Product photo format
+
+Product photos are JPEG, not PNG (converted for performance). When changing or adding a product photo, update the path in `data-products.json` — that JSON is what `products.html` actually renders from client-side; the hardcoded `<img>` tags in the HTML and any JSON-LD `image` URLs in `products.html` are only the no-JS fallback. Editing the HTML alone looks complete in a diff but changes nothing a visitor with JS enabled ever sees. Each product entry's `"image"` line in `data-products.json` has no trailing comma (it's the last property in the object; the comma belongs to the following line) — don't assume it matches the comma pattern used elsewhere in this repo's JSON-LD blocks.
