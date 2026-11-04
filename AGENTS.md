@@ -4,7 +4,7 @@ A README for coding agents working on this repository. For broader company/produ
 
 ## What this is
 
-The public marketing site for Castle Packaging (eco-friendly paper bag / paper cup / packaging manufacturer, Bengaluru). Plain HTML/CSS/JS, no build step, also a PWA (has a service worker). Pages: `index.html` (Home), `about.html`, `products.html`, `custom-order.html`, `quote.html` (Request a Quote), `contact.html`, `faq.html`, `news.html`, `privacy.html`, `thank-you.html`.
+The public marketing site for Castle Packaging (eco-friendly paper bag / paper cup / packaging manufacturer, Bengaluru). Plain HTML/CSS/JS, no build step. It is **not** a PWA any more: `sw.js` is only a clean-up script that unregisters an old broken service worker from earlier visitors' browsers, and `site.js` registers nothing. Pages: `index.html` (Home), `about.html`, `products.html`, `printing-service.html` (Printing Service, added Nov 2026), `custom-order.html`, `quote.html` (Request a Quote), `contact.html`, `faq.html`, `news.html`, `privacy.html`, `thank-you.html`.
 
 ## Environments
 
