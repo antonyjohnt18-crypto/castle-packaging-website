@@ -339,7 +339,7 @@
         addMessage('bot', 'Hi! Thanks for stopping by.');
         showLimitReached();
       } else {
-        addMessage('bot', 'Hi, I\'m Angela from Castle Packaging! Happy to help with our paper bags, covers, cups, tissues or printing service. Could I grab your name and a number to reach you, just in case we get disconnected?');
+        addMessage('bot', 'Hi, I\'m Angela from Castle Packaging! Happy to help with our paper bags and custom printing on bags, boxes, cloth and jute — even a single piece. Could I grab your name and a number to reach you, just in case we get disconnected?');
         input.focus();
       }
     }
