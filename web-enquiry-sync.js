@@ -46,6 +46,19 @@ document.addEventListener('DOMContentLoaded', function () {
     return el ? String(el.value || '').trim() : '';
   }
 
+  // Extra quote-form fields (item, material, dates, occasion...) are folded into
+  // the existing "message" text so the ERP Leads inbox needs no change.
+  function composeMessage() {
+    const labels = { item: 'Item', material: 'Material', bagtype: 'Bag type', needed_by: 'Needed by', occasion: 'Occasion', artwork_link: 'Artwork link' };
+    const lines = [];
+    Object.keys(labels).forEach(function (n) { const v = fieldVal(n); if (v) lines.push(labels[n] + ': ' + v); });
+    const urgent = form.querySelector('[name="urgent"]');
+    if (urgent && urgent.checked) lines.unshift('URGENT / last-minute order');
+    const msg = fieldVal('message');
+    if (msg) lines.push('', msg);
+    return lines.join('\n');
+  }
+
   async function onSubmit(e) {
     e.preventDefault();
 
@@ -63,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         product: fieldVal('product').slice(0, 199),
         quantity: fieldVal('quantity').slice(0, 199),
         printing: fieldVal('printing').slice(0, 299),
-        message: fieldVal('message').slice(0, 2999),
+        message: composeMessage().slice(0, 2999),
         submittedAt: serverTimestamp(),
         status: 'new',
         source: 'website',
