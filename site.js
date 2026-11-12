@@ -25,15 +25,20 @@ document.addEventListener('DOMContentLoaded', function () {
       var qty = (document.getElementById('q_quantity') || {}).value || '';
       var printing = (document.getElementById('q_printing') || {}).value || '';
       var details = (document.getElementById('q_message') || {}).value || '';
+      var extra = ['item','material','bagtype','needed_by','occasion','urgent','artwork_link'].map(function (n) {
+        var el = quoteForm.querySelector('[name="' + n + '"]');
+        var v = el ? (el.type === 'checkbox' ? (el.checked ? 'Yes' : '') : String(el.value || '').trim()) : '';
+        return v ? n.replace('_', ' ') + ': ' + v : '';
+      });
       var lines = [
         'Hi Castle Packaging, I would like a quote:',
         name ? 'Name: ' + name : '',
         company ? 'Company: ' + company : '',
         product ? 'Product: ' + product : '',
         qty ? 'Quantity: ' + qty : '',
-        printing ? 'Custom printing: ' + printing : '',
+        printing ? 'Artwork: ' + printing : '',
         details ? 'Details: ' + details : ''
-      ].filter(Boolean);
+      ].concat(extra).filter(Boolean);
       var text = encodeURIComponent(lines.join('\n'));
       window.open('https://wa.me/919611535171?text=' + text, '_blank', 'noopener');
     });
