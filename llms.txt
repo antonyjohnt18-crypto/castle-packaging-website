@@ -1,6 +1,6 @@
 # Castle Packaging
 
-> Castle Packaging is a Bengaluru-based manufacturer of sustainable paper packaging: kraft, recycled and virgin paper bags, V-bottom paper covers (without handles) for bakeries and grocery stores, paper cups, and paper tissues. Every product is available with custom printing and is made in-house — Castle Packaging is a direct manufacturer, not a reseller.
+> Castle Packaging is a Bengaluru-based paper bag manufacturer and custom digital printing studio. We make paper bags, covers, cups and tissues, and digitally print full-colour on finished products — boxes, bagasse, cloth and jute — from a single piece, with rush orders for events. We also print finished jute, cloth and paper bags for bag makers.
 
 ## Company
 
@@ -17,15 +17,17 @@
 - Paper Covers — V-bottom kraft paper covers without handles, sold by weight (per kg), for bakeries, pharmacies and grocery stores.
 - Paper Cups — food-safe paper cups in multiple sizes, for cafes, events and food service.
 - Paper Tissues — hard, semi soft, soft and virgin cellulose fibre grades, for HORECA, retail and institutional use.
-- Custom Printing — logo and branding printed on any of the above products.
+- Digital Printing — full-colour printing on finished items in paper and board, bagasse, cloth and jute. No minimum order, rush orders welcome.
+- Printing for Bag Makers — jute, cloth and paper bag makers send finished bags; we print their customers' designs.
 
 ## Pages
 
 - Homepage: https://www.castlepkg.com/
 - About: https://www.castlepkg.com/about.html
 - Products: https://www.castlepkg.com/products.html
-- Custom Order: https://www.castlepkg.com/custom-order.html
+- Digital Printing: https://www.castlepkg.com/digital-printing.html
+- For Bag Makers: https://www.castlepkg.com/for-bag-makers.html
 - FAQ: https://www.castlepkg.com/faq.html
-- Request a Quote: https://www.castlepkg.com/quote.html
+- Get a Quote: https://www.castlepkg.com/quote.html
 - Contact: https://www.castlepkg.com/contact.html
 - News: https://www.castlepkg.com/news.html
