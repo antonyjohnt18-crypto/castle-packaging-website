@@ -6,7 +6,7 @@
       "variant": "Kraft Paper",
       "variantColor": "kraft",
       "description": "Sturdy kraft paper bags suited for retail, grocery and general carry-bag use. Custom sizes and printing available.",
-      "soldBy": "Sold per piece · Custom sizes from W10×H16cm up to W42×H60cm",
+      "soldBy": "Sold per piece · Custom sizes",
       "image": "photo-bag-kraft.jpg"
     },
     {
@@ -15,7 +15,7 @@
       "variant": "Recycled Paper",
       "variantColor": "sage",
       "description": "Made from recycled paper stock for businesses that want a lower environmental footprint without compromising strength.",
-      "soldBy": "Sold per piece · Custom sizes from W10×H16cm up to W42×H60cm",
+      "soldBy": "Sold per piece · Custom sizes",
       "image": "photo-bag-recycled.jpg"
     },
     {
@@ -24,7 +24,7 @@
       "variant": "Virgin Paper",
       "variantColor": "gold",
       "description": "Premium virgin paper bags for a cleaner, brighter finish — ideal when print clarity and presentation matter most.",
-      "soldBy": "Sold per piece · Custom sizes from W10×H16cm up to W42×H60cm",
+      "soldBy": "Sold per piece · Custom sizes",
       "image": "photo-bag-virgin.jpg"
     },
     {
@@ -53,6 +53,24 @@
       "description": "Paper tissues across hard, semi soft, soft and virgin cellulose fibre grades, suited for HORECA, retail and institutional use.",
       "soldBy": "Sold per packet (70 pulls/packet) · Multiple sizes across 4 grades",
       "image": "photo-tissues.jpg"
+    },
+    {
+      "id": "digital-printing",
+      "name": "Digital Printing",
+      "variant": "On Finished Products",
+      "variantColor": "gold",
+      "description": "Full-colour custom printing on finished products — bags, boxes, bagasse plates and burger boxes, T-shirts, cloth and jute bags and pouches. No minimum order, even a single piece. Rush and last-minute orders welcome.",
+      "soldBy": "No minimum order · Priced per piece",
+      "image": "svc-digital-printing.jpg"
+    },
+    {
+      "id": "bag-makers",
+      "name": "Printing for Bag Makers",
+      "variant": "You Stitch. We Print.",
+      "variantColor": "sage",
+      "description": "Make jute, cloth or paper bags? Send us your finished bags and we print your customers' designs — many designs, small runs, no minimum.",
+      "soldBy": "No minimum order",
+      "image": "bag-makers.jpg"
     }
   ]
 }
