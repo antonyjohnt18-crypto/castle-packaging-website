@@ -340,3 +340,11 @@ form.site-form fieldset.choice legend{font-size:11px;letter-spacing:.14em;text-t
 form.site-form label.radio{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);font-weight:500;margin-bottom:8px;cursor:pointer}
 form.site-form label.radio input{width:auto;margin:0}
 form.site-form input:disabled,form.site-form select:disabled{opacity:.55;cursor:not-allowed}
+
+/* header icons: Home + WhatsApp icon-only */
+.menu .home-ico{display:inline-flex;align-items:center}
+.menu .home-ico svg{width:20px;height:20px;display:block;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.menu .home-ico .lbl{display:none}
+header.site-header .btn-wa{padding:10px 12px}
+header.site-header .btn-wa span{display:none}
+@media(max-width:1220px){.menu .home-ico svg{display:none}.menu .home-ico .lbl{display:inline}}
