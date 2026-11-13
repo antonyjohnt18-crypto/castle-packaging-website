@@ -102,6 +102,9 @@ section.alt,.alt{background:var(--paper)}
 .mcol h3{margin-bottom:var(--s2)}
 .mcol ul{list-style:none;margin:0;padding:0}
 .mcol li{padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.mphoto{aspect-ratio:3/2;overflow:hidden;margin-bottom:var(--s2);background:var(--gold-pale)}
+.mphoto img{width:100%;height:100%;object-fit:cover;display:block}
+.mcol+.mcol .mphoto{margin-left:0}
 .specs{display:grid;grid-template-columns:repeat(4,1fr);margin-top:54px;border:1px solid var(--line);background:#fff}
 .specs div{padding:22px 24px;border-left:1px solid var(--line)}
 .specs div:first-child{border-left:0}
