@@ -112,7 +112,7 @@
  function toggle(el,on){el.hidden=!on;el.querySelectorAll('input,select,textarea').forEach(function(f){f.disabled=!on;if(!on){if(f.type==='checkbox'||f.type==='radio')f.checked=false;else if(f.id!=='q_unit')f.value='';else f.value='';}});}
  function ist(){var o={};new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()).forEach(function(p){o[p.type]=p.value;});return {d:o.year+'-'+o.month+'-'+o.day,m:(parseInt(o.hour,10)%24)*60+parseInt(o.minute,10)};}
  function add(d,n){var t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10);}
- var sel=$('q_product'),panels=document.querySelectorAll('.req-panel'),mat=$('q_material'),item=$('q_item'),sp=$('s_prodtype'),spa=$('s_paper'),ssz=$('s_size');
+ var q=$('q_quantity'),sel=$('q_product'),panels=document.querySelectorAll('.req-panel'),mat=$('q_material'),item=$('q_item'),sp=$('s_prodtype'),spa=$('s_paper'),ssz=$('s_size');
  function stdPaper(){var p=sp.value,m=p==='Paper bag'?BAGS:p==='Paper cover'?COVERS:{};opts(spa,p?'Select paper':'Select product first',Object.keys(m));if(p==='Paper cover'){spa.value='Brown — 80 gsm';}stdSize();}
  function stdSize(){var p=sp.value,m=p==='Paper bag'?BAGS:p==='Paper cover'?COVERS:{};var l=m[spa.value]||[];opts(ssz,l.length?'Select size':'Select paper first',l);}
  function apply(){
@@ -121,7 +121,7 @@
   document.querySelectorAll('[data-show]').forEach(function(b){toggle(b,!!k&&b.getAttribute('data-show').split(' ').indexOf(k)>-1);});
   var pr=k==='custom'?$('c_print').value:(k==='standard'?$('s_print').value:'');
   if(pr==='No printing'){toggle($('b_art'),false);toggle($('b_artlink'),false);}
-  var q=$('q_quantity'),ql=$('q_qty_label'),qh=$('q_qty_hint'),un=$('q_unit'),d=$('q_needed'),dh=$('q_needed_hint'),u=$('q_urgent'),now=ist(),today=now.d,open=now.m<17*60+30;
+  var ql=$('q_qty_label'),qh=$('q_qty_hint'),un=$('q_unit'),d=$('q_needed'),dh=$('q_needed_hint'),u=$('q_urgent'),now=ist(),today=now.d,open=now.m<17*60+30;
   ql.textContent='Quantity *';qh.textContent='';q.min=1;q.placeholder='';
   if(k==='digital'){q.min=1;q.placeholder='From 1 piece';qh.textContent='No minimum order — even 1 piece is fine.';un.value='pieces';
    var src=document.querySelector('input[name="sourcing"]:checked');var have=!!src&&src.value==='I have the products';
@@ -129,13 +129,18 @@
    var urg=u.checked&&!u.disabled;d.disabled=!urg;
    if(urg){d.min=open?today:add(today,1);dh.textContent=open?'Same-day delivery is possible for orders confirmed before 5:30 pm.':'It is past 5:30 pm — the earliest date is tomorrow.';}
    else{d.value='';d.removeAttribute('min');dh.textContent=!src?'':(have?'Tick “urgent” to choose a delivery date.':'We will confirm the delivery date once the products are sourced.');}
-  }else if(k==='custom'){q.min=2000;q.placeholder='Minimum 2000';qh.textContent='Minimum 2000 pieces. Production takes 7–15 days.';un.value='pieces';d.min=add(today,7);dh.textContent='Production takes 7–15 days.';}
-  else if(k==='standard'){var p=sp.value;if(p==='Paper bag'){ql.textContent='Quantity (packets) *';un.value='packets';}else if(p==='Paper cover'){ql.textContent='Quantity (kg) *';un.value='kg';}else{un.value='';}d.min=add(today,1);dh.textContent='';}
+  }else if(k==='custom'){var cp=$('c_prodtype').value,isC=cp==='Paper cover';
+   if(!cp){q.min=1;q.placeholder='';ql.textContent='Quantity *';qh.textContent='Select the product to see the minimum quantity. Production takes 7–15 days.';un.value='';}
+   else{q.min=isC?300:2000;q.placeholder=isC?'Minimum 300':'Minimum 2000';ql.textContent=isC?'Quantity (kg) *':'Quantity (pieces) *';qh.textContent=(isC?'Minimum 300 kg':'Minimum 2000 pieces')+'. Production takes 7–15 days.';un.value=isC?'kg':'pieces';}
+   d.min=add(today,7);dh.textContent='Production takes 7–15 days.';}
+  else if(k==='standard'){var p=sp.value;if(p==='Paper bag'){ql.textContent='Quantity (packets) *';un.value='packets (1 packet = 20 bags)';qh.textContent='1 packet = 20 paper bags';}else if(p==='Paper cover'){ql.textContent='Quantity (kg) *';un.value='kg';}else{un.value='';}d.min=add(today,1);dh.textContent='';}
  }
  sel.addEventListener('change',apply);
  mat.addEventListener('change',function(){var l=ITEMS[mat.value]||[];opts(item,l.length?'Select item':'Select material first',l);});
  sp.addEventListener('change',function(){stdPaper();apply();});
  spa.addEventListener('change',stdSize);
+ ['c_prodtype'].forEach(function(i){$(i).addEventListener('change',apply);});
+ q.addEventListener('input',function(){if(MAP[sel.value]==='standard'&&sp.value==='Paper bag'){var n=parseInt(q.value,10);$('q_qty_hint').textContent='1 packet = 20 paper bags'+(n>0?' · '+(n*20)+' bags':'');}});
  ['c_print','s_print','q_urgent'].forEach(function(i){$(i).addEventListener('change',apply);});
  document.querySelectorAll('input[name="sourcing"]').forEach(function(r){r.addEventListener('change',apply);});
  apply();
