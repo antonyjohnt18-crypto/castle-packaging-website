@@ -62,18 +62,36 @@
   <form name="bagmaker" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html?submitted=1" class="site-form" id="quoteForm">
     <input type="hidden" name="form-name" value="bagmaker">
     <input type="hidden" name="product" value="Printing for Bag Makers (trade)">
+    <input type="hidden" name="qty_unit" value="pieces per design">
     <p class="honeypot"><label>Don't fill this out: <input name="bot-field"></label></p>
     <div class="form-grid">
       <div class="field"><label for="q_name">Full name *</label><input type="text" id="q_name" name="name" required></div>
       <div class="field"><label for="q_company">Business name</label><input type="text" id="q_company" name="company"></div>
       <div class="field"><label for="q_phone">Phone *</label><input type="tel" id="q_phone" name="phone" required></div>
       <div class="field"><label for="q_email">Email</label><input type="email" id="q_email" name="email"></div>
-      <div class="field"><label for="q_bagtype">Bag type *</label><select id="q_bagtype" name="bagtype" required><option value="">Select</option><option>Jute</option><option>Cloth</option><option>Paper</option><option>More than one</option></select></div>
-      <div class="field"><label for="q_quantity">Approx. monthly volume *</label><input type="text" id="q_quantity" name="quantity" placeholder="e.g. 500 bags / month" required></div>
-      <div class="field full"><label for="q_message">Anything else we should know</label><textarea id="q_message" name="message" placeholder="Bag size, number of designs, timeline&hellip;"></textarea></div>
+      <div class="field"><label for="q_bagtype">Type of bags you make *</label><select id="q_bagtype" name="bagtype" required><option value="">Select</option><option>Jute</option><option>Cloth</option><option>Paper</option><option>More than one</option></select></div>
+      <div class="field"><label for="q_bagsize">Bag size (optional)</label><input type="text" id="q_bagsize" name="bagsize" placeholder="e.g. W 30 × H 40 × G 10 cm"></div>
+      <div class="field"><label for="q_designs">Number of designs *</label><input type="number" id="q_designs" name="designs" min="1" step="1" inputmode="numeric" required></div>
+      <div class="field"><label for="q_quantity">Pieces per design *</label><input type="number" id="q_quantity" name="quantity" min="1" step="1" inputmode="numeric" placeholder="From 1 piece" required><span class="hint">No minimum — even 1 piece is fine.</span></div>
+      <div class="field full check" id="b_urgent"><input type="checkbox" id="q_urgent" name="urgent" value="Yes"><label for="q_urgent">This is urgent / last-minute</label></div>
+      <div class="field"><label for="q_needed">Needed by</label><input type="date" id="q_needed" name="needed_by" disabled><span class="hint" id="q_needed_hint">Tick “urgent” to choose a delivery date.</span></div>
+      <div class="field"><label for="q_printing">Artwork</label><select id="q_printing" name="printing"><option value="">Select an option</option><option>I have artwork ready</option><option>I need design help</option></select></div>
+      <div class="field full"><label for="q_artwork">Artwork link (optional)</label><input type="url" id="q_artwork" name="artwork_link" placeholder="Google Drive or any link to your logo / design"><span class="hint">You can also send files on WhatsApp after submitting.</span></div>
+      <div class="field full"><label for="q_message">Anything else we should know</label><textarea id="q_message" name="message" placeholder="Expected monthly volume, delivery location, anything else&hellip;"></textarea></div>
     </div>
     <div class="form-actions"><button type="submit" class="btn btn-dark">Send enquiry</button><button type="button" id="waPrefillBtn" class="btn btn-wa">Send via WhatsApp instead</button></div>
   </form>
+<script>
+(function(){
+ var u=document.getElementById('q_urgent'),d=document.getElementById('q_needed'),h=document.getElementById('q_needed_hint');
+ function ist(){var o={};new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(new Date()).forEach(function(p){o[p.type]=p.value;});return {d:o.year+'-'+o.month+'-'+o.day,m:(parseInt(o.hour,10)%24)*60+parseInt(o.minute,10)};}
+ function add(s,n){var t=new Date(s+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10);}
+ function apply(){var n=ist(),open=n.m<17*60+30;
+  if(u.checked){d.disabled=false;d.min=open?n.d:add(n.d,1);h.textContent=open?'Same-day delivery is possible for orders confirmed before 5:30 pm.':'It is past 5:30 pm — the earliest date is tomorrow.';}
+  else{d.disabled=true;d.value='';d.removeAttribute('min');h.textContent='Tick “urgent” to choose a delivery date.';}}
+ u.addEventListener('change',apply);apply();
+})();
+</script>
 </div></section>
 <footer class="site-footer">
   <div class="wrap fgrid">
