@@ -25,10 +25,11 @@ document.addEventListener('DOMContentLoaded', function () {
       var qty = (document.getElementById('q_quantity') || {}).value || '';
       var printing = (document.getElementById('q_printing') || {}).value || '';
       var details = (document.getElementById('q_message') || {}).value || '';
-      var extra = ['item','material','bagtype','needed_by','occasion','urgent','artwork_link'].map(function (n) {
+      var LBL = { material: 'Material', item: 'Item', c_prodtype: 'Product (made to size)', c_papertype: 'Paper type', c_size: 'Size', c_print: 'Printing', s_prodtype: 'Product (standard size)', s_size: 'Size needed', s_print: 'Printing', bagtype: 'Bag type', bagsize: 'Bag size', designs: 'Designs', needed_by: 'Needed by', occasion: 'Occasion', urgent: 'Urgent', artwork_link: 'Artwork link' };
+      var extra = Object.keys(LBL).map(function (n) {
         var el = quoteForm.querySelector('[name="' + n + '"]');
         var v = el ? (el.type === 'checkbox' ? (el.checked ? 'Yes' : '') : String(el.value || '').trim()) : '';
-        return v ? n.replace('_', ' ') + ': ' + v : '';
+        return v ? LBL[n] + ': ' + v : '';
       });
       var lines = [
         'Hi Castle Packaging, I would like a quote:',
