@@ -44,23 +44,51 @@
       <div class="field"><label for="q_company">Company name</label><input type="text" id="q_company" name="company"></div>
       <div class="field"><label for="q_phone">Phone *</label><input type="tel" id="q_phone" name="phone" required></div>
       <div class="field"><label for="q_email">Email</label><input type="email" id="q_email" name="email"></div>
-      <div class="field"><label for="q_product">What do you need? *</label>
+      <div class="field full"><label for="q_product">What do you need? *</label>
         <select id="q_product" name="product" required>
           <option value="">Select</option>
           <option>Digital printing on finished items</option>
-          <option>Paper Bags (manufactured to your size)</option>
-          <option>Paper Covers</option>
-          <option>Paper Cups</option>
-          <option>Paper Tissues</option>
+          <option>Paper bags &amp; covers — manufactured to your size</option>
+          <option>Paper bags &amp; covers — standard sizes</option>
           <option>Printing on my own bags (bag maker)</option>
-          <option>Not sure / need advice</option>
+          <option>Other / not sure</option>
         </select></div>
-      <div class="field"><label for="q_item">Item</label><input type="text" id="q_item" name="item" placeholder="e.g. Jute pouches, T-shirts, burger boxes"></div>
-      <div class="field"><label for="q_material">Material</label>
-        <select id="q_material" name="material"><option value="">Select</option><option>Paper &amp; board</option><option>Bagasse</option><option>Cloth</option><option>Jute</option><option>Not sure</option></select></div>
-      <div class="field"><label for="q_quantity">Quantity *</label><input type="text" id="q_quantity" name="quantity" placeholder="From 1 piece" required></div>
+
+      <div class="req-panel" data-for="digital" hidden>
+        <div class="field"><label for="q_material">Material *</label>
+          <select id="q_material" name="material" required><option value="">Select material</option><option>Paper &amp; board</option><option>Bagasse</option><option>Cloth</option><option>Jute</option></select></div>
+        <div class="field"><label for="q_item">Item *</label>
+          <select id="q_item" name="item" required><option value="">Select material first</option></select></div>
+      </div>
+
+      <div class="req-panel" data-for="custom" hidden>
+        <div class="field"><label for="c_prodtype">Product *</label>
+          <select id="c_prodtype" name="c_prodtype" required><option value="">Select</option><option>Paper bag</option><option>Paper cover</option></select></div>
+        <div class="field"><label for="c_papertype">Paper type</label>
+          <select id="c_papertype" name="c_papertype"><option value="">Select</option><option>Kraft</option><option>Recycled</option><option>Virgin</option><option>Not sure</option></select></div>
+        <div class="field"><label for="c_size">Size (W × H × Gusset, cm)</label><input type="text" id="c_size" name="c_size" placeholder="e.g. 24 × 35 × 12.5"></div>
+        <div class="field"><label for="c_print">Printing</label>
+          <select id="c_print" name="c_print"><option value="">Select</option><option>No printing</option><option>Logo / 1–2 colour print</option><option>Full-colour print</option><option>Not sure</option></select></div>
+      </div>
+
+      <div class="req-panel" data-for="standard" hidden>
+        <div class="field"><label for="s_prodtype">Product *</label>
+          <select id="s_prodtype" name="s_prodtype" required><option value="">Select</option><option>Paper bag</option><option>Paper cover</option></select></div>
+        <div class="field"><label for="s_size">Size you need (if known)</label><input type="text" id="s_size" name="s_size" placeholder="e.g. 24 × 35 × 12.5 cm"></div>
+        <div class="field full"><label for="s_print">Printing</label>
+          <select id="s_print" name="s_print"><option value="">Select</option><option>No printing</option><option>Logo / 1–2 colour print</option><option>Full-colour print</option><option>Not sure</option></select></div>
+      </div>
+
+      <div class="req-panel" data-for="own" hidden>
+        <div class="field"><label for="o_bagtype">Bag type *</label>
+          <select id="o_bagtype" name="bagtype" required><option value="">Select</option><option>Jute</option><option>Cloth</option><option>Paper</option><option>More than one</option></select></div>
+        <div class="field"><label for="o_bagsize">Bag size</label><input type="text" id="o_bagsize" name="bagsize" placeholder="e.g. 12 × 14 in"></div>
+        <div class="field full"><label for="o_designs">Number of designs</label><input type="text" id="o_designs" name="designs" placeholder="e.g. 5 designs"></div>
+      </div>
+
+      <div class="field"><label for="q_quantity" id="q_qty_label">Quantity *</label><input type="text" id="q_quantity" name="quantity" placeholder="e.g. 1, 50, 500" required></div>
       <div class="field"><label for="q_needed">Needed by</label><input type="date" id="q_needed" name="needed_by"></div>
-      <div class="field"><label for="q_occasion">Occasion</label>
+      <div class="field full"><label for="q_occasion">Occasion</label>
         <select id="q_occasion" name="occasion"><option value="">Select</option><option>Business / brand</option><option>Wedding</option><option>Birthday</option><option>Pooja / Housewarming</option><option>Baby ceremony</option><option>Office event</option><option>Anniversary / Farewell</option><option>Festival gifting</option><option>Other</option></select></div>
       <div class="field full check"><input type="checkbox" id="q_urgent" name="urgent" value="Yes"><label for="q_urgent">This is urgent / last-minute</label></div>
       <div class="field full"><label for="q_printing">Artwork</label>
@@ -74,10 +102,25 @@
   <p class="form-note">Prefer to talk? Call us on <a href="tel:+919611535171" data-cms="company.phoneDisplay" data-cms-href="company.phoneDial">+91 96115 35171</a>.</p>
 </section>
 <script>
-(function(){var q=new URLSearchParams(location.search);
- var m={item:'q_item',quantity:'q_quantity',needed_by:'q_needed'};
- Object.keys(m).forEach(function(k){var v=q.get(k),e=document.getElementById(m[k]);if(v&&e)e.value=v;});
- var o=q.get('occasion');if(o){var s=document.getElementById('q_occasion');if(s){var hit=false;[].forEach.call(s.options,function(op){if(op.text.toLowerCase()===o.toLowerCase()){s.value=op.value||op.text;hit=true;}});if(!hit){var ms=document.getElementById('q_message');if(ms&&!ms.value)ms.value='Occasion: '+o;}}}
+(function(){
+ var ITEMS={'Paper & board':['Paper bags','Pizza box','Burger box','Tissue / wrapping paper','Napkins','Sleeves','Tags','Menus','Flyers','Cards','Envelopes','Rigid gift box paper','Other'],
+  'Bagasse':['Burger boxes','Plates','Bowls','Trays','Other'],
+  'Cloth':['T-shirts','Pouches','Tote bags','Drawstring bags','Napkins','Other'],
+  'Jute':['Bags','Pouches','Fabric','Coasters','Mats','Other']};
+ var MAP={'Digital printing on finished items':'digital','Paper bags & covers — manufactured to your size':'custom','Paper bags & covers — standard sizes':'standard','Printing on my own bags (bag maker)':'own'};
+ var sel=document.getElementById('q_product'),panels=document.querySelectorAll('.req-panel'),mat=document.getElementById('q_material'),item=document.getElementById('q_item'),ql=document.getElementById('q_qty_label');
+ function show(){var k=MAP[sel.value]||'';
+  panels.forEach(function(p){var on=p.getAttribute('data-for')===k;p.hidden=!on;
+   p.querySelectorAll('input,select,textarea').forEach(function(f){f.disabled=!on;if(!on)f.value='';});});
+  if(!k||k!=='digital'){item.innerHTML='<option value="">Select material first</option>';}
+  ql.textContent=(k==='own')?'Quantity / monthly volume *':'Quantity *';}
+ function fill(){var l=ITEMS[mat.value]||[];item.innerHTML='<option value="">'+(l.length?'Select item':'Select material first')+'</option>'+l.map(function(x){return '<option>'+x.replace(/&/g,'&amp;')+'</option>';}).join('');}
+ sel.addEventListener('change',show);mat.addEventListener('change',fill);show();
+ var q=new URLSearchParams(location.search),msg=document.getElementById('q_message'),pre=[];
+ ['item','occasion'].forEach(function(k){var v=q.get(k);if(v)pre.push((k==='item'?'Item: ':'Occasion: ')+v);});
+ var qt=q.get('quantity');if(qt)document.getElementById('q_quantity').value=qt;
+ var nb=q.get('needed_by');if(nb)document.getElementById('q_needed').value=nb;
+ if(pre.length&&msg&&!msg.value)msg.value=pre.join('\n');
  if(q.get('urgent')==='1'){var u=document.getElementById('q_urgent');if(u)u.checked=true;}
 })();
 </script>
