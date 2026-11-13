@@ -225,6 +225,14 @@ footer .fbar{border-top:1px solid rgba(255,255,255,.12);padding:var(--s3) 0;font
 footer .fbar .wrap{display:flex;justify-content:space-between;gap:var(--s3);flex-wrap:wrap}
 footer .fbar a:hover{color:var(--gold-light)}
 
+/* compact header buttons */
+header.site-header .btn{padding:10px 18px;font-size:11px;letter-spacing:.1em;gap:7px;line-height:1}
+header.site-header .btn-wa{padding:10px 16px}
+header.site-header .btn-wa svg{width:15px;height:15px}
+header.site-header .btn .arrow{width:12px;height:12px}
+header.site-header .wrap{gap:16px}
+header.site-header .menu{margin-right:8px}
+
 @media(max-width:1000px){
   .nav-toggle{display:block}
   .menu{position:fixed;top:120px;left:0;right:0;background:#fff;flex-direction:column;gap:0;padding:8px 28px 20px;border-bottom:1px solid var(--line);display:none}
