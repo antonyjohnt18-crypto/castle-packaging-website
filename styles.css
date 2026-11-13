@@ -328,3 +328,8 @@ header.site-header .menu{margin-right:8px}
   .rows div small{font-size:11px;line-height:1.3}
   #quote-spacer{display:none}
 }
+
+/* conditional request panels on the quote form */
+.req-panel{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:0 16px;padding:16px 16px 0;margin-bottom:16px;background:var(--paper);border:1px solid var(--line)}
+.req-panel[hidden]{display:none}
+@media(max-width:620px){.req-panel{grid-template-columns:1fr;padding:14px 14px 0}}
