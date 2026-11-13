@@ -4,11 +4,29 @@ A README for coding agents working on this repository. For broader company/produ
 
 ## What this is
 
-The public marketing site for Castle Packaging (eco-friendly paper bag / paper cup / packaging manufacturer, Bengaluru). Plain HTML/CSS/JS, no build step. It is **not** a PWA any more: `sw.js` is only a clean-up script that unregisters an old broken service worker from earlier visitors' browsers, and `site.js` registers nothing. Pages: `index.html` (Home), `about.html`, `products.html`, `printing-service.html` (Printing Service, added Nov 2026), `custom-order.html`, `quote.html` (Request a Quote), `contact.html`, `faq.html`, `news.html`, `privacy.html`, `thank-you.html`.
+The public marketing site for Castle Packaging (paper bag manufacturer and custom digital printing studio, Bengaluru). Plain HTML/CSS/JS, no build step. It is **not** a PWA any more: `sw.js` is only a clean-up script that unregisters an old broken service worker from earlier visitors' browsers, and `site.js` registers nothing. Pages: `index.html` (Home), `products.html`, `digital-printing.html` (Digital Printing), `for-bag-makers.html` (printing for jute/cloth/paper bag makers, with its own short enquiry form), `quote.html` (Get a Quote — one form for all enquiries), `about.html`, `faq.html`, `news.html`, `contact.html`, `privacy.html`, `thank-you.html`. `custom-order.html` and `printing-service.html` are now tiny redirect pages (to `quote.html` and `digital-printing.html`) kept only so old links keep working.
+
+**Status (Nov 2026): the redesign described below is live on `sandbox` only and is NOT yet on production (`main`).** It was approved in design (home page mockup "Option A") but is still being fine-tuned by the owner.
 
 ### Navigation and footer are hand-written in every page
 
-The header menu (`<nav class="main-nav">`) and the footer "Quick Links" list are copied into each of the 11 HTML pages — there is no shared include. Any menu or footer change must be made in **all** pages, and the current page needs `aria-current="page"` on its menu link. Since 4 Nov 2026 the header menu shows only Home, Products, Printing Service and Custom Order (plus the WhatsApp and Get a Quote buttons); About, FAQ, News, Request a Quote and Contact now live in the footer Quick Links only. This change is on `sandbox`, **not yet on production**.
+The utility bar, header (`<header class="site-header">`) and footer (`<footer class="site-footer">`) are copied into each of the 11 HTML pages — there is no shared include. Any header or footer change must be made in **all** pages, and the current page needs `aria-current="page"` on its menu link. Header menu: Home, Products, Digital Printing, plus the WhatsApp (green) and Get a Quote (black) buttons. Footer Quick Links: Home, Products, Digital Printing, For Bag Makers, About Us, FAQ, News, Get a Quote, Contact, Privacy Policy. Footer bottom line carries the photo credit "Photos: Magnific" (free licence requires attribution — author details are still missing for the jute, T-shirt, clock and group-bag photos; resolve before production). There is no Terms page, so there is no Terms link.
+
+### Design system (v4, Nov 2026)
+
+One shared `styles.css`, built on CSS variables: gold `#A67C26` / deep gold `#7F5C14` / light gold `#E3C37E`, black `#0B0B0B`, paper `#FBF8F0`, dark `#241C08`. Fonts (Google Fonts): Marcellus for headings, Montserrat for body and labels, Cormorant Garamond italic only for the accent word ("everything", "You stitch. We print."). 8-pt spacing, type scale h1 56 / h2 40 / h3 26 / h4 20 / body 16 / small 13 / label 11, square corners. Legacy inner-page classes (`.breadcrumb-hero`, `.card`, `.product-card`, `.site-form`, `.grid-*`, `.cta-band`) are kept and re-skinned in the same file. Images added for the redesign: `hero-cutout.png`, `hero-jute-cloth.jpg`, `hero-tshirt.jpg`, `svc-paper-bags.jpg`, `svc-digital-printing.jpg`, `svc-rush.jpg`, `bag-makers.jpg`.
+
+### Content rules set by the owner (apply to every page, FAQ, JSON-LD, data files and the chatbot)
+
+- Never say or imply single-pass / one-pass digital printing, a print width (42 cm), a print head, item height limits, or the ink type (water-based, pigment, eco ink). Say only "digital printing" / "full-colour printing".
+- Do **not** list what we cannot print anywhere on the website. Non-woven is removed everywhere for now.
+- Only the chatbot (Angela) may mention it, and only if a visitor asks about plastic, metal, glass, non-woven or glossy/coated items: "not doing it at the moment, planned for the future" plus a link to the Digital Printing page.
+- No minimum order for digital printing (even 1 piece). Rush: only small digital print jobs "can be ready within minutes once artwork is approved"; never promise delivery/courier times. Paper bag and cover sizes, stock and minimums are pending from the owner — say "contact our representative" until then.
+- Message focus: paper bag manufacturing; digital printing on finished items (paper/board, bagasse, cloth, jute); businesses and occasions (weddings, birthdays, pooja/housewarming, baby ceremonies, office events, festivals); and trade customers (jute, cloth and paper bag makers: "You stitch. We print.").
+
+### Get a Quote form
+
+`quote.html` keeps the original field ids/names (`name, company, phone, email, product, quantity, printing, message`) and adds `item`, `material`, `needed_by`, `occasion`, `urgent`, `artwork_link` (a link, not a file upload — there is no file storage; artwork can also be sent on WhatsApp). `web-enquiry-sync.js` folds the extra fields into the existing `message` text (via `composeMessage()`), so the ERP Leads inbox needs no change. `for-bag-makers.html` has its own form with the same id `quoteForm` (hidden `product` = "Printing for Bag Makers (trade)", plus `bagtype`). The home page mini-form is a plain GET to `quote.html` that pre-fills item/quantity/needed-by/occasion; `?urgent=1` ticks the urgent box.
 
 ## Environments
 
@@ -78,11 +96,11 @@ After deploying, hard-verify in-browser. The site no longer registers a service 
 | `cms-loader.js` | Loads `data-*.json` client-side into the static HTML |
 | `admin/config.yml` | Decap CMS field/collection config — commits land on `main` |
 | `data-company.json`, `data-products.json`, `data-news.json`, `data-pages.json` | CMS-editable content |
-| `chat-widget.js`, `chat-config.js` | Chatbot widget, backed by the ERP repo's `server/routes/chat.js` |
+| `chat-widget.js`, `chat-config.js` | Chatbot widget, backed by the ERP repo's `server/routes/chat.js` (Angela's greeting updated Nov 2026; her instructions in `server/routes/chat.js` and `server/lib/chat-catalog-rules.js` are updated in the owner's local ERP copy but not yet deployed) |
 | `web-enquiry-sync.js`, `contact-enquiry-sync.js` | Write straight into the ERP's `webEnquiries` Firestore collection |
 | `firebase-site-config.js` | Firebase project the enquiry sync writes to (branch-specific; see mismatch note) |
-| `printing-service.html`, `printing-digital-products.jpg` | Printing Service page (flexo + digital) and its collage image |
-| `sitemap.xml`, `robots.txt`, `llms.txt` | Search-engine and AI-crawler files; add new pages to `sitemap.xml` and `llms.txt` |
+| `digital-printing.html`, `for-bag-makers.html`, `quote.html` | The three focus pages (printing on finished items; trade printing for bag makers; the single enquiry form) |
+| `sitemap.xml`, `robots.txt`, `llms.txt` | Search-engine and AI-crawler files; add new pages to `sitemap.xml` and `llms.txt` (both already list the new pages; the old two URLs were replaced) |
 | `sw.js` | Clean-up script only; registers nothing |
 | `config.yml` (root) | Stale Decap copy; the live one is `admin/config.yml` |
 
