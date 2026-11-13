@@ -333,3 +333,10 @@ header.site-header .menu{margin-right:8px}
 .req-panel{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:0 16px;padding:16px 16px 0;margin-bottom:16px;background:var(--paper);border:1px solid var(--line)}
 .req-panel[hidden]{display:none}
 @media(max-width:620px){.req-panel{grid-template-columns:1fr;padding:14px 14px 0}}
+
+[hidden]{display:none!important}
+form.site-form fieldset.choice{border:0;padding:0;margin:0 0 16px;min-width:0}
+form.site-form fieldset.choice legend{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0;margin-bottom:10px}
+form.site-form label.radio{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);font-weight:500;margin-bottom:8px;cursor:pointer}
+form.site-form label.radio input{width:auto;margin:0}
+form.site-form input:disabled,form.site-form select:disabled{opacity:.55;cursor:not-allowed}
