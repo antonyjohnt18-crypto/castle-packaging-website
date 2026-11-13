@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Extra quote-form fields (item, material, dates, occasion...) are folded into
   // the existing "message" text so the ERP Leads inbox needs no change.
   function composeMessage() {
-    const labels = { item: 'Item', material: 'Material', bagtype: 'Bag type', needed_by: 'Needed by', occasion: 'Occasion', artwork_link: 'Artwork link' };
+    const labels = { material: 'Material', item: 'Item', c_prodtype: 'Product (made to size)', c_papertype: 'Paper type', c_size: 'Size W×H×Gusset cm', c_print: 'Printing', s_prodtype: 'Product (standard size)', s_size: 'Size needed', s_print: 'Printing', bagtype: 'Bag type', bagsize: 'Bag size', designs: 'Number of designs', needed_by: 'Needed by', occasion: 'Occasion', artwork_link: 'Artwork link' };
     const lines = [];
     Object.keys(labels).forEach(function (n) { const v = fieldVal(n); if (v) lines.push(labels[n] + ': ' + v); });
     const urgent = form.querySelector('[name="urgent"]');
