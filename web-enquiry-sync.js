@@ -49,9 +49,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // Extra quote-form fields (item, material, dates, occasion...) are folded into
   // the existing "message" text so the ERP Leads inbox needs no change.
   function composeMessage() {
-    const labels = { material: 'Material', item: 'Item', c_prodtype: 'Product (made to size)', c_papertype: 'Paper type', c_size: 'Size W×H×Gusset cm', c_print: 'Printing', s_prodtype: 'Product (standard size)', s_size: 'Size needed', s_print: 'Printing', bagtype: 'Bag type', bagsize: 'Bag size', designs: 'Number of designs', needed_by: 'Needed by', occasion: 'Occasion', artwork_link: 'Artwork link' };
+    const labels = { sourcing: 'Products', material: 'Material', item: 'Item', c_prodtype: 'Product (made to size)', c_papertype: 'Paper type', c_size: 'Size W×H×Gusset cm', c_print: 'Printing', s_prodtype: 'Product (standard size)', s_paper: 'Paper', s_size: 'Size', s_print: 'Printing', bagtype: 'Bag type', bagsize: 'Bag size', designs: 'Number of designs', qty_unit: 'Quantity unit', needed_by: 'Needed by', artwork_link: 'Artwork link' };
     const lines = [];
-    Object.keys(labels).forEach(function (n) { const v = fieldVal(n); if (v) lines.push(labels[n] + ': ' + v); });
+    Object.keys(labels).forEach(function (n) {
+      const checked = form.querySelector('[name="' + n + '"]:checked');
+      const v = checked ? String(checked.value || '').trim() : fieldVal(n);
+      if (v) lines.push(labels[n] + ': ' + v);
+    });
     const urgent = form.querySelector('[name="urgent"]');
     if (urgent && urgent.checked) lines.unshift('URGENT / last-minute order');
     const msg = fieldVal('message');
