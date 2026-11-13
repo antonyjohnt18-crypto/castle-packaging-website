@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // empty phone number silently fail the whole write.
         phone: (fieldVal('phone').slice(0, 29) || 'Not provided'),
         email: fieldVal('email').slice(0, 199),
-        message: fieldVal('message').slice(0, 2999),
+        message: ((fieldVal('topic') ? 'Topic: ' + fieldVal('topic') + '\n' : '') + (fieldVal('order_ref') ? 'Order/invoice: ' + fieldVal('order_ref') + '\n' : '') + (fieldVal('topic') ? '\n' : '') + fieldVal('message')).slice(0, 2999),
         submittedAt: serverTimestamp(),
         status: 'new',
         source: 'website',
