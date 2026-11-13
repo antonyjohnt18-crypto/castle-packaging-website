@@ -107,3 +107,8 @@ After deploying, hard-verify in-browser. The site no longer registers a service 
 ## Product photo format
 
 Product photos are JPEG, not PNG (converted for performance). When changing or adding a product photo, update the path in `data-products.json` — that JSON is what `products.html` actually renders from client-side; the hardcoded `<img>` tags in the HTML and any JSON-LD `image` URLs in `products.html` are only the no-JS fallback. Editing the HTML alone looks complete in a diff but changes nothing a visitor with JS enabled ever sees. Each product entry's `"image"` line in `data-products.json` has no trailing comma (it's the last property in the object; the comma belongs to the following line) — don't assume it matches the comma pattern used elsewhere in this repo's JSON-LD blocks.
+
+## Other forms (sandbox redesign)
+
+- **For Bag Makers form** (`for-bag-makers.html`, `#quoteForm`, synced by `web-enquiry-sync.js`): name*, business name, phone*, email, `bagtype`* (Jute/Cloth/Paper/More than one), `bagsize`, `designs`*, `quantity`* (pieces per design, min 1, hidden `qty_unit`), `urgent` checkbox (always available; enables `needed_by` with the 5:30 pm IST same-day rule), `printing` (artwork select), `artwork_link`, `message`. Inline script at the end of the form handles the urgent/date logic.
+- **Contact form** (`contact.html`, `#contactForm`, synced by `contact-enquiry-sync.js`): name*, phone (optional; Firestore fallback "Not provided"), email*, `topic`* dropdown, `order_ref` (shown only for "An existing order"), `message`*. `contact-enquiry-sync.js` prepends "Topic: ..." and "Order/invoice: ..." to the message.
