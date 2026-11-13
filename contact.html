@@ -140,12 +140,24 @@
         <input type="email" id="c_email" name="email" required>
       </div>
       <div class="field full">
+        <label for="c_topic">What is this about? *</label>
+        <select id="c_topic" name="topic" required><option value="">Select a topic</option><option>Quote or pricing</option><option>Digital printing on my items</option><option>Paper bags &amp; covers</option><option>Printing for bag makers (trade)</option><option>An existing order</option><option>Feedback or complaint</option><option>Something else</option></select>
+      </div>
+      <div class="field full" id="b_order" hidden>
+        <label for="c_order">Order or invoice number (optional)</label>
+        <input type="text" id="c_order" name="order_ref" disabled>
+      </div>
+      <div class="field full">
         <label for="c_message">Message *</label>
         <textarea id="c_message" name="message" required></textarea>
       </div>
     </div>
     <button type="submit" class="btn btn-primary">Send Message</button>
   </form>
+<script>
+(function(){var s=document.getElementById('c_topic'),b=document.getElementById('b_order'),o=document.getElementById('c_order');
+ s.addEventListener('change',function(){var on=s.value==='An existing order';b.hidden=!on;o.disabled=!on;if(!on)o.value='';});})();
+</script>
   <p class="form-note">For a product quote with pricing, use the <a href="quote.html">Request a Quote</a> page instead.</p>
 </section>
 
