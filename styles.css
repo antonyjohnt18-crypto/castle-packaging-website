@@ -276,6 +276,9 @@ header.site-header .menu{margin-right:8px}
   .wrap,.container{padding:0 20px}
   h2{font-size:28px}h3{font-size:22px}
   header.site-header .btn{padding:10px 12px}
+  .logo img{height:42px;margin:0}header.site-header .wrap{gap:8px;height:64px}
+  header.site-header .btn{font-size:10.5px;letter-spacing:.06em}
+  .nav-toggle{padding:4px 6px;font-size:24px}
   header.site-header .btn-dark .arrow{display:none}
   .breadcrumb-hero{padding:40px 0 32px}.breadcrumb-hero h1{font-size:32px}
   .hero .cta .btn{width:100%;justify-content:center}
@@ -304,4 +307,4 @@ header.site-header .menu{margin-right:8px}
   section{padding:48px 0}
   .sec-head{margin-bottom:32px}
 }
-@media(max-width:400px){.mgrid{grid-template-columns:1fr}}
+@media(max-width:340px){.mgrid{grid-template-columns:1fr}}
