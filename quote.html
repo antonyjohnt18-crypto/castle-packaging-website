@@ -145,6 +145,13 @@
  ['c_print','s_print','q_urgent'].forEach(function(i){$(i).addEventListener('change',apply);});
  document.querySelectorAll('input[name="sourcing"]').forEach(function(r){r.addEventListener('change',apply);});
  apply();
+ fetch('data-stock.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
+  if(!d||!d.groups)return;var nb={},nc={};
+  d.groups.forEach(function(g){var l=g.items.filter(function(i){return i.status!=='out_of_stock';}).map(function(i){return (i.name?i.name+' — ':'')+'W '+i.w+' × H '+i.h+' × G '+i.g+' cm';});if(l.length)(g.kind==='bag'?nb:nc)[g.paper]=l;});
+  if(Object.keys(nb).length){Object.keys(BAGS).forEach(function(k){delete BAGS[k];});Object.keys(nb).forEach(function(k){BAGS[k]=nb[k];});}
+  if(Object.keys(nc).length){Object.keys(COVERS).forEach(function(k){delete COVERS[k];});Object.keys(nc).forEach(function(k){COVERS[k]=nc[k];});}
+  if(sp.value){var pv=spa.value,sv=ssz.value;stdPaper();if(pv&&spa.querySelector('option[value="'+pv+'"]')){spa.value=pv;stdSize();if(sv&&ssz.querySelector('option[value="'+sv+'"]'))ssz.value=sv;}}
+ }).catch(function(){});
  var qs=new URLSearchParams(location.search),msg=$('q_message'),pre=[];
  if(qs.get('item'))pre.push('Item: '+qs.get('item'));
  if(qs.get('needed_by'))pre.push('Needed by: '+qs.get('needed_by'));
