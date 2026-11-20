@@ -150,6 +150,7 @@
  if(qs.get('needed_by'))pre.push('Needed by: '+qs.get('needed_by'));
  if(qs.get('occasion'))pre.push('Occasion: '+qs.get('occasion'));
  if(qs.get('quantity'))$('q_quantity').value=qs.get('quantity');
+ try{var cn=sessionStorage.getItem('cp_n'),cph=sessionStorage.getItem('cp_p');if(cn&&!$('q_name').value)$('q_name').value=cn;if(cph&&!$('q_phone').value)$('q_phone').value=cph;sessionStorage.removeItem('cp_n');sessionStorage.removeItem('cp_p');}catch(e){}
  if(pre.length&&msg&&!msg.value)msg.value=pre.join('\n');
  if(qs.get('urgent')==='1'){sel.value='Digital printing on finished items';apply();}
 })();
