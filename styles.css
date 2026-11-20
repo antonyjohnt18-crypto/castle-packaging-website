@@ -448,3 +448,10 @@ section{padding:var(--s8) 0}
 .map-full{padding:0;border-top:1px solid var(--line);line-height:0}
 .map-full iframe{width:100%;height:480px;border:0;display:block}
 @media(max-width:900px){.contact-grid{gap:var(--s6)}.map-full iframe{height:360px}}
+
+/* contact card */
+.contact-grid{align-items:stretch}
+.contact-grid>div{display:flex;flex-direction:column}
+.contact-card{flex:1;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);padding:var(--s4)}
+.contact-card .contact-list{flex:1;justify-content:space-between}
+.contact-card .social-row{margin-top:var(--s3)!important}
