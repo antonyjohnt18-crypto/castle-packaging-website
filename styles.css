@@ -73,7 +73,7 @@ section.alt,.alt{background:var(--paper)}
 .hero p.lead{font-size:18px;color:var(--muted);max-width:480px;margin:0 0 32px}
 .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
 .hero .mini{margin-top:var(--s4);display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);font-size:var(--small);color:var(--muted)}
-.hero .mini span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:9px;vertical-align:middle}
+.hero .mini span::before{content:"";display:inline-block;width:16px;height:16px;margin-right:8px;vertical-align:-3px;background:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23A67C26%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3E%3Cpath d=%27M4 12.5l5 5L20 6.5%27/%3E%3C/svg%3E") center/contain no-repeat}
 .collage{display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:1fr 1fr;gap:14px;height:470px;position:relative}
 .collage .a{grid-row:1/3}
 .collage .photo:nth-of-type(2) img{object-position:42% 60%}.collage .photo:nth-of-type(3) img{object-position:30% 40%}
@@ -357,3 +357,8 @@ header.site-header .btn-wa span{display:none}
 .mphoto{position:relative}
 @media(max-width:900px){.mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:340px){.mgrid{grid-template-columns:1fr}}
+
+/* hero checks + proof icons */
+.proof .wrap>div{display:grid;grid-template-columns:auto 1fr;column-gap:16px;align-items:center}
+.proof .pi{grid-row:1/3;width:34px;height:34px;fill:none;stroke:var(--gold-light);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:620px){.proof .wrap>div{column-gap:10px}.proof .pi{width:26px;height:26px}}
