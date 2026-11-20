@@ -502,3 +502,8 @@ section{padding:var(--s8) 0}
 
 /* mobile polish v5c */
 @media(max-width:620px){.ind .rows>div{display:block}.ind .rows>div small{display:block;margin-top:2px}}
+
+/* footer align v6 */
+@media(min-width:901px){footer .fgrid{grid-template-columns:1.4fr 1.5fr 1fr .8fr;gap:48px;align-items:start}footer .fcol:nth-child(2){display:grid;grid-template-columns:1fr 1fr;column-gap:24px;align-content:start}footer .fcol:nth-child(2) h5{grid-column:1/-1}}
+footer .fbar .wrap span:nth-child(2){display:none}
+footer .fbar .wrap{align-items:center}
