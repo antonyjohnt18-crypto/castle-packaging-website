@@ -69,6 +69,46 @@
 <section>
   <div class="contact-grid">
     <div>
+      <div class="sec-head"><span class="tag">Get in touch</span><h2>Send us a message</h2></div>
+      <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="site-form" id="contactForm">
+    <input type="hidden" name="form-name" value="contact">
+    <p class="honeypot"><label>Don't fill this out: <input name="bot-field"></label></p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="c_name">Full Name *</label>
+        <input type="text" id="c_name" name="name" required>
+      </div>
+      <div class="field">
+        <label for="c_phone">Phone</label>
+        <input type="tel" id="c_phone" name="phone">
+      </div>
+      <div class="field full">
+        <label for="c_email">Email *</label>
+        <input type="email" id="c_email" name="email" required>
+      </div>
+      <div class="field full">
+        <label for="c_topic">What is this about? *</label>
+        <select id="c_topic" name="topic" required><option value="">Select a topic</option><option>Quote or pricing</option><option>Digital printing on my items</option><option>Paper bags &amp; covers</option><option>Printing for bag makers (trade)</option><option>An existing order</option><option>Feedback or complaint</option><option>Something else</option></select>
+      </div>
+      <div class="field full" id="b_order" hidden>
+        <label for="c_order">Order or invoice number (optional)</label>
+        <input type="text" id="c_order" name="order_ref" disabled>
+      </div>
+      <div class="field full">
+        <label for="c_message">Message *</label>
+        <textarea id="c_message" name="message" required></textarea>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Send Message</button>
+  </form>
+<script>
+(function(){var s=document.getElementById('c_topic'),b=document.getElementById('b_order'),o=document.getElementById('c_order');
+ s.addEventListener('change',function(){var on=s.value==='An existing order';b.hidden=!on;o.disabled=!on;if(!on)o.value='';});})();
+</script>
+  <p class="form-note">For a product quote with pricing, use the <a href="quote.html">Request a Quote</a> page instead.</p>
+    </div>
+    <div>
+      <div class="sec-head"><span class="tag">Find us</span><h2>Visit, call or WhatsApp</h2></div>
       <ul class="contact-list">
         <li>
           <div class="ic ic-kraft"><svg viewBox="0 0 24 24" fill="none" stroke="#8A5427" stroke-width="1.6"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg></div>
@@ -112,56 +152,14 @@
         <a href="https://x.com/castlepackaging" data-cms-href="company.twitter" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="#221D15" stroke-width="1.6"><path d="M4 4l16 16M20 4 4 20"/></svg></a>
       </div>
     </div>
-    <div class="map-frame">
-      <iframe title="Castle Packaging location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.0696104940516!2d77.49566170074806!3d13.094774821687063!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae23f089935da1%3A0x25c62f2bc1256686!2sCastle%20Packaging!5e0!3m2!1sen!2sin!4v1787674299323!5m2!1sen!2sin">
-      </iframe>
-    </div>
   </div>
 </section>
 
-<section class="alt">
-  <div class="section-head">
-    <span class="kicker">Get In Touch</span>
-    <h2>Send us a message</h2>
-  </div>
-  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html" class="site-form" id="contactForm">
-    <input type="hidden" name="form-name" value="contact">
-    <p class="honeypot"><label>Don't fill this out: <input name="bot-field"></label></p>
-    <div class="form-grid">
-      <div class="field">
-        <label for="c_name">Full Name *</label>
-        <input type="text" id="c_name" name="name" required>
-      </div>
-      <div class="field">
-        <label for="c_phone">Phone</label>
-        <input type="tel" id="c_phone" name="phone">
-      </div>
-      <div class="field full">
-        <label for="c_email">Email *</label>
-        <input type="email" id="c_email" name="email" required>
-      </div>
-      <div class="field full">
-        <label for="c_topic">What is this about? *</label>
-        <select id="c_topic" name="topic" required><option value="">Select a topic</option><option>Quote or pricing</option><option>Digital printing on my items</option><option>Paper bags &amp; covers</option><option>Printing for bag makers (trade)</option><option>An existing order</option><option>Feedback or complaint</option><option>Something else</option></select>
-      </div>
-      <div class="field full" id="b_order" hidden>
-        <label for="c_order">Order or invoice number (optional)</label>
-        <input type="text" id="c_order" name="order_ref" disabled>
-      </div>
-      <div class="field full">
-        <label for="c_message">Message *</label>
-        <textarea id="c_message" name="message" required></textarea>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Send Message</button>
-  </form>
-<script>
-(function(){var s=document.getElementById('c_topic'),b=document.getElementById('b_order'),o=document.getElementById('c_order');
- s.addEventListener('change',function(){var on=s.value==='An existing order';b.hidden=!on;o.disabled=!on;if(!on)o.value='';});})();
-</script>
-  <p class="form-note">For a product quote with pricing, use the <a href="quote.html">Request a Quote</a> page instead.</p>
+<section class="map-full">
+  <iframe title="Castle Packaging location map" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.0696104940516!2d77.49566170074806!3d13.094774821687063!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae23f089935da1%3A0x25c62f2bc1256686!2sCastle%20Packaging!5e0!3m2!1sen!2sin!4v1787674299323!5m2!1sen!2sin"></iframe>
 </section>
+
 
 <footer class="site-footer">
   <div class="wrap fgrid">
