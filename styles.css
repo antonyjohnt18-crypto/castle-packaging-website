@@ -383,3 +383,6 @@ section[id]{scroll-margin-top:90px}
 .rush-steps span{font-size:15px;color:#cfc5b0}
 .rush .row{display:flex;gap:12px;flex-wrap:wrap}
 @media(max-width:900px){.pb-grid{grid-template-columns:1fr}.rush-steps{grid-template-columns:1fr;gap:var(--s2)}}
+
+/* home: white materials section */
+.cat.plain{background:#fff;border-top:0;border-bottom:0}
