@@ -391,3 +391,10 @@ section[id]{scroll-margin-top:90px}
 .quote{background:var(--cream);color:var(--ink);border-top:1px solid var(--line)}
 .quote h2{color:var(--ink)}
 .quote p{color:var(--muted)}
+
+/* compact sections */
+section{padding:var(--s8) 0}
+.sec-head{margin-bottom:var(--s4)}
+.sec-head p{margin-top:12px}
+@media(min-width:901px){h2{font-size:34px}}
+@media(max-width:620px){section{padding:var(--s6) 0}.sec-head{margin-bottom:var(--s3)}}
