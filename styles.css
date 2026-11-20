@@ -510,3 +510,6 @@ footer .fbar .wrap{align-items:center}
 
 /* footer align v6b */
 @media(min-width:901px){footer .fgrid{grid-template-columns:1.3fr 1.8fr 1fr .8fr;gap:40px}footer .fcol:nth-child(2) a{white-space:nowrap}}
+
+/* footer align v6c */
+@media(min-width:901px){footer .fgrid{grid-template-columns:1.5fr 1.7fr .95fr .75fr;gap:32px}footer .fname{white-space:nowrap}}
