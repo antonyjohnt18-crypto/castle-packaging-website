@@ -459,3 +459,4 @@ section{padding:var(--s8) 0}
 /* contact form width */
 .contact-grid form.site-form{margin:0;width:100%;flex:1}
 .contact-grid>div{min-width:0}
+.contact-grid .form-note{max-width:none;width:100%}
