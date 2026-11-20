@@ -440,3 +440,11 @@ section{padding:var(--s8) 0}
   .menu .dd-menu a{padding:12px 0;border-bottom:1px solid var(--line)}
   .menu .dd-menu a:last-child{border-bottom:0}
 }
+
+/* contact layout */
+.contact-grid{gap:var(--s8)}
+.contact-grid form.site-form{max-width:none}
+.contact-grid .sec-head{margin-bottom:var(--s3)}
+.map-full{padding:0;border-top:1px solid var(--line);line-height:0}
+.map-full iframe{width:100%;height:480px;border:0;display:block}
+@media(max-width:900px){.contact-grid{gap:var(--s6)}.map-full iframe{height:360px}}
