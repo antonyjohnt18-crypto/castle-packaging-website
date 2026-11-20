@@ -13,6 +13,27 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Header dropdown (Printing)
+  var dds = document.querySelectorAll('.main-nav .dd');
+  function closeDD(except) {
+    dds.forEach(function (d) {
+      if (d !== except) { d.classList.remove('open'); var b = d.querySelector('.dd-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }
+    });
+  }
+  dds.forEach(function (d) {
+    var b = d.querySelector('.dd-btn');
+    if (!b) return;
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = !d.classList.contains('open');
+      closeDD(d);
+      d.classList.toggle('open', open);
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+  document.addEventListener('click', function () { closeDD(null); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDD(null); });
+
   // Quote form: build a WhatsApp prefilled message as a fallback/alternate action
   var quoteForm = document.getElementById('quoteForm');
   var waBtn = document.getElementById('waPrefillBtn');
