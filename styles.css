@@ -485,3 +485,17 @@ section{padding:var(--s8) 0}
   .pbc,.sz{padding:var(--s2) 0}
   .contact-card,form.site-form{padding:var(--s3)}
 }
+
+/* mobile polish v5b */
+@media(max-width:620px){
+  .pbc .row,.rush .row{flex-direction:column}
+  .pbc .row .btn,.rush .row .btn{width:100%;justify-content:center;text-align:center}
+  .ind .rows{display:grid;grid-template-columns:1fr 1fr;column-gap:20px;align-content:start}
+  .ind .rows h5{grid-column:1/-1}
+  .quote form.site-form{max-width:none;width:100%;margin:0}
+  .makers .photo{min-height:220px}
+  .grid{padding-left:20px;padding-right:20px}
+  .product-visual img{height:200px;object-fit:contain}
+  .field.check input{flex:0 0 20px;min-width:20px}
+  .link{padding:11px 0}
+}
