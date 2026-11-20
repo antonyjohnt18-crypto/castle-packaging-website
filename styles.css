@@ -455,3 +455,7 @@ section{padding:var(--s8) 0}
 .contact-card{flex:1;display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);padding:var(--s4)}
 .contact-card .contact-list{flex:1;justify-content:space-between}
 .contact-card .social-row{margin-top:var(--s3)!important}
+
+/* contact form width */
+.contact-grid form.site-form{margin:0;width:100%;flex:1}
+.contact-grid>div{min-width:0}
