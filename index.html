@@ -149,14 +149,18 @@
 
 <section class="quote" id="quote"><div class="wrap">
   <div><span class="tag">Get a quote</span><h2>Ready to start? Tell us what you need.</h2><p>Paper bags, printing or a rush order — we reply with price and lead time.</p><a class="btn btn-wa" href="https://wa.me/919611535171" data-cms-href="company.whatsapp" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
-  <form class="site-form" action="quote.html" method="get">
+  <form class="site-form" id="homeQuote" action="quote.html" method="get">
     <div class="form-grid">
-      <div class="field full"><label for="h_item">Item</label><input id="h_item" name="item" type="text" placeholder="e.g. Paper bags, printed T-shirts"></div>
-      <div class="field"><label for="h_qty">Quantity</label><input id="h_qty" name="quantity" type="text" placeholder="From 1"></div>
-      <div class="field"><label for="h_by">Needed by (optional)</label><input id="h_by" name="needed_by" type="date"></div>
+      <div class="field"><label for="h_name">Name *</label><input id="h_name" type="text" autocomplete="name" required></div>
+      <div class="field"><label for="h_phone">Phone *</label><input id="h_phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
+      <div class="field"><label for="h_item">Item *</label><input id="h_item" name="item" type="text" placeholder="e.g. Paper bags, printed T-shirts" required></div>
+      <div class="field"><label for="h_qty">Quantity *</label><input id="h_qty" name="quantity" type="number" min="1" step="1" inputmode="numeric" placeholder="From 1" required></div>
     </div>
     <button class="btn btn-dark" type="submit">Continue <svg class="arrow" aria-hidden="true"><use href="#arr"/></svg></button>
   </form>
+  <script>
+  (function(){var f=document.getElementById('homeQuote');f.addEventListener('submit',function(){try{sessionStorage.setItem('cp_n',document.getElementById('h_name').value.trim());sessionStorage.setItem('cp_p',document.getElementById('h_phone').value.trim());}catch(e){}});})();
+  </script>
 </div></section>
 <footer class="site-footer">
   <div class="wrap fgrid">
