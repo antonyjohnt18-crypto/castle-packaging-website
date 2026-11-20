@@ -421,3 +421,22 @@ section{padding:var(--s8) 0}
 .sz tr.oos td{opacity:.45;text-decoration:line-through}
 .sz .st{font-size:11px;color:var(--gold-deep);text-decoration:none;display:inline-block;margin-left:6px;letter-spacing:.04em;text-transform:uppercase}
 @media(max-width:900px){.wp-grid{grid-template-columns:1fr}}
+
+/* header dropdown */
+.menu .dd{position:relative}
+.menu .dd-btn{font:inherit;color:inherit;background:none;border:0;border-bottom:2px solid transparent;padding:6px 0;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.menu .dd-btn:hover,.menu .dd.on .dd-btn,.menu .dd.open .dd-btn{border-color:var(--gold)}
+.menu .dd-btn svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.menu .dd.open .dd-btn svg{transform:rotate(180deg)}
+.menu .dd-menu{display:none;position:absolute;top:100%;left:-18px;min-width:210px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 28px rgba(0,0,0,.10);padding:8px 0;margin-top:8px;z-index:60}
+.menu .dd.open .dd-menu{display:block}
+.menu .dd-menu a{display:block;padding:11px 20px;border:0;white-space:nowrap}
+.menu .dd-menu a:hover{background:var(--paper)}
+.menu .dd-menu a[aria-current="page"]{color:var(--gold-deep);font-weight:600;border:0}
+@media(max-width:1100px){
+  .menu .dd{border-bottom:1px solid var(--line)}
+  .menu .dd-btn{width:100%;justify-content:space-between;padding:14px 0;border-bottom:0}
+  .menu .dd-menu{position:static;box-shadow:none;border:0;margin:0;padding:0 0 8px 16px;min-width:0}
+  .menu .dd-menu a{padding:12px 0;border-bottom:1px solid var(--line)}
+  .menu .dd-menu a:last-child{border-bottom:0}
+}
