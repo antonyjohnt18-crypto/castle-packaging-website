@@ -128,3 +128,19 @@ Product photos are JPEG, not PNG (converted for performance). When changing or a
 - `data-products.json` cards: Recycled Paper Bags — Brown (100 gsm), Paper Bags — White (virgin, 120 gsm), Recycled Paper Covers — Brown (80 gsm), Made to Your Specification, Paper Tissues, Digital Printing, Printing for Bag Makers. Paper Cups and the old Kraft/Recycled/Virgin cards were removed; the static fallback cards, meta tags and JSON-LD in products.html match.
 - **Wording rules:** "recycled" is used only for the brown products (kraft = recycled). White paper is virgin — never call it recycled; position it as the best choice for multicolour printing, and recycled brown as the affordable choice. Only make verifiable green claims (plastic-free, recyclable after use); avoid vague "eco-friendly". Do not mention the 60–140 gsm custom range on the website; custom orders say "your size, your paper".
 - **Merge note:** when promoting to main, merge `data-products.json` and `data-stock.json` carefully (the ERP CMS may write them) and re-verify the Products page and Quote form after deploy.
+
+## Legal pages and policies (sandbox redesign)
+
+- Pages: `faq.html` (18 Q&As + FAQPage JSON-LD — keep the JSON-LD in step with the visible answers), `privacy.html`, and `terms.html` (Terms & Order Policy). A "Terms & Order Policy" link sits after "Privacy Policy" in the footer of every page, and `sitemap.xml` lists terms.html.
+- Business facts stated in these pages: Castle Packaging is a **proprietorship** based in Bengaluru. Payment is **UPI only** (no online/card payment, no card details collected). Work starts only after the customer confirms the order **and pays a 50% advance**. Cancellation is possible **before printing starts**; **no refunds**; defective pieces are **replaced**. **Delivery is arranged by the customer**; if Castle arranges it, the customer pays for it. Grievances go to the owner at info@castlepkg.com.
+- Assumed, not given by the owner (review with a lawyer/CA before production): treatment of the advance on cancellation, no fixed defect-reporting window, governing law India / Bengaluru courts, DPDP wording, no named grievance officer.
+- Privacy "Third-Party Services We Use" must match what is really used: DigitalOcean (hosting), Google Firebase (form and chat storage), Anthropic (Angela), ipinfo.io (server-side location estimate in chat), Google Maps (Contact page), Google Fonts, WhatsApp, Instagram/Facebook/X links. Add a line whenever a new external service is loaded. The Advertising section is forward-looking only; no ad scripts are loaded.
+- Update "Last updated" on privacy.html and terms.html whenever their content changes.
+- **Angela (chatbot):** she does not need to know the payment, advance, cancellation, refund or delivery policy. If a visitor asks about these, she redirects them to the sales team (the team confirms) and captures the lead as usual. Do not add these policies to her rules.
+
+## Header, About and contact layout (sandbox redesign)
+
+- Top bar line on every page: "Crafted and Printed in Bengaluru" (`.util` strip, hand-written in each page's HTML).
+- About page: the visible copy lives both in `about.html` (static fallback) and `data-pages.json` → `about` (overrides at runtime via `data-cms="pages.about.*"`). Edit both together. No cups, no "plastic alternative" claims, no 360° wording; brown kraft = recycled, white = virgin.
+- Contact page: form on the left, address/details card on the right (aligned), full-width Google Map below filling the section (`.map-full`).
+- Mobile polish (v5/v5b/v5c blocks at the end of styles.css): all pages tested at 390 px with no horizontal overflow, 44 px tap targets, 16 px form fonts; hamburger menu below 1100 px. The home page and the Bag Makers form are long on mobile by design.
