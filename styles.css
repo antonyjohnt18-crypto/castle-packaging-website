@@ -411,3 +411,13 @@ section{padding:var(--s8) 0}
 .sz-note{margin-top:var(--s3);color:var(--muted);font-size:15px;max-width:720px}
 .sz-note+.row{margin-top:var(--s2)}
 @media(max-width:900px){.sz-grid{grid-template-columns:1fr}}
+
+/* why paper + stock */
+.why-paper{padding:var(--s4) 0}
+.wp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s3)}
+.wp-grid>div{border-left:2px solid var(--gold);padding-left:var(--s2)}
+.wp-grid b{display:block;font-family:var(--serif);font-weight:400;font-size:var(--h4);margin-bottom:4px}
+.wp-grid span{color:var(--muted);font-size:14px}
+.sz tr.oos td{opacity:.45;text-decoration:line-through}
+.sz .st{font-size:11px;color:var(--gold-deep);text-decoration:none;display:inline-block;margin-left:6px;letter-spacing:.04em;text-transform:uppercase}
+@media(max-width:900px){.wp-grid{grid-template-columns:1fr}}
