@@ -499,3 +499,6 @@ section{padding:var(--s8) 0}
   .field.check input{flex:0 0 20px;min-width:20px}
   .link{padding:11px 0}
 }
+
+/* mobile polish v5c */
+@media(max-width:620px){.ind .rows>div{display:block}.ind .rows>div small{display:block;margin-top:2px}}
