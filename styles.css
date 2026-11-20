@@ -507,3 +507,6 @@ section{padding:var(--s8) 0}
 @media(min-width:901px){footer .fgrid{grid-template-columns:1.4fr 1.5fr 1fr .8fr;gap:48px;align-items:start}footer .fcol:nth-child(2){display:grid;grid-template-columns:1fr 1fr;column-gap:24px;align-content:start}footer .fcol:nth-child(2) h5{grid-column:1/-1}}
 footer .fbar .wrap span:nth-child(2){display:none}
 footer .fbar .wrap{align-items:center}
+
+/* footer align v6b */
+@media(min-width:901px){footer .fgrid{grid-template-columns:1.3fr 1.8fr 1fr .8fr;gap:40px}footer .fcol:nth-child(2) a{white-space:nowrap}}
