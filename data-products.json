@@ -1,49 +1,40 @@
 {
   "products": [
     {
-      "id": "kraft",
-      "name": "Paper Bags — Kraft",
-      "variant": "Kraft Paper",
-      "variantColor": "kraft",
-      "description": "Sturdy kraft paper bags suited for retail, grocery and general carry-bag use. Custom sizes and printing available.",
-      "soldBy": "Sold per piece · Custom sizes",
+      "id": "brown-bag",
+      "name": "Recycled Paper Bags — Brown",
+      "variant": "Recycled paper · 100 gsm",
+      "variantColor": "sage",
+      "description": "The affordable choice. Strong brown paper bags made from recycled paper — a plastic-free way to carry, for retail, grocery and takeaway. Ready stock in standard sizes.",
+      "soldBy": "Ready stock · Sold in packets of 20 · See size chart",
       "image": "photo-bag-kraft.jpg"
     },
     {
-      "id": "recycled",
-      "name": "Paper Bags — Recycled",
-      "variant": "Recycled Paper",
-      "variantColor": "sage",
-      "description": "Made from recycled paper stock for businesses that want a lower environmental footprint without compromising strength.",
-      "soldBy": "Sold per piece · Custom sizes",
-      "image": "photo-bag-recycled.jpg"
-    },
-    {
-      "id": "virgin",
-      "name": "Paper Bags — Virgin",
-      "variant": "Virgin Paper",
+      "id": "white-bag",
+      "name": "Paper Bags — White",
+      "variant": "Virgin paper · 120 gsm",
       "variantColor": "gold",
-      "description": "Premium virgin paper bags for a cleaner, brighter finish — ideal when print clarity and presentation matter most.",
-      "soldBy": "Sold per piece · Custom sizes",
+      "description": "The best choice for multicolour printing. Bright white virgin paper gives vivid, detailed colour — ideal for gifts, cakes and premium retail. Ready stock in standard sizes.",
+      "soldBy": "Ready stock · Sold in packets of 20 · See size chart",
       "image": "photo-bag-virgin.jpg"
     },
     {
-      "id": "covers",
-      "name": "Paper Covers",
-      "variant": "All Sizes",
+      "id": "brown-cover",
+      "name": "Recycled Paper Covers — Brown",
+      "variant": "Recycled paper · 80 gsm",
       "variantColor": "sage",
-      "description": "Paper covers for packing and wrapping needs, available in a range of sizes with custom printing on request.",
-      "soldBy": "Sold per kg · Custom sizes available",
+      "description": "V-bottom paper covers without handles for bakeries, pharmacies and grocery stores. Plastic-free and affordable. Ready stock in standard sizes.",
+      "soldBy": "Ready stock · Sold per kg · See size chart",
       "image": "photo-covers.jpg"
     },
     {
-      "id": "cups",
-      "name": "Paper Cups",
-      "variant": "Multiple Sizes",
+      "id": "made-to-order",
+      "name": "Made to Your Specification",
+      "variant": "Any size · Your paper",
       "variantColor": "kraft",
-      "description": "Paper cups for beverages and food service, available in multiple sizes with optional custom branding.",
-      "soldBy": "Sold per packet (60 cups/packet)",
-      "image": "photo-cups.jpg"
+      "description": "Need a different size or paper? We manufacture paper bags and covers to your specification, plain or printed. Paper bags from 2000 pieces, paper covers from 300 kg.",
+      "soldBy": "Ready in 7–15 days",
+      "image": "svc-paper-bags.jpg"
     },
     {
       "id": "tissues",
