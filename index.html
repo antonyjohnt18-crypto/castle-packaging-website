@@ -152,7 +152,7 @@
   <form class="site-form" id="homeQuote" action="quote.html" method="get">
     <div class="form-grid">
       <div class="field"><label for="h_name">Name *</label><input id="h_name" type="text" autocomplete="name" required></div>
-      <div class="field"><label for="h_phone">Phone *</label><input id="h_phone" type="tel" autocomplete="tel" inputmode="tel" required></div>
+      <div class="field"><label for="h_phone">Phone *</label><input id="h_phone" type="tel" autocomplete="tel" inputmode="tel" required maxlength="18" pattern="(\+?91( |-)?|0)?[6-9][0-9]{4}( |-)?[0-9]{5}" title="Enter a valid 10-digit Indian mobile number starting with 6, 7, 8 or 9 (for example 98765 43210)."></div>
       <div class="field"><label for="h_item">Item *</label><input id="h_item" name="item" type="text" placeholder="e.g. Paper bags" required></div>
       <div class="field"><label for="h_qty">Quantity *</label><input id="h_qty" name="quantity" type="number" min="1" step="1" inputmode="numeric" placeholder="From 1" required></div>
     </div>
