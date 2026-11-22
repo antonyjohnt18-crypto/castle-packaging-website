@@ -188,3 +188,4 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 
 ### Security status log
 - **22 Nov 2026 (sandbox):** done — `admin/config.yml` branch set to `sandbox` (must be `main` on `main`); `cms-setup-guide.md` and the old root `config.yml` deleted (now 404); `.git`/`.env` return 404; GitHub secret protection and push protection already ON (dependency scanning/Dependabot off — the site has no packages). Still open on sandbox: chat server origin allow-list/rate limits and Anthropic spend limit (ERP repo/console), Firestore rules check (Firebase console), 2FA on all accounts. Headers (HSTS, nosniff, X-Frame-Options, Referrer-Policy) cannot be set on the sandbox URL; do them on castlepkg.com in Cloudflare before production.
+
