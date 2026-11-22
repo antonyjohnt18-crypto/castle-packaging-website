@@ -8,7 +8,7 @@
 (function () {
   'use strict';
 
-  var PHONE_MSG = 'Please enter a valid 10-digit mobile number, for example 98765 43210.';
+  var PHONE_MSG = 'Please enter a valid 10-digit mobile number.';
   var EMAIL_MSG = 'Please enter a valid email address, for example name@company.com.';
 
   function isCheckable(el) {
