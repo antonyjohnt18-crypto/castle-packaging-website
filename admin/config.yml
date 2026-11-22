@@ -2,7 +2,7 @@
 backend:
   name: git-gateway
   repo: antonyjohnt18-crypto/castle-packaging-website
-  branch: main
+  branch: sandbox  # MUST be "main" on the main branch — see AGENTS.md Security
   auth_type: pkce
   base_url: https://auth.decapbridge.com
   auth_endpoint: /sites/706c4a94-424b-4974-849e-76f394a72c33/pkce
