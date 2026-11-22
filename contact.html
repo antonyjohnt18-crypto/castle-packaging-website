@@ -79,12 +79,12 @@
         <input type="text" id="c_name" name="name" required>
       </div>
       <div class="field">
-        <label for="c_phone">Phone</label>
-        <input type="tel" id="c_phone" name="phone">
+        <label for="c_phone">Mobile number *</label>
+        <input type="tel" id="c_phone" name="phone" required inputmode="tel" autocomplete="tel" maxlength="18" pattern="(\+?91( |-)?|0)?[6-9][0-9]{4}( |-)?[0-9]{5}" title="Enter a valid 10-digit Indian mobile number starting with 6, 7, 8 or 9 (for example 98765 43210).">
       </div>
       <div class="field full">
         <label for="c_email">Email *</label>
-        <input type="email" id="c_email" name="email" required>
+        <input type="email" id="c_email" name="email" required autocomplete="email" maxlength="120" pattern="[^@ ]+@[^@ ]+\.[^@ ]{2,}" title="Enter a valid email address, for example name@company.com">
       </div>
       <div class="field full">
         <label for="c_topic">What is this about? *</label>
