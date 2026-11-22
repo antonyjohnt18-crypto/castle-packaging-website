@@ -189,3 +189,11 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 ### Security status log
 - **22 Nov 2026 (sandbox):** done — `admin/config.yml` branch set to `sandbox` (must be `main` on `main`); `cms-setup-guide.md` and the old root `config.yml` deleted (now 404); `.git`/`.env` return 404; GitHub secret protection and push protection already ON (dependency scanning/Dependabot off — the site has no packages). Still open on sandbox: chat server origin allow-list/rate limits and Anthropic spend limit (ERP repo/console), Firestore rules check (Firebase console), 2FA on all accounts. Headers (HSTS, nosniff, X-Frame-Options, Referrer-Policy) cannot be set on the sandbox URL; do them on castlepkg.com in Cloudflare before production.
 
+
+## Form validation and spam rules (22 Nov 2026)
+
+- **Mobile number and Email are mandatory** on Get a Quote (`quote.html`), For Bag Makers, and Contact; the home quick-quote requires the mobile number (email is asked on the Quote page). Labels read "Mobile number *" and "Email *".
+- **Level 1 format check** (HTML `pattern`, no JavaScript): Indian mobile = 10 digits starting 6-9, optional `+91`/`91`/`0` prefix, optional single space or hyphen after the prefix and in the middle (`98765 43210`, `+91 98765 43210`). Email must have text, `@`, a domain and a dot. Patterns avoid character classes with `-` and `.` because browsers compile `pattern` with the `v` flag. Keep the pattern identical on every form.
+- This is a format check only — it cannot prove the number is real or belongs to the visitor. Real verification would need an OTP service (not built).
+- **Honeypot:** every enquiry form has a hidden `bot-field`; `web-enquiry-sync.js` and `contact-enquiry-sync.js` skip the Firestore write when it is filled (the visitor is still sent to the thank-you page). Do not remove the field or the check.
+- Still to do for spam: Firebase budget alert and Firebase App Check (monitor mode first) before production.
