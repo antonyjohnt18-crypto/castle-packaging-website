@@ -513,3 +513,11 @@ footer .fbar .wrap{align-items:center}
 
 /* footer align v6c */
 @media(min-width:901px){footer .fgrid{grid-template-columns:1.5fr 1.7fr .95fr .75fr;gap:32px}footer .fname{white-space:nowrap}}
+
+/* form validation v7 — inline error messages (form-validate.js) */
+.field .field-error{display:flex;align-items:flex-start;gap:9px;margin-top:8px;padding:9px 12px;background:#FBF1EE;border-left:3px solid #A63D2A;color:#8A2F1F;font-size:13px;line-height:1.45;font-weight:500;animation:fe-in .18s ease-out}
+.field .field-error::before{content:"!";flex:0 0 auto;width:17px;height:17px;margin-top:1px;border-radius:50%;background:#A63D2A;color:#fff;font-size:11px;font-weight:700;line-height:17px;text-align:center}
+.field.has-error input,.field.has-error select,.field.has-error textarea{border-color:#A63D2A;background:#FFFAF8}
+.field.has-error input:focus,.field.has-error select:focus,.field.has-error textarea:focus{outline:none;border-color:#A63D2A;box-shadow:0 0 0 3px rgba(166,61,42,.15)}
+@keyframes fe-in{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.field .field-error{animation:none}}
