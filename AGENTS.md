@@ -197,3 +197,4 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 - This is a format check only — it cannot prove the number is real or belongs to the visitor. Real verification would need an OTP service (not built).
 - **Honeypot:** every enquiry form has a hidden `bot-field`; `web-enquiry-sync.js` and `contact-enquiry-sync.js` skip the Firestore write when it is filled (the visitor is still sent to the thank-you page). Do not remove the field or the check.
 - Still to do for spam: Firebase budget alert and Firebase App Check (monitor mode first) before production.
+
