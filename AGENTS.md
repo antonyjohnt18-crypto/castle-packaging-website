@@ -66,6 +66,7 @@ Before any merge, remind the owner this list exists and get a clear "yes" at eac
 3. **Review the whole diff** (`main...sandbox`) and list the files changed.
 4. After the deploy, hard-verify on `www.castlepkg.com` (clear cache, check the menu on every page, the new page loads, `sitemap.xml` includes it).
 5. Update this file to mark what is now live.
+6. **Complete the Security section's "Before production" and "After production" checklists.** Do not merge until the "Before production" items are ticked.
 
 ## Verified facts (4 Nov 2026)
 
@@ -150,32 +151,35 @@ Product photos are JPEG, not PNG (converted for performance). When changing or a
 An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behind Cloudflare, with no exposed `.git`/`.env`, but the gaps below. **This section must be kept when `sandbox` is merged into `main`, and every item in "Before production" and "After production" must be done and ticked off.**
 
 ### Standing rules
+(Repo is public — see below.)
 - **Public by design:** `firebase-site-config.js` web keys are not secrets — the real protection is the Firestore security rules. `chat-config.js` contains a "shared secret" that is readable by anyone in the browser; it protects nothing. Never rely on it and never put real secrets (API keys, service accounts, tokens) in this repo.
 - Do not edit `firebase-site-config.js` or `chat-config.js` during a merge (each environment has its own values).
 - `admin/config.yml` has `backend.branch`. It must be `sandbox` on the `sandbox` branch and `main` on `main`. If sandbox's value reaches main (or main's reaches sandbox), the CMS would edit the wrong environment. Check it on every merge.
-- Internal documents must not be publicly served on production: `AGENTS.md`, `cms-setup-guide.md` and the root `config.yml` (not the `admin/` copy). Delete the outdated ones; block the rest at the edge.
+- **The GitHub repo is public**, so everything committed (including `AGENTS.md`) is readable by anyone — never write secrets, passwords, tokens or customer data into the repo or this file. Blocking `/AGENTS.md` on the website is only tidiness, not protection. Delete the outdated internal files `cms-setup-guide.md` and the old root `config.yml` (not the `admin/` copy).
 - Keep the privacy page's "Third-Party Services We Use" list in step with what the site really loads.
 
 ### Sandbox — do now
 1. Set `admin/config.yml` `backend.branch` to `sandbox` (sandbox branch only).
-2. Delete `cms-setup-guide.md`; delete the root `config.yml` if nothing uses it (the admin loads `admin/config.yml`).
+2. Delete `cms-setup-guide.md` and the old root `config.yml` (an old Netlify-era Decap copy; the live one is `admin/config.yml`).
 3. Chat server (ERP repo, sandbox API): accept requests only from the sandbox site origin and castlepkg.com; add per-IP and per-session rate limits, a maximum message length and a per-conversation message cap.
 4. Set a monthly spend limit on the Anthropic API key used by the sandbox chat.
 5. Firebase sandbox project (`castle-erp-sandbox`) → Firestore rules: public may only **create** documents in `webEnquiries` and the contact collection (with field and size checks); no public read, list, update or delete. Test by trying a public read — it must fail.
 6. Turn on 2FA for GitHub, DigitalOcean, Firebase/Google and Anthropic accounts.
+6a. GitHub repo → Settings → turn on **secret scanning and push protection**, and check Dependabot/security alerts are enabled.
 7. Re-run the outside check (headers and sensitive paths) and record the result here.
 
 ### Before production (checklist — do not promote until done)
 - [ ] `admin/config.yml` on main still says `branch: main` after the merge; `firebase-site-config.js` and `chat-config.js` untouched.
 - [ ] Production Firebase project has the same locked-down Firestore rules as sandbox (public create-only, no public read/list/update/delete).
 - [ ] Production chat API: origin allow-list is castlepkg.com only (sandbox origin removed), rate limits on, Anthropic spend limit set, production uses its own value in `chat-config.js`.
-- [ ] Cloudflare (castlepkg.com): HSTS on; response headers `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; WAF rule blocking `/AGENTS.md`, `/cms-setup-guide.md` and root `/config.yml`; Content-Security-Policy added as report-only first (site uses Google Fonts, Firebase, Google Maps and the chat API).
+- [ ] Cloudflare (castlepkg.com): HSTS on; response headers `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; optional WAF rule hiding `/AGENTS.md` (cosmetic only); Content-Security-Policy added as report-only first (site uses Google Fonts, Firebase, Google Maps and the chat API).
+- [ ] **Branch protection on `main`** (Settings → Rules): require a pull request, block force-push and deletion. Currently `main` has no protection (checked 4 Nov 2026). Remember the CMS commits to `main` through DecapBridge — allow that path or use a rule that still lets the CMS work, then test a CMS edit.
 - [ ] 2FA on every account above, including Cloudflare and the domain registrar.
 - [ ] This Security section is present in main's AGENTS.md.
 
 ### After production (verify within 24 hours)
 - [ ] Headers present on https://www.castlepkg.com (HSTS, nosniff, X-Frame-Options, Referrer-Policy).
-- [ ] `/AGENTS.md`, `/cms-setup-guide.md`, `/config.yml`, `/.git/config`, `/.env` all return 404 or are blocked.
+- [ ] `/cms-setup-guide.md` and root `/config.yml` return 404 (deleted); `/.git/config` and `/.env` return 404. (`/AGENTS.md` stays reachable because the repo is public — that is accepted.)
 - [ ] A public Firestore read/list is rejected; a test enquiry and a test contact message still save.
 - [ ] Chat works from castlepkg.com and is rejected from another origin; rate limit triggers.
 - [ ] CMS login works and a test edit commits to `main`, not `sandbox`.
