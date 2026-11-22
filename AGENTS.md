@@ -144,3 +144,40 @@ Product photos are JPEG, not PNG (converted for performance). When changing or a
 - About page: the visible copy lives both in `about.html` (static fallback) and `data-pages.json` → `about` (overrides at runtime via `data-cms="pages.about.*"`). Edit both together. No cups, no "plastic alternative" claims, no 360° wording; brown kraft = recycled, white = virgin.
 - Contact page: form on the left, address/details card on the right (aligned), full-width Google Map below filling the section (`.map-full`).
 - Mobile polish (v5/v5b/v5c blocks at the end of styles.css): all pages tested at 390 px with no horizontal overflow, 44 px tap targets, 16 px form fonts; hamburger menu below 1100 px. The home page and the Bag Makers form are long on mobile by design.
+
+## Security (added Nov 2026 — applies to sandbox AND production)
+
+An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behind Cloudflare, with no exposed `.git`/`.env`, but the gaps below. **This section must be kept when `sandbox` is merged into `main`, and every item in "Before production" and "After production" must be done and ticked off.**
+
+### Standing rules
+- **Public by design:** `firebase-site-config.js` web keys are not secrets — the real protection is the Firestore security rules. `chat-config.js` contains a "shared secret" that is readable by anyone in the browser; it protects nothing. Never rely on it and never put real secrets (API keys, service accounts, tokens) in this repo.
+- Do not edit `firebase-site-config.js` or `chat-config.js` during a merge (each environment has its own values).
+- `admin/config.yml` has `backend.branch`. It must be `sandbox` on the `sandbox` branch and `main` on `main`. If sandbox's value reaches main (or main's reaches sandbox), the CMS would edit the wrong environment. Check it on every merge.
+- Internal documents must not be publicly served on production: `AGENTS.md`, `cms-setup-guide.md` and the root `config.yml` (not the `admin/` copy). Delete the outdated ones; block the rest at the edge.
+- Keep the privacy page's "Third-Party Services We Use" list in step with what the site really loads.
+
+### Sandbox — do now
+1. Set `admin/config.yml` `backend.branch` to `sandbox` (sandbox branch only).
+2. Delete `cms-setup-guide.md`; delete the root `config.yml` if nothing uses it (the admin loads `admin/config.yml`).
+3. Chat server (ERP repo, sandbox API): accept requests only from the sandbox site origin and castlepkg.com; add per-IP and per-session rate limits, a maximum message length and a per-conversation message cap.
+4. Set a monthly spend limit on the Anthropic API key used by the sandbox chat.
+5. Firebase sandbox project (`castle-erp-sandbox`) → Firestore rules: public may only **create** documents in `webEnquiries` and the contact collection (with field and size checks); no public read, list, update or delete. Test by trying a public read — it must fail.
+6. Turn on 2FA for GitHub, DigitalOcean, Firebase/Google and Anthropic accounts.
+7. Re-run the outside check (headers and sensitive paths) and record the result here.
+
+### Before production (checklist — do not promote until done)
+- [ ] `admin/config.yml` on main still says `branch: main` after the merge; `firebase-site-config.js` and `chat-config.js` untouched.
+- [ ] Production Firebase project has the same locked-down Firestore rules as sandbox (public create-only, no public read/list/update/delete).
+- [ ] Production chat API: origin allow-list is castlepkg.com only (sandbox origin removed), rate limits on, Anthropic spend limit set, production uses its own value in `chat-config.js`.
+- [ ] Cloudflare (castlepkg.com): HSTS on; response headers `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; WAF rule blocking `/AGENTS.md`, `/cms-setup-guide.md` and root `/config.yml`; Content-Security-Policy added as report-only first (site uses Google Fonts, Firebase, Google Maps and the chat API).
+- [ ] 2FA on every account above, including Cloudflare and the domain registrar.
+- [ ] This Security section is present in main's AGENTS.md.
+
+### After production (verify within 24 hours)
+- [ ] Headers present on https://www.castlepkg.com (HSTS, nosniff, X-Frame-Options, Referrer-Policy).
+- [ ] `/AGENTS.md`, `/cms-setup-guide.md`, `/config.yml`, `/.git/config`, `/.env` all return 404 or are blocked.
+- [ ] A public Firestore read/list is rejected; a test enquiry and a test contact message still save.
+- [ ] Chat works from castlepkg.com and is rejected from another origin; rate limit triggers.
+- [ ] CMS login works and a test edit commits to `main`, not `sandbox`.
+- [ ] Review the Content-Security-Policy report-only results, then enforce it.
+- [ ] Update this section with the date checked and any findings.
