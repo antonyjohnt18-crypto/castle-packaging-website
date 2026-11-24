@@ -247,7 +247,7 @@
     var panel = document.createElement('div');
     panel.className = 'cp-chat-panel';
     panel.innerHTML =
-      '<div class="cp-chat-head"><div class="cp-chat-who"><div class="cp-chat-avatar" aria-hidden="true">A</div><div><strong>Angela</strong><span>Castle Packaging · Product Assistant</span></div></div><div class="cp-chat-head-actions"><button type="button" class="cp-chat-restart">Start over</button><button class="cp-chat-close" aria-label="Close chat">&times;</button></div></div>' +
+      '<div class="cp-chat-head"><div class="cp-chat-who"><div class="cp-chat-avatar" aria-hidden="true">A</div><div><strong>Angela</strong><span>Castle Packaging assistant</span></div></div><div class="cp-chat-head-actions"><button type="button" class="cp-chat-restart">Start over</button><button class="cp-chat-close" aria-label="Close chat">&times;</button></div></div>' +
       '<div class="cp-chat-body"></div>' +
       '<div class="cp-chat-contact"></div>' +
       '<div class="cp-chat-input-row"><input type="text" placeholder="Ask a question…" maxlength="600"><button type="button">Send</button></div>';
