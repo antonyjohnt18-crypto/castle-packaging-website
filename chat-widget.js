@@ -199,6 +199,34 @@
       '.cp-chat-contact-error{color:#B3261E;font-size:11px;margin-top:6px;}',
       '.cp-chat-contact-done{font-size:12px;color:#1E7A34;padding:2px 0;font-weight:bold;}',
       '@media (max-width:480px){.cp-chat-panel{right:16px;bottom:80px;}.cp-chat-bubble{right:16px;bottom:16px;}}',
+      // --- widget redesign (Nov 2026): overrides, kept after the base rules ---
+      '.cp-chat-panel{width:380px;height:min(640px,calc(100vh - 110px));border-radius:16px;}',
+      '.cp-chat-head{padding:14px 16px;}',
+      '.cp-chat-who{display:flex;align-items:center;gap:11px;min-width:0;}',
+      '.cp-chat-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#000;flex:none;}',
+      '.cp-chat-head strong{font-size:15px;}',
+      '.cp-chat-head span{font-size:12px;}',
+      '.cp-chat-restart{border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:4px 10px;text-decoration:none;font-size:12px;}',
+      '.cp-chat-close{font-size:24px;}',
+      '.cp-chat-body{padding:16px 14px;}',
+      '.cp-chat-msg{max-width:88%;margin-bottom:12px;padding:10px 13px;border-radius:14px;font-size:14px;line-height:1.55;}',
+      '.cp-chat-msg strong{font-weight:700;}',
+      '.cp-chat-msg.user{border-bottom-right-radius:4px;}',
+      '.cp-chat-msg.bot{border-bottom-left-radius:4px;}',
+      '.cp-chat-input-row{padding:12px;gap:8px;}',
+      '.cp-chat-input-row input{padding:10px 12px;font-size:14px;}',
+      '.cp-chat-input-row button{padding:10px 18px;font-size:14px;font-weight:600;}',
+      '.cp-chat-contact{padding:0;}',
+      '.cp-chat-contact-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;background:var(--bg-alt,#FAF7F1);border:none;padding:10px 14px;font-size:13px;font-weight:600;color:var(--ink,#17130D);cursor:pointer;font-family:inherit;text-align:left;}',
+      '.cp-chat-contact-toggle i{font-style:normal;transition:transform .2s;}',
+      '.cp-chat-contact.open .cp-chat-contact-toggle i{transform:rotate(180deg);}',
+      '.cp-chat-contact-fields{display:none;padding:2px 14px 12px;}',
+      '.cp-chat-contact.open .cp-chat-contact-fields{display:block;}',
+      '.cp-chat-contact input{padding:8px 10px;font-size:13px;border-radius:8px;}',
+      '.cp-chat-contact-save{padding:8px 14px;font-size:13px;border-radius:8px;}',
+      '.cp-chat-contact-error{font-size:12px;}',
+      '.cp-chat-contact-done{font-size:13px;padding:10px 14px;}',
+      '@media (max-width:480px){.cp-chat-panel{left:12px;right:12px;width:auto;max-width:none;bottom:84px;height:calc(100vh - 104px);height:calc(100dvh - 104px);}}',
     ].join('\n');
     document.head.appendChild(style);
 
@@ -211,7 +239,7 @@
     var panel = document.createElement('div');
     panel.className = 'cp-chat-panel';
     panel.innerHTML =
-      '<div class="cp-chat-head"><div><strong>Angela</strong><span>Castle Packaging · Product Assistant</span></div><div class="cp-chat-head-actions"><button type="button" class="cp-chat-restart">Start over</button><button class="cp-chat-close" aria-label="Close chat">&times;</button></div></div>' +
+      '<div class="cp-chat-head"><div class="cp-chat-who"><img class="cp-chat-avatar" src="favicon.png" alt=""><div><strong>Angela</strong><span>Castle Packaging · Product Assistant</span></div></div><div class="cp-chat-head-actions"><button type="button" class="cp-chat-restart">Start over</button><button class="cp-chat-close" aria-label="Close chat">&times;</button></div></div>' +
       '<div class="cp-chat-body"></div>' +
       '<div class="cp-chat-contact"></div>' +
       '<div class="cp-chat-input-row"><input type="text" placeholder="Ask a question…" maxlength="600"><button type="button">Send</button></div>';
@@ -239,7 +267,8 @@
     }
     function renderContactForm() {
       contactBox.innerHTML =
-        '<p class="cp-chat-contact-title">Leave your details and we\'ll reach out</p>' +
+        '<button type="button" class="cp-chat-contact-toggle" aria-expanded="false"><span>Leave your number and we\'ll get back to you</span><i>&#9662;</i></button>' +
+        '<div class="cp-chat-contact-fields">' +
         '<div class="cp-chat-contact-row">' +
           '<input type="text" class="cp-contact-name" placeholder="Your name" maxlength="100">' +
           '<input type="tel" class="cp-contact-phone" placeholder="Phone number" maxlength="20">' +
@@ -249,7 +278,8 @@
           '<input type="text" class="cp-contact-pincode" placeholder="PIN code (optional)" maxlength="6" inputmode="numeric">' +
           '<button type="button" class="cp-chat-contact-save">Save</button>' +
         '</div>' +
-        '<div class="cp-chat-contact-error" style="display:none;"></div>';
+        '<div class="cp-chat-contact-error" style="display:none;"></div>' +
+        '</div>';
 
       var nameEl = contactBox.querySelector('.cp-contact-name');
       var phoneEl = contactBox.querySelector('.cp-contact-phone');
@@ -257,6 +287,12 @@
       var pincodeEl = contactBox.querySelector('.cp-contact-pincode');
       var saveBtn = contactBox.querySelector('.cp-chat-contact-save');
       var errorEl = contactBox.querySelector('.cp-chat-contact-error');
+      var toggleBtn = contactBox.querySelector('.cp-chat-contact-toggle');
+      toggleBtn.addEventListener('click', function () {
+        var isOpen = contactBox.classList.toggle('open');
+        toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        if (isOpen) nameEl.focus();
+      });
 
       function showContactError(msg) {
         errorEl.textContent = msg;
@@ -310,7 +346,12 @@
     function addMessage(role, text) {
       var el = document.createElement('div');
       el.className = 'cp-chat-msg ' + (role === 'user' ? 'user' : role === 'error' ? 'error' : 'bot');
-      el.textContent = text;
+      if (role === 'user' || role === 'error') {
+        el.textContent = text;
+      } else {
+        // Angela's replies can contain **bold**: show it as bold instead of raw asterisks.
+        el.innerHTML = String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
+      }
       body.appendChild(el);
       body.scrollTop = body.scrollHeight;
     }
