@@ -44,9 +44,9 @@ Repo: `castle-packaging-website` (**public**, GitHub account `antonyjohnt18-cryp
 
 Company info and the product catalog live in `data-company.json`, `data-products.json`, `data-news.json`, `data-pages.json`, loaded client-side by `cms-loader.js`. The HTML files carry today's content as a fallback if that fetch fails — so editing a JSON data file is almost always the right move for a content change, not editing the HTML directly, unless the change is to page layout/structure itself (which the CMS can't touch).
 
-### The `/admin` CMS
+### Content editing (Decap CMS and DecapBridge retired 24 Nov 2026)
 
-Content editor at `/admin`, built on Decap CMS via DecapBridge (git-gateway, PKCE auth) — lets the Owner edit company info and the product catalog without touching code. **Its commits land directly on `main`**, bypassing `sandbox` entirely (see `admin/config.yml`) — a config change here is one of the few things in this repo that goes straight to production. Page layout and wording outside the product catalog aren't editable there.
+The old `/admin` content editor (Decap CMS via DecapBridge) was removed from `sandbox` on 24 Nov 2026 because it was broken (expired GitHub token, stale Netlify login address) and the owner does not edit pages by hand. It is to be removed from `main` as well (see the merge checklist). Content changes are made by editing the `data-*.json` files or the HTML in GitHub. The planned replacement is an ERP feature for the standard bag and cover sizes: an Item Master tick ("Show on size chart") plus a Publish action that commits `data-stock.json` to this repo (sandbox ERP to `sandbox`, production ERP to `main`). Do not reintroduce Decap, DecapBridge or Netlify Identity.
 
 ## Integration points with the ERP backend
 
@@ -62,7 +62,7 @@ Netlify Forms and Netlify Identity are fully retired — don't reintroduce them 
 Before any merge, remind the owner this list exists and get a clear "yes" at each step:
 
 1. **Protect environment-specific files:** `firebase-site-config.js` and `chat-config.js` are meant to differ between branches (see the mismatch note above). A plain merge can overwrite production's values with sandbox's — review the diff for both and keep production's.
-2. **Compare `data-products.json` (and the other `data-*.json`).** The `/admin` CMS commits straight to `main`, so `main` may hold owner edits that `sandbox` lacks. Merge, don't overwrite, and check the Products page afterwards.
+2. **Compare `data-products.json` (and the other `data-*.json`).** Before 24 Nov 2026 the Decap `/admin` committed straight to `main`, so `main` may hold owner edits that `sandbox` lacks. Merge, don't overwrite, and check the Products page afterwards. `/admin` was deleted on `sandbox`; when merging, delete `admin/` on `main` too (a modify/delete conflict is expected because `main`'s `admin/config.yml` differs) and confirm `/admin/` returns 404 after deploy.
 3. **Review the whole diff** (`main...sandbox`) and list the files changed.
 4. After the deploy, hard-verify on `www.castlepkg.com` (clear cache, check the menu on every page, the new page loads, `sitemap.xml` includes it).
 5. Update this file to mark what is now live.
@@ -71,8 +71,8 @@ Before any merge, remind the owner this list exists and get a clear "yes" at eac
 ## Verified facts (4 Nov 2026)
 
 - The repo is public. **`main` has no protection:** no classic branch-protection rules and no rulesets (checked in Settings → Branches and Rules), so a direct push to `main` is allowed.
-- **DecapBridge:** `admin/index.html` loads Decap CMS from unpkg and `admin/config.yml` uses `git-gateway` with PKCE against `auth.decapbridge.com`, branch `main`. The admin page and the PKCE endpoint respond. A full CMS login was not tested.
-- Root `config.yml` is an old Decap copy that still references a Netlify URL; `admin/config.yml` is the live one.
+- **DecapBridge (retired 24 Nov 2026):** the `admin/` folder is gone from `sandbox`. The owner deletes the DecapBridge site and revokes its GitHub token; check these are done before production is promoted.
+- The old root `config.yml` was deleted on 22 Nov 2026.
 
 ## Verify before calling something done
 
@@ -95,15 +95,15 @@ After deploying, hard-verify in-browser. The site no longer registers a service 
 | File | Purpose |
 |---|---|
 | `cms-loader.js` | Loads `data-*.json` client-side into the static HTML |
-| `admin/config.yml` | Decap CMS field/collection config — commits land on `main` |
-| `data-company.json`, `data-products.json`, `data-news.json`, `data-pages.json` | CMS-editable content |
+| `admin/` | Removed on `sandbox` (24 Nov 2026); still on `main` until the next promotion |
+| `data-company.json`, `data-products.json`, `data-news.json`, `data-pages.json` | Content data files (edited in GitHub) |
 | `chat-widget.js`, `chat-config.js` | Chatbot widget, backed by the ERP repo's `server/routes/chat.js` (Angela's greeting updated Nov 2026; her instructions in `server/routes/chat.js` and `server/lib/chat-catalog-rules.js` are updated in the owner's local ERP copy but not yet deployed) |
 | `web-enquiry-sync.js`, `contact-enquiry-sync.js` | Write straight into the ERP's `webEnquiries` Firestore collection |
 | `firebase-site-config.js` | Firebase project the enquiry sync writes to (branch-specific; see mismatch note) |
 | `digital-printing.html`, `for-bag-makers.html`, `quote.html` | The three focus pages (printing on finished items; trade printing for bag makers; the single enquiry form) |
 | `sitemap.xml`, `robots.txt`, `llms.txt` | Search-engine and AI-crawler files; add new pages to `sitemap.xml` and `llms.txt` (both already list the new pages; the old two URLs were replaced) |
 | `sw.js` | Clean-up script only; registers nothing |
-| `config.yml` (root) | Stale Decap copy; the live one is `admin/config.yml` |
+| `config.yml` (root) | Deleted 22 Nov 2026 |
 
 ## Product photo format
 
@@ -156,12 +156,12 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 (Repo is public — see below.)
 - **Public by design:** `firebase-site-config.js` web keys are not secrets — the real protection is the Firestore security rules. `chat-config.js` contains a "shared secret" that is readable by anyone in the browser; it protects nothing. Never rely on it and never put real secrets (API keys, service accounts, tokens) in this repo.
 - Do not edit `firebase-site-config.js` or `chat-config.js` during a merge (each environment has its own values).
-- `admin/config.yml` has `backend.branch`. It must be `sandbox` on the `sandbox` branch and `main` on `main`. If sandbox's value reaches main (or main's reaches sandbox), the CMS would edit the wrong environment. Check it on every merge.
+- The Decap `admin/` folder has been retired; there is no CMS config to check on merge. Make sure `admin/` is deleted on `main` after promotion.
 - **The GitHub repo is public**, so everything committed (including `AGENTS.md`) is readable by anyone — never write secrets, passwords, tokens or customer data into the repo or this file. Blocking `/AGENTS.md` on the website is only tidiness, not protection. Delete the outdated internal files `cms-setup-guide.md` and the old root `config.yml` (not the `admin/` copy).
 - Keep the privacy page's "Third-Party Services We Use" list in step with what the site really loads.
 
 ### Sandbox — do now
-1. Set `admin/config.yml` `backend.branch` to `sandbox` (sandbox branch only).
+1. (Done 22 Nov 2026, now obsolete) `admin/config.yml` was set to `sandbox`; the whole `admin/` folder was deleted on 24 Nov 2026.
 2. Delete `cms-setup-guide.md` and the old root `config.yml` (an old Netlify-era Decap copy; the live one is `admin/config.yml`).
 3. Chat server (ERP repo, sandbox API): accept requests only from the sandbox site origin and castlepkg.com; add per-IP and per-session rate limits, a maximum message length and a per-conversation message cap.
 4. Set a monthly spend limit on the Anthropic API key used by the sandbox chat.
@@ -171,11 +171,11 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 7. Re-run the outside check (headers and sensitive paths) and record the result here.
 
 ### Before production (checklist — do not promote until done)
-- [ ] `admin/config.yml` on main still says `branch: main` after the merge; `firebase-site-config.js` and `chat-config.js` untouched.
+- [ ] `admin/` is deleted on `main` (404 at `/admin/`); `firebase-site-config.js` and `chat-config.js` untouched.
 - [ ] Production Firebase project has the same locked-down Firestore rules as sandbox (public create-only, no public read/list/update/delete).
 - [ ] Production chat API: origin allow-list is castlepkg.com only (sandbox origin removed), rate limits on, Anthropic spend limit set, production uses its own value in `chat-config.js`.
 - [ ] Cloudflare (castlepkg.com): HSTS on; response headers `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; optional WAF rule hiding `/AGENTS.md` (cosmetic only); Content-Security-Policy added as report-only first (site uses Google Fonts, Firebase, Google Maps and the chat API).
-- [ ] **Branch protection on `main`** (Settings → Rules): require a pull request, block force-push and deletion. Currently `main` has no protection (checked 4 Nov 2026). Remember the CMS commits to `main` through DecapBridge — allow that path or use a rule that still lets the CMS work, then test a CMS edit.
+- [ ] **Branch protection on `main`** (Settings → Rules): require a pull request, block force-push and deletion. Currently `main` has no protection (checked 4 Nov 2026). The Decap CMS no longer commits to `main`. If the planned ERP publish feature commits `data-stock.json` to `main` with a token, allow that path (for example a bypass for that token) and test a publish.
 - [ ] 2FA on every account above, including Cloudflare and the domain registrar.
 - [ ] This Security section is present in main's AGENTS.md.
 
@@ -184,12 +184,13 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 - [ ] `/cms-setup-guide.md` and root `/config.yml` return 404 (deleted); `/.git/config` and `/.env` return 404. (`/AGENTS.md` stays reachable because the repo is public — that is accepted.)
 - [ ] A public Firestore read/list is rejected; a test enquiry and a test contact message still save.
 - [ ] Chat works from castlepkg.com and is rejected from another origin; rate limit triggers.
-- [ ] CMS login works and a test edit commits to `main`, not `sandbox`.
+- [ ] `/admin/` returns 404 on production. DecapBridge site deleted and its GitHub token revoked by the owner.
 - [ ] Review the Content-Security-Policy report-only results, then enforce it.
 - [ ] Update this section with the date checked and any findings.
 
 ### Security status log
 - **22 Nov 2026 (sandbox):** done — `admin/config.yml` branch set to `sandbox` (must be `main` on `main`); `cms-setup-guide.md` and the old root `config.yml` deleted (now 404); `.git`/`.env` return 404; GitHub secret protection and push protection already ON (dependency scanning/Dependabot off — the site has no packages). Still open on sandbox: chat server origin allow-list/rate limits and Anthropic spend limit (ERP repo/console), Firestore rules check (Firebase console), 2FA on all accounts. Headers (HSTS, nosniff, X-Frame-Options, Referrer-Policy) cannot be set on the sandbox URL; do them on castlepkg.com in Cloudflare before production.
+- **24 Nov 2026 (sandbox):** Decap CMS retired: `admin/config.yml` and `admin/index.html` deleted from `sandbox`. DecapBridge site deletion, revoking its GitHub token, and removing `admin/` from `main` are still to do (the last only with the owner's approval).
 
 
 ## Form validation and spam rules (22 Nov 2026)
