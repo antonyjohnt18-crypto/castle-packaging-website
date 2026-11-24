@@ -46,7 +46,7 @@ Company info and the product catalog live in `data-company.json`, `data-products
 
 ### Content editing (Decap CMS and DecapBridge retired 24 Nov 2026)
 
-The old `/admin` content editor (Decap CMS via DecapBridge) was removed from `sandbox` on 24 Nov 2026 because it was broken (expired GitHub token, stale Netlify login address) and the owner does not edit pages by hand. It is to be removed from `main` as well (see the merge checklist). Content changes are made by editing the `data-*.json` files or the HTML in GitHub. The planned replacement is an ERP feature for the standard bag and cover sizes: an Item Master tick ("Show on size chart") plus a Publish action that commits `data-stock.json` to this repo (sandbox ERP to `sandbox`, production ERP to `main`). Do not reintroduce Decap, DecapBridge or Netlify Identity.
+The old `/admin` content editor (Decap CMS via DecapBridge) was removed from `sandbox` on 24 Nov 2026 because it was broken (expired GitHub token, stale Netlify login address) and the owner does not edit pages by hand. It was removed from `main` as well on 24 Nov 2026 (owner approved a direct production change). Content changes are made by editing the `data-*.json` files or the HTML in GitHub. The planned replacement is an ERP feature for the standard bag and cover sizes: an Item Master tick ("Show on size chart") plus a Publish action that commits `data-stock.json` to this repo (sandbox ERP to `sandbox`, production ERP to `main`). Do not reintroduce Decap, DecapBridge or Netlify Identity.
 
 ## Integration points with the ERP backend
 
@@ -62,7 +62,7 @@ Netlify Forms and Netlify Identity are fully retired — don't reintroduce them 
 Before any merge, remind the owner this list exists and get a clear "yes" at each step:
 
 1. **Protect environment-specific files:** `firebase-site-config.js` and `chat-config.js` are meant to differ between branches (see the mismatch note above). A plain merge can overwrite production's values with sandbox's — review the diff for both and keep production's.
-2. **Compare `data-products.json` (and the other `data-*.json`).** Before 24 Nov 2026 the Decap `/admin` committed straight to `main`, so `main` may hold owner edits that `sandbox` lacks. Merge, don't overwrite, and check the Products page afterwards. `/admin` was deleted on `sandbox`; when merging, delete `admin/` on `main` too (a modify/delete conflict is expected because `main`'s `admin/config.yml` differs) and confirm `/admin/` returns 404 after deploy.
+2. **Compare `data-products.json` (and the other `data-*.json`).** Before 24 Nov 2026 the Decap `/admin` committed straight to `main`, so `main` may hold owner edits that `sandbox` lacks. Merge, don't overwrite, and check the Products page afterwards. `/admin` was deleted on both `sandbox` and `main` on 24 Nov 2026, so no `admin/` folder should exist after a merge; confirm `/admin/` returns 404 after deploy.
 3. **Review the whole diff** (`main...sandbox`) and list the files changed.
 4. After the deploy, hard-verify on `www.castlepkg.com` (clear cache, check the menu on every page, the new page loads, `sitemap.xml` includes it).
 5. Update this file to mark what is now live.
@@ -71,7 +71,7 @@ Before any merge, remind the owner this list exists and get a clear "yes" at eac
 ## Verified facts (4 Nov 2026)
 
 - The repo is public. **`main` has no protection:** no classic branch-protection rules and no rulesets (checked in Settings → Branches and Rules), so a direct push to `main` is allowed.
-- **DecapBridge (retired 24 Nov 2026):** the `admin/` folder is gone from `sandbox`. The owner deletes the DecapBridge site and revokes its GitHub token; check these are done before production is promoted.
+- **DecapBridge (retired 24 Nov 2026):** the `admin/` folder is gone from `sandbox`. The DecapBridge site was deleted on 24 Nov 2026. Still for the owner: revoke the old GitHub token it used (github.com/settings/tokens).
 - The old root `config.yml` was deleted on 22 Nov 2026.
 
 ## Verify before calling something done
@@ -95,7 +95,7 @@ After deploying, hard-verify in-browser. The site no longer registers a service 
 | File | Purpose |
 |---|---|
 | `cms-loader.js` | Loads `data-*.json` client-side into the static HTML |
-| `admin/` | Removed on `sandbox` (24 Nov 2026); still on `main` until the next promotion |
+| `admin/` | Removed on `sandbox` and `main` (24 Nov 2026) |
 | `data-company.json`, `data-products.json`, `data-news.json`, `data-pages.json` | Content data files (edited in GitHub) |
 | `chat-widget.js`, `chat-config.js` | Chatbot widget, backed by the ERP repo's `server/routes/chat.js` (Angela's greeting updated Nov 2026; her instructions in `server/routes/chat.js` and `server/lib/chat-catalog-rules.js` are updated in the owner's local ERP copy but not yet deployed) |
 | `web-enquiry-sync.js`, `contact-enquiry-sync.js` | Write straight into the ERP's `webEnquiries` Firestore collection |
@@ -171,7 +171,7 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 7. Re-run the outside check (headers and sensitive paths) and record the result here.
 
 ### Before production (checklist — do not promote until done)
-- [ ] `admin/` is deleted on `main` (404 at `/admin/`); `firebase-site-config.js` and `chat-config.js` untouched.
+- [ ] `/admin/` returns 404 on production (deleted from `main` on 24 Nov 2026); `firebase-site-config.js` and `chat-config.js` untouched.
 - [ ] Production Firebase project has the same locked-down Firestore rules as sandbox (public create-only, no public read/list/update/delete).
 - [ ] Production chat API: origin allow-list is castlepkg.com only (sandbox origin removed), rate limits on, Anthropic spend limit set, production uses its own value in `chat-config.js`.
 - [ ] Cloudflare (castlepkg.com): HSTS on; response headers `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; optional WAF rule hiding `/AGENTS.md` (cosmetic only); Content-Security-Policy added as report-only first (site uses Google Fonts, Firebase, Google Maps and the chat API).
@@ -190,7 +190,7 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 
 ### Security status log
 - **22 Nov 2026 (sandbox):** done — `admin/config.yml` branch set to `sandbox` (must be `main` on `main`); `cms-setup-guide.md` and the old root `config.yml` deleted (now 404); `.git`/`.env` return 404; GitHub secret protection and push protection already ON (dependency scanning/Dependabot off — the site has no packages). Still open on sandbox: chat server origin allow-list/rate limits and Anthropic spend limit (ERP repo/console), Firestore rules check (Firebase console), 2FA on all accounts. Headers (HSTS, nosniff, X-Frame-Options, Referrer-Policy) cannot be set on the sandbox URL; do them on castlepkg.com in Cloudflare before production.
-- **24 Nov 2026 (sandbox):** Decap CMS retired: `admin/config.yml` and `admin/index.html` deleted from `sandbox`. DecapBridge site deletion, revoking its GitHub token, and removing `admin/` from `main` are still to do (the last only with the owner's approval).
+- **24 Nov 2026 (sandbox):** Decap CMS retired: `admin/config.yml` and `admin/index.html` deleted from `sandbox`. `admin/` was also deleted from `main` with the owner's approval, and the DecapBridge site was deleted. Still to do by the owner: revoke the old GitHub token used by DecapBridge.
 
 
 ## Form validation and spam rules (22 Nov 2026)
