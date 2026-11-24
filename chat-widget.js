@@ -226,6 +226,13 @@
       '.cp-chat-contact-save{padding:8px 14px;font-size:13px;border-radius:8px;}',
       '.cp-chat-contact-error{font-size:12px;}',
       '.cp-chat-contact-done{font-size:13px;padding:10px 14px;}',
+      '.cp-chat-panel{width:400px;}',
+      '.cp-chat-who{flex:1;}',
+      '.cp-chat-who>div{min-width:0;}',
+      '.cp-chat-head span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+      '.cp-chat-head-actions{flex:none;}',
+      '.cp-chat-restart{white-space:nowrap;flex:none;}',
+      '.cp-chat-contact-toggle i{font-size:14px;}',
       '@media (max-width:480px){.cp-chat-panel{left:12px;right:12px;width:auto;max-width:none;bottom:84px;height:calc(100vh - 104px);height:calc(100dvh - 104px);}}',
     ].join('\n');
     document.head.appendChild(style);
