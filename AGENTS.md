@@ -204,3 +204,18 @@ An outside check of the sandbox (22 Nov 2026) found the site is HTTPS-only behin
 ## Angela chat widget design (24 Nov 2026)
 
 `chat-widget.js` injects its own CSS. The visible design is the **black and gold** version approved by the owner (chosen over a cream and gold option because it is more visible): square corners, hairline `--line` borders, Marcellus for the name and Montserrat for text, small uppercase tracked labels and buttons, black header with a gold bottom rule and a black "A" tile with a gold border, white bot bubbles, black customer bubbles with white text, black Send button (gold-deep on hover), square black launcher with a gold border and gold-light icon. The details form is a collapsed bar ("Leave your number and we'll get back to you") that opens on tap. Angela's `**bold**` is rendered as bold (everything else is escaped; no other markdown). The redesign rules are an override block in the style array labelled "widget redesign (Nov 2026)", placed after the base rules; edit that block, not the older base rules. The panel fits the screen on phones (left/right 12px). Subtitle is "Packaging assistant" (a longer subtitle gets cut off in the header). Keep the widget on the site design tokens in `styles.css`.
+
+
+## Website Control (ERP) edits this site's text and page visibility (27 Nov 2026, sandbox)
+
+The ERP menu **Website Control** (CRM, sandbox first) is the backend for this website. One row of tabs: Page control (first), then one tab per page in menu order (Home, About, Products, Digital printing, For bag makers, Get a quote, FAQ, News and updates, Contact, Terms, Privacy), then E-commerce. The Products tab holds the page wording plus the ready-size chart. Only the Owner publishes; edits are drafts first.
+
+What the ERP writes into THIS repo (never hand-edit these while the ERP owns them): data-pages.json (page text under pages.<page>.<key> plus a hidden map), data-stock.json (ready sizes: name, size, handle, status; no pack size, no quantities), sitemap.xml (regenerated when page visibility changes).
+
+How the site uses it: cms-loader.js reads data-pages.json and fills elements marked data-cms="pages.<page>.<key>" (textContent only). A page is only editable from the ERP if its HTML has those markers. Wired today: about.html (18 keys) and quote.html (2 keys). Home, FAQ, Contact, Products wording, Digital printing, For bag makers, Terms and Privacy are plain HTML and still to be wired (one page at a time: add markers, then add the page to FIELDS in the ERP server/lib/website-content.js).
+
+Hidden pages: cms-loader.js removes links to hidden pages, adds noindex,nofollow, and shows a "This page is coming soon" notice with a Back to Home button (no redirect). Home cannot be hidden. Hiding is script-based on a static site, so a brief flash is possible and it is not for secrets.
+
+Content rules still apply to anything typed in the ERP (publish is blocked by a rules check): no single-pass/one-pass, 42 cm, print head, ink type, item height limit, 60-140 gsm, cups or prices; "recycled" only for brown kraft, white is virgin.
+
+Production (main) must not be touched or promoted without explicit approval. Next session: wire Home and FAQ first.
