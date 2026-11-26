@@ -236,13 +236,13 @@
  fetch('data-stock.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
   if(!d||!d.groups||!d.groups.length)return;
   g.innerHTML=d.groups.map(function(grp){
-   var named=grp.kind==='bag'; var hasH=grp.items.some(function(i){return i.handle;}), hasP=grp.items.some(function(i){return i.pack;});
+   var named=grp.items.some(function(i){return i.name;}); var hasH=grp.items.some(function(i){return i.handle;}), hasP=grp.items.some(function(i){return i.pack;});
    var rows=grp.items.map(function(i){
-    var dim='W '+i.w+' × H '+i.h+' × G '+i.g;
+    var dim='W '+i.w+' × H '+i.h+(i.g?' × G '+i.g:'');
     var st=i.status==='out_of_stock'?' <small class="st">Out of stock</small>':(i.status==='limited'?' <small class="st">Limited</small>':'');
     return '<tr'+(i.status==='out_of_stock'?' class="oos"':'')+'>'+(named?'<td>'+esc(i.name)+'</td>':'')+'<td>'+dim+st+'</td>'+(hasH?'<td>'+esc(i.handle||'No handle')+'</td>':'')+(hasP?'<td>'+(i.pack?esc(i.pack)+' per packet':'&mdash;')+'</td>':'')+'</tr>';
    }).join('');
-   return '<div class="sz"><h3>'+esc(grp.title)+'</h3><p class="sub">'+esc(grp.sub)+'</p><table><thead><tr>'+(named?'<th>Size</th>':'')+'<th>W × H × G (cm)</th>'+(hasH?'<th>Handle</th>':'')+(hasP?'<th>Pack</th>':'')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
+   return '<div class="sz"><h3>'+esc(grp.title)+'</h3><p class="sub">'+esc(grp.sub)+'</p><table><thead><tr>'+(named?'<th>'+(grp.kind==='bag'?'Size':'Name')+'</th>':'')+'<th>W × H × G (cm)</th>'+(hasH?'<th>Handle</th>':'')+(hasP?'<th>Pack</th>':'')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
   }).join('');
  }).catch(function(){});
 })();
