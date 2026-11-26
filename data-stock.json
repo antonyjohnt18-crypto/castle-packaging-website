@@ -1,158 +1,89 @@
 {
- "_note": "Ready-stock sizes shown on products.html and offered in quote.html. status: in_stock | limited | out_of_stock. To be synced from the ERP later; add/remove sizes here.",
- "groups": [
-  {
-   "id": "brown-bag",
-   "kind": "bag",
-   "paper": "Brown — 100 gsm",
-   "title": "Paper bags — Brown",
-   "sub": "Recycled paper · 100 gsm · sold in packets of 20",
-   "items": [
+  "_note": "Ready-stock sizes shown on products.html and offered in quote.html. status: in_stock | limited | out_of_stock. Published from the ERP (Item Master -> Standard size list). Edit sizes in the ERP, not here.",
+  "groups": [
     {
-     "name": "Cake Bag – Small",
-     "w": 15,
-     "h": 25,
-     "g": 15,
-     "status": "in_stock"
+      "id": "brown-bag-44",
+      "kind": "bag",
+      "paper": "Brown — 44 gsm",
+      "title": "Paper bags — Brown",
+      "sub": "Recycled paper · 44 gsm",
+      "items": [
+        {
+          "name": "Small",
+          "w": 15,
+          "h": 25,
+          "g": 10,
+          "handle": "Twisted",
+          "status": "limited"
+        }
+      ]
     },
     {
-     "name": "Cake Bag – Medium",
-     "w": 20,
-     "h": 25,
-     "g": 20,
-     "status": "in_stock"
+      "id": "brown-bag-80",
+      "kind": "bag",
+      "paper": "Brown — 80 gsm",
+      "title": "Paper bags — Brown",
+      "sub": "Recycled paper · 80 gsm",
+      "items": [
+        {
+          "name": "mini bag",
+          "w": 25,
+          "h": 35,
+          "g": 9,
+          "handle": "Twisted Paper Handle",
+          "status": "out_of_stock"
+        }
+      ]
     },
     {
-     "name": "Mini",
-     "w": 20,
-     "h": 25,
-     "g": 10,
-     "status": "in_stock"
+      "id": "brown-bag-90",
+      "kind": "bag",
+      "paper": "Brown — 90 gsm",
+      "title": "Paper bags — Brown",
+      "sub": "Recycled paper · 90 gsm",
+      "items": [
+        {
+          "name": "cake bag",
+          "w": 20,
+          "h": 60,
+          "g": 20,
+          "handle": "Cotton Handle",
+          "status": "limited"
+        }
+      ]
     },
     {
-     "name": "Small",
-     "w": 26,
-     "h": 35,
-     "g": 10,
-     "status": "in_stock"
+      "id": "white-bag",
+      "kind": "bag",
+      "paper": "White — 80 gsm",
+      "title": "Paper bags — White",
+      "sub": "Virgin paper · 80 gsm · best for multicolour printing",
+      "items": [
+        {
+          "name": "Large",
+          "w": 30,
+          "h": 20,
+          "g": 12,
+          "handle": "Twisted",
+          "status": "limited"
+        }
+      ]
     },
     {
-     "name": "Medium",
-     "w": 30,
-     "h": 40,
-     "g": 12,
-     "status": "in_stock"
-    },
-    {
-     "name": "Medium (wide)",
-     "w": 40,
-     "h": 30,
-     "g": 12,
-     "status": "in_stock"
-    },
-    {
-     "name": "Large",
-     "w": 40,
-     "h": 60,
-     "g": 15,
-     "status": "in_stock"
+      "id": "white-cover",
+      "kind": "cover",
+      "paper": "White — 100 gsm",
+      "title": "Paper covers — White",
+      "sub": "Virgin paper · 100 gsm · sold per kg",
+      "items": [
+        {
+          "name": "",
+          "w": 15,
+          "h": 30,
+          "g": 8,
+          "status": "in_stock"
+        }
+      ]
     }
-   ]
-  },
-  {
-   "id": "white-bag",
-   "kind": "bag",
-   "paper": "White — 120 gsm",
-   "title": "Paper bags — White",
-   "sub": "Virgin paper · 120 gsm · best for multicolour printing · sold in packets of 20",
-   "items": [
-    {
-     "name": "Cake Bag – Small",
-     "w": 15,
-     "h": 25,
-     "g": 15,
-     "status": "in_stock"
-    },
-    {
-     "name": "Cake Bag – Medium",
-     "w": 20,
-     "h": 25,
-     "g": 20,
-     "status": "in_stock"
-    },
-    {
-     "name": "Mini",
-     "w": 20,
-     "h": 25,
-     "g": 8,
-     "status": "in_stock"
-    },
-    {
-     "name": "Medium",
-     "w": 30,
-     "h": 40,
-     "g": 12,
-     "status": "in_stock"
-    },
-    {
-     "name": "Large",
-     "w": 40,
-     "h": 60,
-     "g": 15,
-     "status": "in_stock"
-    }
-   ]
-  },
-  {
-   "id": "brown-cover",
-   "kind": "cover",
-   "paper": "Brown — 80 gsm",
-   "title": "Paper covers — Brown",
-   "sub": "Recycled paper · 80 gsm · sold per kg",
-   "items": [
-    {
-     "name": "",
-     "w": 15,
-     "h": 20,
-     "g": 5,
-     "status": "in_stock"
-    },
-    {
-     "name": "",
-     "w": 18,
-     "h": 25,
-     "g": 8,
-     "status": "in_stock"
-    },
-    {
-     "name": "",
-     "w": 20,
-     "h": 30,
-     "g": 10,
-     "status": "in_stock"
-    },
-    {
-     "name": "",
-     "w": 26,
-     "h": 35,
-     "g": 10,
-     "status": "in_stock"
-    },
-    {
-     "name": "",
-     "w": 30,
-     "h": 40,
-     "g": 10,
-     "status": "in_stock"
-    },
-    {
-     "name": "",
-     "w": 35,
-     "h": 46,
-     "g": 11,
-     "status": "in_stock"
-    }
-   ]
-  }
- ]
+  ]
 }
