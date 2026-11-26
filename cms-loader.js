@@ -15,6 +15,40 @@
     document.querySelectorAll(selector).forEach(function (el) { el.setAttribute('href', value); });
   }
 
+  // ---- Hidden pages (set in the ERP: Website Content -> Website Text) ----
+  // data-pages.json has a "hidden" map, for example { "faq": true }. A hidden page loses its
+  // menu, footer and button links and shows a short coming-soon notice (and is marked noindex).
+  function slugHere() {
+    var f = location.pathname.split('/').pop().replace(/\.html$/, '');
+    return (f === '' || f === 'index') ? 'home' : f;
+  }
+  function showNotice() {
+    var meta = document.createElement('meta');
+    meta.name = 'robots'; meta.content = 'noindex, nofollow';
+    document.head.appendChild(meta);
+    var header = document.querySelector('header.site-header');
+    var footer = document.querySelector('footer.site-footer');
+    if (!header || !footer) return;
+    var n = header.nextElementSibling;
+    while (n && n !== footer) { var next = n.nextElementSibling; n.parentNode.removeChild(n); n = next; }
+    var s = document.createElement('section');
+    s.innerHTML = '<div class="wrap" style="text-align:center;padding:72px 0;"><h1>This page is coming soon</h1><p>We are working on it and it will be back shortly. In the meantime, have a look around the rest of our site, or get in touch and we will be happy to help.</p><p><a class="btn btn-primary" href="index.html">Back to Home</a></p></div>';
+    footer.parentNode.insertBefore(s, footer);
+    document.title = 'Coming soon | Castle Packaging';
+  }
+  function applyVisibility(hidden) {
+    var slugs = Object.keys(hidden).filter(function (k) { return hidden[k] === true && k !== 'home'; });
+    if (!slugs.length) return;
+    var files = slugs.map(function (s) { return s + '.html'; });
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var h = (a.getAttribute('href') || '').split('#')[0].split('?')[0];
+      if (files.indexOf(h) < 0) return;
+      var host = a.closest('nav, footer, header') ? (a.closest('li') || a) : a;
+      host.style.display = 'none';
+    });
+    if (slugs.indexOf(slugHere()) >= 0) showNotice();
+  }
+
   fetch('data-company.json', { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (c) {
@@ -64,13 +98,14 @@
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (p) {
       if (!p) return;
-      ['home', 'about', 'quote'].forEach(function (page) {
+      Object.keys(p).forEach(function (page) {
         var section = p[page];
-        if (!section) return;
+        if (page.charAt(0) === '_' || page === 'hidden' || !section || typeof section !== 'object') return;
         Object.keys(section).forEach(function (key) {
           setText('[data-cms="pages.' + page + '.' + key + '"]', section[key]);
         });
       });
+      applyVisibility(p.hidden || {});
     })
     .catch(function () { /* keep static fallback content */ });
 
