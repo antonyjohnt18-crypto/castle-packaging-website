@@ -43,7 +43,7 @@
       "sub": "Recycled paper · 90 gsm",
       "items": [
         {
-          "name": "cake bag",
+          "name": "cake bag test",
           "w": 20,
           "h": 60,
           "g": 20,
@@ -60,7 +60,7 @@
       "sub": "Virgin paper · 80 gsm · best for multicolour printing",
       "items": [
         {
-          "name": "Large",
+          "name": "Large lot",
           "w": 30,
           "h": 20,
           "g": 12,
