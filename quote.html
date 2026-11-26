@@ -134,20 +134,20 @@
    if(!cp){q.min=1;q.placeholder='';ql.textContent='Quantity *';qh.textContent='Select the product to see the minimum quantity. Production takes 7–15 days.';un.value='';}
    else{q.min=isC?300:2000;q.placeholder=isC?'Minimum 300':'Minimum 2000';ql.textContent=isC?'Quantity (kg) *':'Quantity (pieces) *';qh.textContent=(isC?'Minimum 300 kg':'Minimum 2000 pieces')+'. Production takes 7–15 days.';un.value=isC?'kg':'pieces';}
    d.min=add(today,7);dh.textContent='Production takes 7–15 days.';}
-  else if(k==='standard'){var p=sp.value;if(p==='Paper bag'){ql.textContent='Quantity (packets) *';un.value='packets (1 packet = 20 bags)';qh.textContent='1 packet = 20 paper bags';}else if(p==='Paper cover'){ql.textContent='Quantity (kg) *';un.value='kg';}else{un.value='';}d.min=add(today,1);dh.textContent='';}
+  else if(k==='standard'){var p=sp.value;if(p==='Paper bag'){ql.textContent='Quantity (packets) *';un.value='packets';qh.textContent='Pieces per packet depend on the size you choose.';}else if(p==='Paper cover'){ql.textContent='Quantity (kg) *';un.value='kg';}else{un.value='';}d.min=add(today,1);dh.textContent='';}
  }
  sel.addEventListener('change',apply);
  mat.addEventListener('change',function(){var l=ITEMS[mat.value]||[];opts(item,l.length?'Select item':'Select material first',l);});
  sp.addEventListener('change',function(){stdPaper();apply();});
  spa.addEventListener('change',stdSize);
  ['c_prodtype'].forEach(function(i){$(i).addEventListener('change',apply);});
- q.addEventListener('input',function(){if(MAP[sel.value]==='standard'&&sp.value==='Paper bag'){var n=parseInt(q.value,10);$('q_qty_hint').textContent='1 packet = 20 paper bags'+(n>0?' · '+(n*20)+' bags':'');}});
+ q.addEventListener('input',function(){if(MAP[sel.value]==='standard'&&sp.value==='Paper bag'){var n=parseInt(q.value,10);$('q_qty_hint').textContent=(function(){var pm=/(\d+) per packet/.exec(ssz.value||'');if(!pm)return 'Pieces per packet depend on the size you choose.';var pk=parseInt(pm[1],10);return '1 packet = '+pk+' paper bags'+(n>0?' · '+(n*pk)+' bags':'');})();}});
  ['c_print','s_print','q_urgent'].forEach(function(i){$(i).addEventListener('change',apply);});
  document.querySelectorAll('input[name="sourcing"]').forEach(function(r){r.addEventListener('change',apply);});
  apply();
  fetch('data-stock.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
   if(!d||!d.groups)return;var nb={},nc={};
-  d.groups.forEach(function(g){var l=g.items.filter(function(i){return i.status!=='out_of_stock';}).map(function(i){return (i.name?i.name+' — ':'')+'W '+i.w+' × H '+i.h+' × G '+i.g+' cm';});if(l.length)(g.kind==='bag'?nb:nc)[g.paper]=l;});
+  d.groups.forEach(function(g){var l=g.items.filter(function(i){return i.status!=='out_of_stock';}).map(function(i){return (i.name?i.name+' — ':'')+'W '+i.w+' × H '+i.h+' × G '+i.g+' cm'+(i.handle?', '+i.handle:'')+(i.pack?', '+i.pack+' per packet':'');});if(l.length)(g.kind==='bag'?nb:nc)[g.paper]=l;});
   if(Object.keys(nb).length){Object.keys(BAGS).forEach(function(k){delete BAGS[k];});Object.keys(nb).forEach(function(k){BAGS[k]=nb[k];});}
   if(Object.keys(nc).length){Object.keys(COVERS).forEach(function(k){delete COVERS[k];});Object.keys(nc).forEach(function(k){COVERS[k]=nc[k];});}
   if(sp.value){var pv=spa.value,sv=ssz.value;stdPaper();if(pv&&[].some.call(spa.options,function(o){return o.value===pv;})){spa.value=pv;stdSize();if(sv&&[].some.call(ssz.options,function(o){return o.value===sv;}))ssz.value=sv;}}
