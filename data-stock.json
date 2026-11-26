@@ -47,7 +47,7 @@
           "w": 20,
           "h": 60,
           "g": 20,
-          "handle": "Cotton Handle",
+          "handle": "Twisted Handle",
           "status": "limited"
         }
       ]
@@ -77,7 +77,7 @@
       "sub": "Virgin paper · 100 gsm · sold per kg",
       "items": [
         {
-          "name": "",
+          "name": "V-Bottom test",
           "w": 15,
           "h": 30,
           "g": 8,
