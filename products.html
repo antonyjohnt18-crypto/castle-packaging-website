@@ -148,7 +148,7 @@
         <h3>Recycled Paper Bags — Brown</h3>
         <div class="variants v-sage">Recycled paper · 100 gsm</div>
         <p>The affordable choice. Strong brown paper bags made from recycled paper — a plastic-free way to carry, for retail, grocery and takeaway. Ready stock in standard sizes.</p>
-        <p class="product-soldby">Ready stock · Sold in packets of 20 · See size chart</p>
+        <p class="product-soldby">Ready stock · Sold in packets · See size chart</p>
       </div>
     </div>
 
@@ -158,7 +158,7 @@
         <h3>Paper Bags — White</h3>
         <div class="variants">Virgin paper · 120 gsm</div>
         <p>The best choice for multicolour printing. Bright white virgin paper gives vivid, detailed colour — ideal for gifts, cakes and premium retail. Ready stock in standard sizes.</p>
-        <p class="product-soldby">Ready stock · Sold in packets of 20 · See size chart</p>
+        <p class="product-soldby">Ready stock · Sold in packets · See size chart</p>
       </div>
     </div>
 
@@ -219,9 +219,9 @@
   <div class="container">
     <div class="sec-head"><span class="tag">Standard sizes</span><h2>Paper bag and cover size chart</h2><p>All sizes in cm — W = width, H = height, G = gusset.</p></div>
     <div class="sz-grid" id="szGrid">
-      <div class="sz"><h3>Paper bags — Brown</h3><p class="sub">Recycled paper · 100 gsm · sold in packets of 20</p>
+      <div class="sz"><h3>Paper bags — Brown</h3><p class="sub">Recycled paper · 100 gsm · sold in packets</p>
         <table><thead><tr><th>Size</th><th>W × H × G (cm)</th></tr></thead><tbody><tr><td>Cake Bag – Small</td><td>W 15 × H 25 × G 15</td></tr><tr><td>Cake Bag – Medium</td><td>W 20 × H 25 × G 20</td></tr><tr><td>Mini</td><td>W 20 × H 25 × G 10</td></tr><tr><td>Small</td><td>W 26 × H 35 × G 10</td></tr><tr><td>Medium</td><td>W 30 × H 40 × G 12</td></tr><tr><td>Medium (wide)</td><td>W 40 × H 30 × G 12</td></tr><tr><td>Large</td><td>W 40 × H 60 × G 15</td></tr></tbody></table></div>
-      <div class="sz"><h3>Paper bags — White</h3><p class="sub">Virgin paper · 120 gsm · best for multicolour printing · sold in packets of 20</p>
+      <div class="sz"><h3>Paper bags — White</h3><p class="sub">Virgin paper · 120 gsm · best for multicolour printing · sold in packets</p>
         <table><thead><tr><th>Size</th><th>W × H × G (cm)</th></tr></thead><tbody><tr><td>Cake Bag – Small</td><td>W 15 × H 25 × G 15</td></tr><tr><td>Cake Bag – Medium</td><td>W 20 × H 25 × G 20</td></tr><tr><td>Mini</td><td>W 20 × H 25 × G 8</td></tr><tr><td>Medium</td><td>W 30 × H 40 × G 12</td></tr><tr><td>Large</td><td>W 40 × H 60 × G 15</td></tr></tbody></table></div>
       <div class="sz"><h3>Paper covers — Brown</h3><p class="sub">Recycled paper · 80 gsm · sold per kg</p>
         <table><thead><tr><th>W × H × G (cm)</th></tr></thead><tbody><tr><td>W 15 × H 20 × G 5</td></tr><tr><td>W 18 × H 25 × G 8</td></tr><tr><td>W 20 × H 30 × G 10</td></tr><tr><td>W 26 × H 35 × G 10</td></tr><tr><td>W 30 × H 40 × G 10</td></tr><tr><td>W 35 × H 46 × G 11</td></tr></tbody></table></div>
@@ -236,13 +236,13 @@
  fetch('data-stock.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
   if(!d||!d.groups||!d.groups.length)return;
   g.innerHTML=d.groups.map(function(grp){
-   var named=grp.kind==='bag';
+   var named=grp.kind==='bag'; var hasH=grp.items.some(function(i){return i.handle;}), hasP=grp.items.some(function(i){return i.pack;});
    var rows=grp.items.map(function(i){
     var dim='W '+i.w+' × H '+i.h+' × G '+i.g;
     var st=i.status==='out_of_stock'?' <small class="st">Out of stock</small>':(i.status==='limited'?' <small class="st">Limited</small>':'');
-    return '<tr'+(i.status==='out_of_stock'?' class="oos"':'')+'>'+(named?'<td>'+esc(i.name)+'</td>':'')+'<td>'+dim+st+'</td></tr>';
+    return '<tr'+(i.status==='out_of_stock'?' class="oos"':'')+'>'+(named?'<td>'+esc(i.name)+'</td>':'')+'<td>'+dim+st+'</td>'+(hasH?'<td>'+esc(i.handle||'No handle')+'</td>':'')+(hasP?'<td>'+(i.pack?esc(i.pack)+' per packet':'&mdash;')+'</td>':'')+'</tr>';
    }).join('');
-   return '<div class="sz"><h3>'+esc(grp.title)+'</h3><p class="sub">'+esc(grp.sub)+'</p><table><thead><tr>'+(named?'<th>Size</th>':'')+'<th>W × H × G (cm)</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+   return '<div class="sz"><h3>'+esc(grp.title)+'</h3><p class="sub">'+esc(grp.sub)+'</p><table><thead><tr>'+(named?'<th>Size</th>':'')+'<th>W × H × G (cm)</th>'+(hasH?'<th>Handle</th>':'')+(hasP?'<th>Pack</th>':'')+'</tr></thead><tbody>'+rows+'</tbody></table></div>';
   }).join('');
  }).catch(function(){});
 })();
