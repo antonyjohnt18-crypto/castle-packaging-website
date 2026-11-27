@@ -61,6 +61,38 @@
       });
     });
   }
+  // Look presets chosen in the ERP (size, colour, font) for text fields: p._styles = { page: { key: { size, color, font } } }.
+  var ST_CSS = '.cms-c-gold{color:var(--gold)!important}.cms-c-ink{color:var(--ink)!important}.cms-c-muted{color:var(--muted)!important}.cms-f-serif{font-family:var(--serif)!important}.cms-f-sans{font-family:var(--sans)!important}';
+  var SCALE = { sm: 0.85, lg: 1.2, xl: 1.5 };
+  var scaled = [];
+  function rescale() {
+    scaled.forEach(function (it) {
+      it.el.style.fontSize = '';
+      var px = parseFloat(getComputedStyle(it.el).fontSize);
+      if (px) it.el.style.fontSize = (px * it.k) + 'px';
+    });
+  }
+  function applyStyles(st) {
+    if (!st || typeof st !== 'object') return;
+    var any = false;
+    Object.keys(st).forEach(function (page) {
+      Object.keys(st[page] || {}).forEach(function (key) {
+        var s = st[page][key] || {};
+        document.querySelectorAll('[data-cms="pages.' + page + '.' + key + '"],[data-cms-rich="pages.' + page + '.' + key + '"]').forEach(function (el) {
+          if (s.color === 'gold' || s.color === 'ink' || s.color === 'muted') { el.classList.add('cms-c-' + s.color); any = true; }
+          if (s.font === 'serif' || s.font === 'sans') { el.classList.add('cms-f-' + s.font); any = true; }
+          if (Object.prototype.hasOwnProperty.call(SCALE, s.size)) { scaled.push({ el: el, k: SCALE[s.size] }); any = true; }
+        });
+      });
+    });
+    if (!any) return;
+    var tag = document.createElement('style');
+    tag.textContent = ST_CSS;
+    document.head.appendChild(tag);
+    rescale();
+    var tm;
+    window.addEventListener('resize', function () { clearTimeout(tm); tm = setTimeout(rescale, 150); });
+  }
   function setHref(selector, value) {
     document.querySelectorAll(selector).forEach(function (el) { el.setAttribute('href', value); });
   }
@@ -157,6 +189,7 @@
           if (Array.isArray(section[key])) setFaq('[data-cms-faq="pages.' + page + '.' + key + '"]', section[key]);
         });
       });
+      applyStyles(p._styles);
       applyVisibility(p.hidden || {});
     })
     .catch(function () { /* keep static fallback content */ });
