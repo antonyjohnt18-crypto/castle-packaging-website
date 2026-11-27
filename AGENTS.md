@@ -224,3 +224,8 @@ Production (main) must not be touched or promoted without explicit approval. Nex
 ## Browser tab rule (applies to every session)
 
 Keep ONE browser tab per website and always reuse that same tab for that website. Never open a different website in a tab that belongs to another site, and never load all sites into one tab. Standard tabs: (1) website sandbox https://castle-packaging-website-sandbox-o67at.ondigitalocean.app, (2) ERP sandbox https://erp-castlepkg-sandbox-7bgs8.ondigitalocean.app, (3) GitHub repo castle-packaging-website (this repo), (4) GitHub repo castle-packagingerp-website (ERP), and a DigitalOcean tab when deploys need checking. At the start of a session open each one in its own tab. Open the tabs one at a time (parallel preview_start calls reuse the same tab and overwrite each other), then check with tabs_context that each tab shows the right site.
+
+
+## Text markers wired for the ERP (27 Nov 2026, sandbox)
+
+Markers (data-cms="pages.<page>.<key>") now exist in: about.html (18), quote.html (2), index.html (14: heroTag, heroIntro, whatHead, whatIntro, bagsHead, bagsIntro, printHead, printIntro, rushHead, rushIntro, serveHead, howHead, quoteHead, quoteIntro), faq.html (4: headline, intro, ctaHeadline, ctaText). Keep those marker names in step with FIELDS in the ERP server/lib/website-content.js. The home hero H1 and the FAQ questions/answers are deliberately not marked (emphasis and links would be lost; FAQPage JSON-LD would go stale). data-pages.json still has stale old home keys (heroHeadline, heroLead, feature*, cta*): never reuse those names for markers.
