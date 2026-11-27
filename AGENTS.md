@@ -229,3 +229,8 @@ Keep ONE browser tab per website and always reuse that same tab for that website
 ## Text markers wired for the ERP (27 Nov 2026, sandbox)
 
 Markers (data-cms="pages.<page>.<key>") now exist in: about.html (18), quote.html (2), index.html (14: heroTag, heroIntro, whatHead, whatIntro, bagsHead, bagsIntro, printHead, printIntro, rushHead, rushIntro, serveHead, howHead, quoteHead, quoteIntro), faq.html (4: headline, intro, ctaHeadline, ctaText). Keep those marker names in step with FIELDS in the ERP server/lib/website-content.js. The home hero H1 and the FAQ questions/answers are deliberately not marked (emphasis and links would be lost; FAQPage JSON-LD would go stale). data-pages.json still has stale old home keys (heroHeadline, heroLead, feature*, cta*): never reuse those names for markers.
+
+
+## Rich text markers (27 Nov 2026, sandbox)
+
+For text that needs bold, italic, links, line breaks or bullets, mark the element with data-cms-rich="pages.<page>.<key>" instead of data-cms (data-cms writes plain text only). cms-loader.js cleanRich() keeps only strong, em, br, ul, ol, li and a[href] (safe links only) before setting innerHTML. Wired today: index.html h1 = pages.home.heroTitle (keeps its em highlight). Do not hand-edit data-pages.json values for rich keys with other tags: they are stripped.
