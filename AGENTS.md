@@ -259,3 +259,10 @@ data-pages.json can have a top-level _styles = { page: { key: { size: sm|lg|xl, 
 - FAQ is visual too: in edit mode cms-editor.js rebuilds the list inside [data-cms-faq] with Up/Down/Delete buttons per question and an Add question button, and sends {type:faq,key,items:[{q,a}]} to the ERP (cms-editor.js?v=2). Questions are plain text, answers are rich text.
 - shop.html is the E-commerce page. It is hidden by default (data-pages.json hidden.shop = true). cms-loader.js adds a Shop link after Products in the menu and footer only when the page is not hidden and shop.html exists. Add shop.html to sitemap.xml when it goes live (the ERP only removes entries for hidden pages, it never adds them). Terms currently say online checkout is not available: review the Terms and the page wording before showing it.
 - On promotion to main: check hidden.shop is true in data-pages.json, and add the production ERP origin to cms-editor.js ALLOWED.
+
+## Photos (27 Nov 2026, sandbox)
+- Photos on Home and Digital printing carry data-cms-img="pages.<page>.<key>" (key from the file name, e.g. imgHeroCutout). The ERP stores a photo as JSON text {s: file path, a: alt text, h: true when hidden} in data-pages.json; cms-loader.js setImg() applies it (src, alt, hide). Do not mark images that JavaScript rebuilds (product and news grids, size chart).
+- New photos are uploaded from the ERP (Website Control > Insert photo / Photos), resized in the browser to WebP and committed to the uploads/ folder of this repo. A file in uploads/ is not live until a published page uses it. uploads/ also holds product photos from the ERP E-commerce editor, so never delete files there by hand.
+- Rich text may contain <img src="uploads/..."> (class cms-img) inserted with Insert photo; only uploads/ paths survive cleanRich and the server cleanHtml.
+- In edit mode cms-editor.js shows uploads/ photos through raw.githubusercontent.com (previewBase from the ERP) because the site only serves a new file after it redeploys. Current versions: cms-editor.js?v=4.
+- To make a new page photo editable: add data-cms-img and the matching I(key, label) entry in the ERP server FIELDS.
