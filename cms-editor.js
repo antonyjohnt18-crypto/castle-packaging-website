@@ -29,7 +29,7 @@
   function report(el) {
     if (!el) return;
     if (el.closest && el.closest('[data-cms-faq]')) { faqSend(); return; }
-    send({ type: 'change', key: keyOf(el), html: el.innerHTML });
+    send({ type: 'change', key: keyOf(el), html: outHtml(el) });
   }
 
   var css = document.createElement('style');
@@ -92,9 +92,23 @@
 
   var imgs = [].slice.call(document.querySelectorAll('img[data-cms-img^="pages."]'));
   var selImg = null;
+  var previewBase = '';
+  function prev(p) { return p.indexOf('uploads/') === 0 && previewBase ? previewBase + p : p; }
+  function relSrc(el) { return el.getAttribute('data-cms-src') || el.getAttribute('src') || ''; }
+  function relink(el) {
+    [].forEach.call(el.querySelectorAll('img[src^="uploads/"]'), function (i) {
+      i.setAttribute('data-rel', i.getAttribute('src'));
+      i.setAttribute('src', prev(i.getAttribute('src')));
+    });
+  }
+  function outHtml(el) {
+    var c = el.cloneNode(true);
+    [].forEach.call(c.querySelectorAll('img[data-rel]'), function (i) { i.setAttribute('src', i.getAttribute('data-rel')); i.removeAttribute('data-rel'); });
+    return c.innerHTML;
+  }
   function imgKey(el) { return (el.getAttribute('data-cms-img') || '').split('.').slice(2).join('.'); }
   function imgVal(el) {
-    var o = { s: el.getAttribute('src') || '', a: el.getAttribute('alt') || '' };
+    var o = { s: relSrc(el), a: el.getAttribute('alt') || '' };
     if (el.getAttribute('data-cms-hid') === '1') o.h = true;
     return JSON.stringify(o);
   }
@@ -102,7 +116,7 @@
     if (hid) { el.setAttribute('data-cms-hid', '1'); el.style.opacity = '.3'; el.style.outline = '3px dashed #c0392b'; }
     else { el.removeAttribute('data-cms-hid'); el.style.opacity = ''; el.style.outline = ''; }
   }
-  function imgInfo(el) { send({ type: 'image', key: imgKey(el), src: el.getAttribute('src') || '', alt: el.getAttribute('alt') || '', hidden: el.getAttribute('data-cms-hid') === '1' }); }
+  function imgInfo(el) { send({ type: 'image', key: imgKey(el), src: relSrc(el), alt: el.getAttribute('alt') || '', hidden: el.getAttribute('data-cms-hid') === '1' }); }
   function imgPick(el) {
     imgs.forEach(function (x) { if (x.getAttribute('data-cms-hid') !== '1') x.style.outline = ''; });
     selImg = el;
@@ -115,14 +129,14 @@
     if (m.cmd === 'insertImage') {
       if (!restore()) { send({ type: 'notice', text: 'Click inside a text on the page where the photo should go, then insert it.' }); return; }
       var a = String(m.alt || '').split('"').join('&quot;').split('<').join('&lt;');
-      document.execCommand('insertHTML', false, '<img class="cms-img" src="' + m.src + '" alt="' + a + '">');
+      document.execCommand('insertHTML', false, '<img class="cms-img" data-rel="' + m.src + '" src="' + prev(m.src) + '" alt="' + a + '">');
       report(lastEl);
       return;
     }
     var el = imgByKey(m.key);
     if (!el) return;
     if (m.cmd === 'setImage') {
-      if (m.src) { el.removeAttribute('srcset'); el.setAttribute('src', m.src); }
+      if (m.src) { el.removeAttribute('srcset'); el.setAttribute('data-cms-src', m.src); el.setAttribute('src', prev(m.src)); }
       if (typeof m.alt === 'string') el.setAttribute('alt', m.alt);
     } else if (m.cmd === 'hideImage') imgMark(el, true);
     else if (m.cmd === 'showImage') imgMark(el, false);
@@ -226,16 +240,17 @@
     if (ev.origin !== parentOrigin || ev.source !== window.parent || !ev.data || ev.data.cms !== 1) return;
     var m = ev.data;
     if (m.type === 'init') {
+      previewBase = m.preview || '';
       fields.forEach(function (el) {
         var v = m.values && m.values[keyOf(el)];
-        if (typeof v === 'string') el.innerHTML = v;
+        if (typeof v === 'string') { el.innerHTML = v; relink(el); }
       });
       imgs.forEach(function (el) {
         var iv = m.values && m.values[imgKey(el)];
         if (typeof iv !== 'string') return;
         try {
           var o = JSON.parse(iv);
-          if (o.s) el.setAttribute('src', o.s);
+          if (o.s) { el.setAttribute('data-cms-src', o.s); el.setAttribute('src', prev(o.s)); }
           if (typeof o.a === 'string') el.setAttribute('alt', o.a);
           imgMark(el, !!o.h);
         } catch (e) { /* keep the page photo */ }
