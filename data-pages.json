@@ -34,7 +34,5 @@
     "headline": "Get a Quote",
     "subtext": "Tell us what you need and when. We'll reply with pricing and lead time."
   },
-  "hidden": {
-    "shop": true
-  }
+  "hidden": {}
 }
