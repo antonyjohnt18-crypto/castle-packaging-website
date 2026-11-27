@@ -79,7 +79,7 @@
   var EDIT = window.parent !== window && location.search.indexOf('cmsedit=1') >= 0;
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = 'cms-editor.js?v=1';
+    s.src = 'cms-editor.js?v=2';
     document.body.appendChild(s);
   }
   var scaled = [];
