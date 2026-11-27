@@ -239,3 +239,8 @@ For text that needs bold, italic, links, line breaks or bullets, mark the elemen
 ## FAQ list marker (27 Nov 2026, sandbox) - supersedes the FAQ note above
 
 faq.html: the container of the question blocks has data-cms-faq="pages.faq.items". Each block must stay as div > h3 (question) + p (answer); the ERP reads this structure as the starting list and cms-loader.js setFaq() rebuilds it from data-pages.json (faq.items = [{ q, a }]) once the ERP has published. When the ERP publishes FAQ changes it also rewrites the FAQPage JSON-LD in faq.html: do not hand-edit the questions in faq.html or the JSON-LD after that; change them in the ERP (Website Control -> FAQ).
+
+
+## Look presets from the ERP (27 Nov 2026, sandbox)
+
+data-pages.json can have a top-level _styles = { page: { key: { size: sm|lg|xl, color: gold|ink|muted, font: serif|sans } } } written by the ERP (Website Control). cms-loader.js applyStyles() applies it to elements with data-cms or data-cms-rich markers: classes cms-c-* and cms-f-* (CSS injected by the loader, using --gold, --ink, --muted, --serif, --sans) and a font-size multiplier (0.85 / 1.2 / 1.5 of the element's own computed size, recomputed on resize). Do not hand-edit _styles; do not put !important font rules on marked elements.
