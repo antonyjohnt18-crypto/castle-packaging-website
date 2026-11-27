@@ -234,3 +234,8 @@ Markers (data-cms="pages.<page>.<key>") now exist in: about.html (18), quote.htm
 ## Rich text markers (27 Nov 2026, sandbox)
 
 For text that needs bold, italic, links, line breaks or bullets, mark the element with data-cms-rich="pages.<page>.<key>" instead of data-cms (data-cms writes plain text only). cms-loader.js cleanRich() keeps only strong, em, br, ul, ol, li and a[href] (safe links only) before setting innerHTML. Wired today: index.html h1 = pages.home.heroTitle (keeps its em highlight). Do not hand-edit data-pages.json values for rich keys with other tags: they are stripped.
+
+
+## FAQ list marker (27 Nov 2026, sandbox) - supersedes the FAQ note above
+
+faq.html: the container of the question blocks has data-cms-faq="pages.faq.items". Each block must stay as div > h3 (question) + p (answer); the ERP reads this structure as the starting list and cms-loader.js setFaq() rebuilds it from data-pages.json (faq.items = [{ q, a }]) once the ERP has published. When the ERP publishes FAQ changes it also rewrites the FAQPage JSON-LD in faq.html: do not hand-edit the questions in faq.html or the JSON-LD after that; change them in the ERP (Website Control -> FAQ).
