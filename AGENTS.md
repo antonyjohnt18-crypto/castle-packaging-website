@@ -244,3 +244,11 @@ faq.html: the container of the question blocks has data-cms-faq="pages.faq.items
 ## Look presets from the ERP (27 Nov 2026, sandbox)
 
 data-pages.json can have a top-level _styles = { page: { key: { size: sm|lg|xl, color: gold|ink|muted, font: serif|sans } } } written by the ERP (Website Control). cms-loader.js applyStyles() applies it to elements with data-cms or data-cms-rich markers: classes cms-c-* and cms-f-* (CSS injected by the loader, using --gold, --ink, --muted, --serif, --sans) and a font-size multiplier (0.85 / 1.2 / 1.5 of the element's own computed size, recomputed on resize). Do not hand-edit _styles; do not put !important font rules on marked elements.
+
+## Visual page editor support (27 Nov 2026, sandbox)
+- The ERP (Website Control) opens a page in an iframe with ?cmsedit=1. In that mode cms-loader.js (EDIT = inside an iframe and cmsedit=1) skips applying published content and loads cms-editor.js, which makes every data-cms-rich element editable (contenteditable) and talks to the ERP by postMessage (every message has cms:1): site to ERP ready, change, select, notice; ERP to site init, cmd. The website never saves anything.
+- cms-editor.js only accepts messages from origins in its ALLOWED list (sandbox ERP only). Add the production ERP origin only when promoting to main.
+- Link clicks and form submits are blocked in edit mode; paste is plain text; Enter inserts a line break.
+- Look presets are span classes whitelisted in cleanRich: cms-c-gold|ink|muted (colour), cms-f-serif|sans (font), cms-s-sm|lg|xl (size). Add new classes in cms-loader.js, cms-editor.js and the ERP server cleanHtml together.
+- Home markers are all data-cms-rich (15). To make another page visually editable: switch its markers to data-cms-rich and flag the page visual:true in the ERP server.
+- Verified on sandbox: iframe loads, edit and colour apply, autosave to draft, discard. Real publish still to be tested.
