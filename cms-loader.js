@@ -12,7 +12,7 @@
     document.querySelectorAll(selector).forEach(function (el) { el.innerHTML = value; });
   }
   // Rich text from the ERP (bold, italic, links, line breaks, bullets only). Everything else is removed here too.
-  var RICH_OK = { STRONG: 1, EM: 1, BR: 1, UL: 1, OL: 1, LI: 1, A: 1, SPAN: 1 };
+  var RICH_OK = { STRONG: 1, EM: 1, BR: 1, UL: 1, OL: 1, LI: 1, A: 1, SPAN: 1, IMG: 1 };
   var SPAN_CLASSES = ['cms-c-gold', 'cms-c-ink', 'cms-c-muted', 'cms-f-serif', 'cms-f-sans', 'cms-s-sm', 'cms-s-lg', 'cms-s-xl'];
   function hrefOk(h) {
     h = String(h || '').trim().toLowerCase();
@@ -29,7 +29,11 @@
         if (c.nodeType !== 1) { n.removeChild(c); return; }
         walk(c);
         if (!RICH_OK[c.tagName]) { while (c.firstChild) n.insertBefore(c.firstChild, c); n.removeChild(c); return; }
-        Array.prototype.slice.call(c.attributes).forEach(function (a) { if (!(c.tagName === 'A' && a.name === 'href') && !(c.tagName === 'SPAN' && a.name === 'class')) c.removeAttribute(a.name); });
+        Array.prototype.slice.call(c.attributes).forEach(function (a) { if (!(c.tagName === 'A' && a.name === 'href') && !(c.tagName === 'SPAN' && a.name === 'class') && !(c.tagName === 'IMG' && (a.name === 'src' || a.name === 'alt'))) c.removeAttribute(a.name); });
+        if (c.tagName === 'IMG') {
+          if (!/^uploads\/[A-Za-z0-9._-]+$/.test(c.getAttribute('src') || '')) { n.removeChild(c); return; }
+          c.setAttribute('class', 'cms-img');
+        }
         if (c.tagName === 'SPAN') {
           var keep = (c.getAttribute('class') || '').split(' ').filter(function (x) { return SPAN_CLASSES.indexOf(x) >= 0; });
           if (keep.length) c.setAttribute('class', keep.join(' '));
@@ -42,6 +46,17 @@
       });
     })(tpl.content);
     return tpl.innerHTML;
+  }
+  // Photos chosen in the ERP: value is JSON {s: file path, a: alt text, h: true when hidden}.
+  function setImg(selector, value) {
+    var v;
+    try { v = JSON.parse(value); } catch (e) { return; }
+    if (!v || typeof v !== 'object') return;
+    document.querySelectorAll(selector).forEach(function (el) {
+      if (typeof v.s === 'string' && /^[A-Za-z0-9._\/-]+$/.test(v.s) && v.s.indexOf('..') < 0) { el.removeAttribute('srcset'); el.setAttribute('src', v.s); }
+      if (typeof v.a === 'string') el.setAttribute('alt', v.a);
+      el.style.display = v.h ? 'none' : '';
+    });
   }
   function setRich(selector, value) {
     var clean = cleanRich(value);
@@ -68,7 +83,7 @@
     });
   }
   // Look presets chosen in the ERP (size, colour, font) for text fields: p._styles = { page: { key: { size, color, font } } }.
-  var ST_CSS = '.cms-c-gold{color:var(--gold)!important}.cms-c-ink{color:var(--ink)!important}.cms-c-muted{color:var(--muted)!important}.cms-f-serif{font-family:var(--serif)!important}.cms-f-sans{font-family:var(--sans)!important}';
+  var ST_CSS = '.cms-c-gold{color:var(--gold)!important}.cms-c-ink{color:var(--ink)!important}.cms-c-muted{color:var(--muted)!important}.cms-f-serif{font-family:var(--serif)!important}.cms-f-sans{font-family:var(--sans)!important}.cms-img{max-width:100%;height:auto;display:block;margin:12px 0;border-radius:8px}';
   var SCALE = { sm: 0.85, lg: 1.2, xl: 1.5 };
   (function () {
     var st = document.createElement('style');
@@ -79,7 +94,7 @@
   var EDIT = window.parent !== window && location.search.indexOf('cmsedit=1') >= 0;
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = 'cms-editor.js?v=2';
+    s.src = 'cms-editor.js?v=3';
     document.body.appendChild(s);
   }
   var scaled = [];
@@ -218,7 +233,10 @@
         if (page.charAt(0) === '_' || page === 'hidden' || !section || typeof section !== 'object') return;
         Object.keys(section).forEach(function (key) {
           setText('[data-cms="pages.' + page + '.' + key + '"]', section[key]);
-          if (typeof section[key] === 'string') setRich('[data-cms-rich="pages.' + page + '.' + key + '"]', section[key]);
+          if (typeof section[key] === 'string') {
+            setRich('[data-cms-rich="pages.' + page + '.' + key + '"]', section[key]);
+            setImg('[data-cms-img="pages.' + page + '.' + key + '"]', section[key]);
+          }
           if (Array.isArray(section[key])) setFaq('[data-cms-faq="pages.' + page + '.' + key + '"]', section[key]);
         });
       });
