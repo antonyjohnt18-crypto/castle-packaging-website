@@ -11,6 +11,36 @@
   function setHTML(selector, value) {
     document.querySelectorAll(selector).forEach(function (el) { el.innerHTML = value; });
   }
+  // Rich text from the ERP (bold, italic, links, line breaks, bullets only). Everything else is removed here too.
+  var RICH_OK = { STRONG: 1, EM: 1, BR: 1, UL: 1, OL: 1, LI: 1, A: 1 };
+  function hrefOk(h) {
+    h = String(h || '').trim().toLowerCase();
+    if (!h) return false;
+    if (h.indexOf('http://') === 0 || h.indexOf('https://') === 0 || h.indexOf('mailto:') === 0 || h.indexOf('tel:') === 0 || h.charAt(0) === '#') return true;
+    return h.indexOf(':') < 0 && h.indexOf('//') !== 0;
+  }
+  function cleanRich(html) {
+    var tpl = document.createElement('template');
+    tpl.innerHTML = String(html || '');
+    (function walk(n) {
+      Array.prototype.slice.call(n.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) return;
+        if (c.nodeType !== 1) { n.removeChild(c); return; }
+        walk(c);
+        if (!RICH_OK[c.tagName]) { while (c.firstChild) n.insertBefore(c.firstChild, c); n.removeChild(c); return; }
+        Array.prototype.slice.call(c.attributes).forEach(function (a) { if (!(c.tagName === 'A' && a.name === 'href')) c.removeAttribute(a.name); });
+        if (c.tagName === 'A') {
+          if (!hrefOk(c.getAttribute('href'))) c.removeAttribute('href');
+          else if (/^https?:/i.test(c.getAttribute('href'))) { c.setAttribute('target', '_blank'); c.setAttribute('rel', 'noopener'); }
+        }
+      });
+    })(tpl.content);
+    return tpl.innerHTML;
+  }
+  function setRich(selector, value) {
+    var clean = cleanRich(value);
+    document.querySelectorAll(selector).forEach(function (el) { el.innerHTML = clean; });
+  }
   function setHref(selector, value) {
     document.querySelectorAll(selector).forEach(function (el) { el.setAttribute('href', value); });
   }
@@ -103,6 +133,7 @@
         if (page.charAt(0) === '_' || page === 'hidden' || !section || typeof section !== 'object') return;
         Object.keys(section).forEach(function (key) {
           setText('[data-cms="pages.' + page + '.' + key + '"]', section[key]);
+          setRich('[data-cms-rich="pages.' + page + '.' + key + '"]', section[key]);
         });
       });
       applyVisibility(p.hidden || {});
