@@ -136,6 +136,20 @@
     footer.parentNode.insertBefore(s, footer);
     document.title = 'Coming soon | Castle Packaging';
   }
+  function addShop(hidden) {
+    if (hidden.shop === true) return;
+    fetch('shop.html', { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+      if (!r.ok) return;
+      document.querySelectorAll('nav a[href="products.html"], footer a[href="products.html"]').forEach(function (a) {
+        if (a.parentNode.querySelector('a[href="shop.html"]')) return;
+        var s = document.createElement('a');
+        s.href = 'shop.html';
+        s.textContent = 'Shop';
+        a.insertAdjacentElement('afterend', s);
+      });
+    }).catch(function () { /* no shop page */ });
+  }
+
   function applyVisibility(hidden) {
     var slugs = Object.keys(hidden).filter(function (k) { return hidden[k] === true && k !== 'home'; });
     if (!slugs.length) return;
@@ -210,6 +224,7 @@
       });
       applyStyles(p._styles);
       applyVisibility(p.hidden || {});
+      addShop(p.hidden || {});
     })
     .catch(function () { /* keep static fallback content */ });
 
