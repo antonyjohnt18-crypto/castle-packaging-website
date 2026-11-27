@@ -41,6 +41,26 @@
     var clean = cleanRich(value);
     document.querySelectorAll(selector).forEach(function (el) { el.innerHTML = clean; });
   }
+  // A list of questions and answers from the ERP: [{ q: 'text', a: 'rich text' }].
+  function setFaq(selector, items) {
+    if (!Array.isArray(items) || !items.length) return;
+    document.querySelectorAll(selector).forEach(function (el) {
+      el.innerHTML = '';
+      items.forEach(function (it) {
+        if (!it || typeof it.q !== 'string') return;
+        var d = document.createElement('div');
+        d.style.marginBottom = '28px';
+        var h = document.createElement('h3');
+        h.style.cssText = 'font-size:20px;margin:0 0 8px;';
+        h.textContent = it.q;
+        var p = document.createElement('p');
+        p.innerHTML = cleanRich(it.a);
+        d.appendChild(h);
+        d.appendChild(p);
+        el.appendChild(d);
+      });
+    });
+  }
   function setHref(selector, value) {
     document.querySelectorAll(selector).forEach(function (el) { el.setAttribute('href', value); });
   }
@@ -133,7 +153,8 @@
         if (page.charAt(0) === '_' || page === 'hidden' || !section || typeof section !== 'object') return;
         Object.keys(section).forEach(function (key) {
           setText('[data-cms="pages.' + page + '.' + key + '"]', section[key]);
-          setRich('[data-cms-rich="pages.' + page + '.' + key + '"]', section[key]);
+          if (typeof section[key] === 'string') setRich('[data-cms-rich="pages.' + page + '.' + key + '"]', section[key]);
+          if (Array.isArray(section[key])) setFaq('[data-cms-faq="pages.' + page + '.' + key + '"]', section[key]);
         });
       });
       applyVisibility(p.hidden || {});
