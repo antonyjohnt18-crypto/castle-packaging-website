@@ -65,6 +65,7 @@
 
   function run(m) {
     var c = m.cmd;
+    if (c === 'insertImage' || c === 'setImage' || c === 'hideImage' || c === 'showImage') { imgCmd(m); return; }
     if (c === 'undo' || c === 'redo') {
       if (lastEl) { lastEl.focus(); document.execCommand(c, false, null); report(lastEl); }
       return;
@@ -89,6 +90,45 @@
     });
   });
 
+  var imgs = [].slice.call(document.querySelectorAll('img[data-cms-img^="pages."]'));
+  var selImg = null;
+  function imgKey(el) { return (el.getAttribute('data-cms-img') || '').split('.').slice(2).join('.'); }
+  function imgVal(el) {
+    var o = { s: el.getAttribute('src') || '', a: el.getAttribute('alt') || '' };
+    if (el.getAttribute('data-cms-hid') === '1') o.h = true;
+    return JSON.stringify(o);
+  }
+  function imgMark(el, hid) {
+    if (hid) { el.setAttribute('data-cms-hid', '1'); el.style.opacity = '.3'; el.style.outline = '3px dashed #c0392b'; }
+    else { el.removeAttribute('data-cms-hid'); el.style.opacity = ''; el.style.outline = ''; }
+  }
+  function imgInfo(el) { send({ type: 'image', key: imgKey(el), src: el.getAttribute('src') || '', alt: el.getAttribute('alt') || '', hidden: el.getAttribute('data-cms-hid') === '1' }); }
+  function imgPick(el) {
+    imgs.forEach(function (x) { if (x.getAttribute('data-cms-hid') !== '1') x.style.outline = ''; });
+    selImg = el;
+    if (el.getAttribute('data-cms-hid') !== '1') el.style.outline = '3px solid #A67C26';
+    imgInfo(el);
+  }
+  imgs.forEach(function (el) { el.style.cursor = 'pointer'; });
+  function imgByKey(k) { return imgs.filter(function (x) { return imgKey(x) === k; })[0]; }
+  function imgCmd(m) {
+    if (m.cmd === 'insertImage') {
+      if (!restore()) { send({ type: 'notice', text: 'Click inside a text on the page where the photo should go, then insert it.' }); return; }
+      var a = String(m.alt || '').split('"').join('&quot;').split('<').join('&lt;');
+      document.execCommand('insertHTML', false, '<img class="cms-img" src="' + m.src + '" alt="' + a + '">');
+      report(lastEl);
+      return;
+    }
+    var el = imgByKey(m.key);
+    if (!el) return;
+    if (m.cmd === 'setImage') {
+      if (m.src) { el.removeAttribute('srcset'); el.setAttribute('src', m.src); }
+      if (typeof m.alt === 'string') el.setAttribute('alt', m.alt);
+    } else if (m.cmd === 'hideImage') imgMark(el, true);
+    else if (m.cmd === 'showImage') imgMark(el, false);
+    send({ type: 'imgchange', key: m.key, value: imgVal(el) });
+    imgPick(el);
+  }
   var faqBox = document.querySelector('[data-cms-faq^="pages."]');
   function faqKey() { return (faqBox.getAttribute('data-cms-faq') || '').split('.').slice(2).join('.'); }
   function faqItems() {
@@ -168,7 +208,11 @@
     wrap.appendChild(add);
     faqBox.appendChild(wrap);
   }
-  document.addEventListener('click', function (ev) { if (ev.target.closest && ev.target.closest('a')) ev.preventDefault(); }, true);
+  document.addEventListener('click', function (ev) {
+    if (ev.target.closest && ev.target.closest('a')) ev.preventDefault();
+    var im = ev.target.closest && ev.target.closest('img[data-cms-img]');
+    if (im) imgPick(im);
+  }, true);
   document.addEventListener('submit', function (ev) { ev.preventDefault(); }, true);
   document.addEventListener('selectionchange', function () {
     var s = window.getSelection();
@@ -186,9 +230,19 @@
         var v = m.values && m.values[keyOf(el)];
         if (typeof v === 'string') el.innerHTML = v;
       });
+      imgs.forEach(function (el) {
+        var iv = m.values && m.values[imgKey(el)];
+        if (typeof iv !== 'string') return;
+        try {
+          var o = JSON.parse(iv);
+          if (o.s) el.setAttribute('src', o.s);
+          if (typeof o.a === 'string') el.setAttribute('alt', o.a);
+          imgMark(el, !!o.h);
+        } catch (e) { /* keep the page photo */ }
+      });
       if (faqBox) { var fv = m.values && m.values[faqKey()]; if (Array.isArray(fv) && fv.length) faqRender(fv); }
     } else if (m.type === 'cmd') run(m);
   });
 
-  send({ type: 'ready', keys: fields.map(keyOf) });
+  send({ type: 'ready', keys: fields.map(keyOf).concat(imgs.map(imgKey)) });
 })();
