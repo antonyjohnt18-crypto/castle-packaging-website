@@ -252,3 +252,10 @@ data-pages.json can have a top-level _styles = { page: { key: { size: sm|lg|xl, 
 - Look presets are span classes whitelisted in cleanRich: cms-c-gold|ink|muted (colour), cms-f-serif|sans (font), cms-s-sm|lg|xl (size). Add new classes in cms-loader.js, cms-editor.js and the ERP server cleanHtml together.
 - Home markers are all data-cms-rich (15). To make another page visually editable: switch its markers to data-cms-rich and flag the page visual:true in the ERP server.
 - Verified on sandbox: iframe loads, edit and colour apply, autosave to draft, discard. Real publish still to be tested.
+
+## All pages editable + E-commerce page (27 Nov 2026, sandbox)
+- Every page except FAQ now has data-cms-rich markers on its headings, paragraphs and list items (keys come from the first words of the text, e.g. pages.about.ourStory). Footer, forms, tables and dynamic blocks (size chart, product and news grids) are intentionally not marked. Never put a marker on an element whose content JavaScript rebuilds (e.g. inside #szGrid or #shopGrid): the edit would never show.
+- When you add a new text element to a page, add a data-cms-rich marker AND the matching R(...) entry in the ERP server FIELDS list, or it will not be editable.
+- FAQ questions are still edited with the form (visual list editing is next).
+- shop.html is the E-commerce page. It is hidden by default (data-pages.json hidden.shop = true). cms-loader.js adds a Shop link after Products in the menu and footer only when the page is not hidden and shop.html exists. Add shop.html to sitemap.xml when it goes live (the ERP only removes entries for hidden pages, it never adds them). Terms currently say online checkout is not available: review the Terms and the page wording before showing it.
+- On promotion to main: check hidden.shop is true in data-pages.json, and add the production ERP origin to cms-editor.js ALLOWED.
