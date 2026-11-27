@@ -94,7 +94,7 @@
   var EDIT = window.parent !== window && location.search.indexOf('cmsedit=1') >= 0;
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = 'cms-editor.js?v=3';
+    s.src = 'cms-editor.js?v=4';
     document.body.appendChild(s);
   }
   var scaled = [];
