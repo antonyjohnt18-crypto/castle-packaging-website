@@ -66,27 +66,135 @@
   </div>
 </div>
 
+<style>
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+.shop-card{border:1px solid rgba(0,0,0,.12);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.shop-card img{width:100%;height:190px;object-fit:cover;background:#f3efe6}
+.shop-card .b{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1}
+.shop-card h3{margin:0;font-size:17px}
+.shop-card .d{color:var(--muted);font-size:13.5px;margin:0}
+.shop-price{font-weight:700;font-size:18px}
+.shop-price s{font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
+.shop-note{font-size:12px;color:var(--muted)}
+.shop-buy{display:flex;gap:8px;margin-top:auto;align-items:center}
+.shop-buy input{width:74px;padding:8px;border:1px solid #bbb;border-radius:8px}
+.shop-panel{max-width:860px;margin:0 auto;border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:20px;background:#fff}
+.shop-panel table{width:100%;border-collapse:collapse;font-size:14.5px}
+.shop-panel td,.shop-panel th{padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.1);text-align:left;vertical-align:middle}
+.shop-panel td.n,.shop-panel th.n{text-align:right}
+.shop-panel .q{width:70px;padding:6px;border:1px solid #bbb;border-radius:8px}
+.shop-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.shop-form label{display:flex;flex-direction:column;font-size:13px;gap:4px}
+.shop-form input,.shop-form textarea{padding:10px;border:1px solid #bbb;border-radius:8px;font:inherit}
+.shop-form .full{grid-column:1/-1}
+.shop-err{color:#b3261e;font-size:14px;margin-top:10px}
+.shop-total{font-size:17px}
+.shop-hp{position:absolute;left:-9999px}
+#shopQr{display:flex;justify-content:center;margin:14px 0}
+@media(max-width:640px){.shop-form{grid-template-columns:1fr}}
+</style>
 <section id="shop">
   <div class="container">
-    <div class="sec-head"><span class="tag">Ready stock</span><h2 data-cms-rich="pages.shop.chooseASize">Choose a size</h2><p data-cms-rich="pages.shop.allSizesIn">All sizes in cm — W = width, H = height, G = gusset. Availability is shown next to each size.</p></div>
-    <div class="sz-grid" id="shopGrid"><p>Loading ready-stock sizes&hellip;</p></div>
-    <div class="row"><a class="btn btn-primary" href="quote.html">Send a request <svg class="arrow" aria-hidden="true"><use href="#arr"/></svg></a></div>
+    <div class="sec-head"><span class="tag">Online shop</span><h2 data-cms-rich="pages.shop.chooseASize">Choose your items</h2><p data-cms-rich="pages.shop.allSizesIn">Prices are before GST. GST is added at checkout.</p></div>
+    <div class="shop-grid" id="shopGrid"><p>Loading the shop&hellip;</p></div>
   </div>
 </section>
+<section class="alt" id="cartSec" style="display:none">
+  <div class="container">
+    <div class="shop-panel" id="stepCart">
+      <h2 style="margin-top:0;">Your order</h2>
+      <table id="cartTable"></table>
+      <p class="shop-total" id="cartTotals"></p>
+      <div class="shop-form" id="shopForm">
+        <label>Your name *<input id="cName" maxlength="80" autocomplete="name"></label>
+        <label>Mobile number *<input id="cPhone" maxlength="15" inputmode="tel" autocomplete="tel"></label>
+        <label>Email<input id="cEmail" maxlength="120" autocomplete="email"></label>
+        <label>Company (optional)<input id="cCompany" maxlength="100"></label>
+        <label class="full">GST number (optional, for a GST invoice)<input id="cGstin" maxlength="15"></label>
+        <div class="full"><b style="font-size:13px;">How will you receive the order?</b><br>
+          <label style="flex-direction:row;gap:8px;align-items:center;margin-top:6px;"><input type="radio" name="ful" value="pickup" checked> I will collect it from Castle Packaging, Bengaluru</label>
+          <label style="flex-direction:row;gap:8px;align-items:center;margin-top:6px;"><input type="radio" name="ful" value="own_courier"> My own courier or transport will collect it</label>
+        </div>
+        <label class="full" id="addrWrap" style="display:none">Address for your courier or transport *<textarea id="cAddress" rows="2" maxlength="300"></textarea></label>
+        <label class="full">Note (optional)<textarea id="cNote" rows="2" maxlength="300"></textarea></label>
+        <input class="shop-hp" id="cWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">
+      </div>
+      <p class="shop-err" id="shopErr"></p>
+      <button class="btn btn-primary" id="placeBtn" type="button">Place order and pay by UPI</button>
+    </div>
+    <div class="shop-panel" id="stepPay" style="display:none">
+      <h2 style="margin-top:0;">Pay by UPI</h2>
+      <p>Order <b id="pOrderNo"></b>. Amount to pay: <b id="pAmount"></b></p>
+      <p>Pay to <b id="pUpi"></b> (<span id="pPayee"></span>). On a phone, tap the button. On a computer, scan the QR code with any UPI app.</p>
+      <p><a class="btn btn-dark" id="pLink" href="#">Pay with my UPI app</a></p>
+      <div id="shopQr"></div>
+      <p>After paying, enter the UPI reference number (UTR) from your payment app so we can match your payment.</p>
+      <div class="shop-form"><label class="full">UPI reference number *<input id="pUtr" maxlength="40"></label></div>
+      <p class="shop-err" id="payErr"></p>
+      <button class="btn btn-primary" id="paidBtn" type="button">I have paid</button>
+    </div>
+    <div class="shop-panel" id="stepDone" style="display:none">
+      <h2 style="margin-top:0;">Thank you</h2>
+      <p>We have your order <b id="dOrderNo"></b> and payment reference. We will check the payment and contact you on your mobile number to confirm. Please keep your order number.</p>
+      <p><a class="btn btn-dark" href="shop.html">Back to the shop</a></p>
+    </div>
+  </div>
+</section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-(function(){var g=document.getElementById('shopGrid');if(!g)return;
- function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');}
- fetch('data-stock.json',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(d){
-  if(!d||!d.groups||!d.groups.length){g.innerHTML='<p>Ready-stock sizes will appear here soon.</p>';return;}
-  g.innerHTML=d.groups.map(function(grp){
-   var rows=grp.items.map(function(i){
-    var dim='W '+i.w+' × H '+i.h+(i.g?' × G '+i.g:'');
-    var st=i.status==='out_of_stock'?'Out of stock':(i.status==='limited'?'Limited':'Available');
-    return '<tr'+(i.status==='out_of_stock'?' class="oos"':'')+'><td>'+(i.name?esc(i.name)+' &middot; ':'')+dim+'</td><td><small class="st">'+st+'</small></td></tr>';
-   }).join('');
-   return '<div class="sz"><h3>'+esc(grp.title)+'</h3><p class="sub">'+esc(grp.sub)+'</p><table><tbody>'+rows+'</tbody></table><div class="row"><a class="btn btn-dark" href="quote.html">Request this</a></div></div>';
+(function(){
+ var grid=document.getElementById('shopGrid');if(!grid)return;
+ var items=[],cart={},order=null;
+ function $(id){return document.getElementById(id);}
+ function api(){return (window.CPChatConfig&&window.CPChatConfig.apiBaseUrl)||'';}
+ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+ function inr(n){return '₹'+Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});}
+ function load(){try{cart=JSON.parse(localStorage.getItem('cpCart')||'{}')||{};}catch(e){cart={};}}
+ function save(){try{localStorage.setItem('cpCart',JSON.stringify(cart));}catch(e){}}
+ function byId(id){for(var i=0;i<items.length;i++)if(items[i].id===id)return items[i];return null;}
+ function post(path,body){return fetch(api()+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().catch(function(){return {};}).then(function(j){if(!r.ok)throw new Error(j.error||'Something went wrong. Please try again.');return j;});});}
+ function renderGrid(){
+  if(!items.length){grid.innerHTML='<p>Our online shop is opening soon. In the meantime, please <a href="quote.html">send us a request</a>.</p>';return;}
+  grid.innerHTML=items.map(function(i){
+   var img=i.image?'<img src="'+esc(i.image)+'" alt="'+esc(i.name)+'" loading="lazy">':'<img alt="" src="logo-square.png">';
+   return '<div class="shop-card">'+img+'<div class="b"><h3>'+esc(i.name)+'</h3><p class="d">'+esc(i.short)+'</p><div class="shop-price">'+inr(i.price)+(i.was?'<s>'+inr(i.was)+'</s>':'')+'</div><div class="shop-note">'+(i.unit?'per '+esc(i.unit)+' &middot; ':'')+'plus '+i.gstRate+'% GST</div>'+(i.available?'<div class="shop-buy"><input type="number" min="1" max="10000" value="1" aria-label="Quantity" id="q_'+esc(i.id)+'"><button class="btn btn-dark" type="button" data-add="'+esc(i.id)+'">Add to order</button></div>':'<div class="shop-note"><b>Out of stock</b></div>')+'</div></div>';
   }).join('');
- }).catch(function(){g.innerHTML='<p>Ready-stock sizes could not be loaded. Please <a href="quote.html">send a request</a>.</p>';});
+  grid.querySelectorAll('[data-add]').forEach(function(b){b.addEventListener('click',function(){var id=b.getAttribute('data-add');var q=Math.floor(Number($('q_'+id).value));if(!(q>=1))q=1;cart[id]=Math.min(10000,(cart[id]||0)+q);save();renderCart();$('cartSec').scrollIntoView({behavior:'smooth'});});});
+ }
+ function totals(){var net=0,gst=0;Object.keys(cart).forEach(function(id){var i=byId(id);if(!i)return;var n=Math.round(i.price*cart[id]*100)/100;net+=n;gst+=Math.round(n*i.gstRate)/100;});return {net:net,gst:gst,total:net+gst};}
+ function renderCart(){
+  Object.keys(cart).forEach(function(id){if(!byId(id)||!(cart[id]>0))delete cart[id];});
+  var ids=Object.keys(cart);var sec=$('cartSec');
+  if(!ids.length){if($('stepCart').style.display!=='none')sec.style.display='none';return;}
+  sec.style.display='';
+  var rows='<tr><th>Item</th><th class="n">Price</th><th>Qty</th><th class="n">Amount</th><th></th></tr>';
+  ids.forEach(function(id){var i=byId(id);rows+='<tr><td>'+esc(i.name)+'</td><td class="n">'+inr(i.price)+'</td><td><input class="q" type="number" min="1" max="10000" value="'+cart[id]+'" data-q="'+esc(id)+'"></td><td class="n">'+inr(i.price*cart[id])+'</td><td><button type="button" class="btn btn-outline" data-rm="'+esc(id)+'" aria-label="Remove">Remove</button></td></tr>';});
+  $('cartTable').innerHTML=rows;
+  var t=totals();$('cartTotals').innerHTML='Subtotal '+inr(t.net)+' &middot; GST '+inr(t.gst)+' &middot; <b>Total '+inr(t.total)+'</b>';
+  $('cartTable').querySelectorAll('[data-q]').forEach(function(x){x.addEventListener('change',function(){var q=Math.floor(Number(x.value));if(q>=1){cart[x.getAttribute('data-q')]=Math.min(10000,q);}save();renderCart();});});
+  $('cartTable').querySelectorAll('[data-rm]').forEach(function(x){x.addEventListener('click',function(){delete cart[x.getAttribute('data-rm')];save();renderCart();});});
+ }
+ document.querySelectorAll('input[name=ful]').forEach(function(r){r.addEventListener('change',function(){$('addrWrap').style.display=document.querySelector('input[name=ful]:checked').value==='own_courier'?'':'none';});});
+ $('placeBtn').addEventListener('click',function(){
+  $('shopErr').textContent='';var btn=$('placeBtn');
+  var list=Object.keys(cart).map(function(id){return {id:id,qty:cart[id]};});
+  btn.disabled=true;btn.textContent='Placing your order...';
+  post('/shop/order',{items:list,fulfilment:document.querySelector('input[name=ful]:checked').value,note:$('cNote').value,website:$('cWebsite').value,customer:{name:$('cName').value,phone:$('cPhone').value,email:$('cEmail').value,company:$('cCompany').value,gstin:$('cGstin').value,address:$('cAddress').value}})
+  .then(function(r){order=r;cart={};save();$('stepCart').style.display='none';$('stepPay').style.display='';
+   $('pOrderNo').textContent=r.orderNo;$('pAmount').textContent=inr(r.total);$('pUpi').textContent=r.upi.id;$('pPayee').textContent=r.upi.payee;$('pLink').href=r.upi.link;
+   $('shopQr').innerHTML='';try{new QRCode($('shopQr'),{text:r.upi.link,width:200,height:200});}catch(e){}
+   $('cartSec').scrollIntoView({behavior:'smooth'});})
+  .catch(function(e){$('shopErr').textContent=e.message;btn.disabled=false;btn.textContent='Place order and pay by UPI';});
+ });
+ $('paidBtn').addEventListener('click',function(){
+  $('payErr').textContent='';var btn=$('paidBtn');btn.disabled=true;
+  post('/shop/pay',{orderId:order.orderId,token:order.token,utr:$('pUtr').value})
+  .then(function(r){$('stepPay').style.display='none';$('stepDone').style.display='';$('dOrderNo').textContent=r.orderNo;})
+  .catch(function(e){$('payErr').textContent=e.message;btn.disabled=false;});
+ });
+ function boot(){load();
+ fetch(api()+'/shop/catalog').then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error);return j;});}).then(function(j){items=j.items||[];renderGrid();renderCart();}).catch(function(){grid.innerHTML='<p>The shop could not be loaded. Please <a href="quote.html">send us a request</a>.</p>';});}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();
 </script>
 
@@ -94,10 +202,10 @@
   <div class="container">
     <div class="sec-head"><span class="tag">How it works</span><h2 data-cms-rich="pages.shop.fourSimpleSteps">Four simple steps</h2></div>
     <div class="grid grid-2" style="max-width:900px;">
-      <div class="card"><h3 data-cms-rich="pages.shop.t1ChooseA" style="margin-top:0;">1. Choose a size</h3><p data-cms-rich="pages.shop.pickThePaper">Pick the paper bag or cover size you need from the list above.</p></div>
-      <div class="card"><h3 data-cms-rich="pages.shop.t2SendA" style="margin-top:0;">2. Send a request</h3><p data-cms-rich="pages.shop.tellUsThe">Tell us the quantity and date. We reply with price and availability.</p></div>
-      <div class="card"><h3 data-cms-rich="pages.shop.t3PayThe" style="margin-top:0;">3. Pay the advance</h3><p data-cms-rich="pages.shop.workStartsAfter">Work starts after a 50% advance payment by UPI. The balance is as confirmed in your quote.</p></div>
-      <div class="card"><h3 data-cms-rich="pages.shop.t4CollectOr" style="margin-top:0;">4. Collect or arrange delivery</h3><p data-cms-rich="pages.shop.deliveryIsHandled">Delivery is handled by you. We pack your order and have it ready on the agreed date.</p></div>
+      <div class="card"><h3 data-cms-rich="pages.shop.t1ChooseA" style="margin-top:0;">1. Choose a size</h3><p data-cms-rich="pages.shop.pickThePaper">Pick the items you need and add them to your order.</p></div>
+      <div class="card"><h3 data-cms-rich="pages.shop.t2SendA" style="margin-top:0;">2. Enter your details</h3><p data-cms-rich="pages.shop.tellUsThe">Enter your details and choose how you will receive the order. GST is added at checkout.</p></div>
+      <div class="card"><h3 data-cms-rich="pages.shop.t3PayThe" style="margin-top:0;">3. Pay by UPI</h3><p data-cms-rich="pages.shop.workStartsAfter">Pay by UPI app or QR code and enter the UPI reference. We check the payment and confirm your order.</p></div>
+      <div class="card"><h3 data-cms-rich="pages.shop.t4CollectOr" style="margin-top:0;">4. Collect your order</h3><p data-cms-rich="pages.shop.deliveryIsHandled">Collect it from us, or send your own courier or transport. We pack your order and keep it ready.</p></div>
     </div>
   </div>
 </section>
