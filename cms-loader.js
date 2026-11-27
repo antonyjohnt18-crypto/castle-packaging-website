@@ -12,7 +12,8 @@
     document.querySelectorAll(selector).forEach(function (el) { el.innerHTML = value; });
   }
   // Rich text from the ERP (bold, italic, links, line breaks, bullets only). Everything else is removed here too.
-  var RICH_OK = { STRONG: 1, EM: 1, BR: 1, UL: 1, OL: 1, LI: 1, A: 1 };
+  var RICH_OK = { STRONG: 1, EM: 1, BR: 1, UL: 1, OL: 1, LI: 1, A: 1, SPAN: 1 };
+  var SPAN_CLASSES = ['cms-c-gold', 'cms-c-ink', 'cms-c-muted', 'cms-f-serif', 'cms-f-sans', 'cms-s-sm', 'cms-s-lg', 'cms-s-xl'];
   function hrefOk(h) {
     h = String(h || '').trim().toLowerCase();
     if (!h) return false;
@@ -28,7 +29,12 @@
         if (c.nodeType !== 1) { n.removeChild(c); return; }
         walk(c);
         if (!RICH_OK[c.tagName]) { while (c.firstChild) n.insertBefore(c.firstChild, c); n.removeChild(c); return; }
-        Array.prototype.slice.call(c.attributes).forEach(function (a) { if (!(c.tagName === 'A' && a.name === 'href')) c.removeAttribute(a.name); });
+        Array.prototype.slice.call(c.attributes).forEach(function (a) { if (!(c.tagName === 'A' && a.name === 'href') && !(c.tagName === 'SPAN' && a.name === 'class')) c.removeAttribute(a.name); });
+        if (c.tagName === 'SPAN') {
+          var keep = (c.getAttribute('class') || '').split(' ').filter(function (x) { return SPAN_CLASSES.indexOf(x) >= 0; });
+          if (keep.length) c.setAttribute('class', keep.join(' '));
+          else { while (c.firstChild) n.insertBefore(c.firstChild, c); n.removeChild(c); return; }
+        }
         if (c.tagName === 'A') {
           if (!hrefOk(c.getAttribute('href'))) c.removeAttribute('href');
           else if (/^https?:/i.test(c.getAttribute('href'))) { c.setAttribute('target', '_blank'); c.setAttribute('rel', 'noopener'); }
@@ -64,6 +70,18 @@
   // Look presets chosen in the ERP (size, colour, font) for text fields: p._styles = { page: { key: { size, color, font } } }.
   var ST_CSS = '.cms-c-gold{color:var(--gold)!important}.cms-c-ink{color:var(--ink)!important}.cms-c-muted{color:var(--muted)!important}.cms-f-serif{font-family:var(--serif)!important}.cms-f-sans{font-family:var(--sans)!important}';
   var SCALE = { sm: 0.85, lg: 1.2, xl: 1.5 };
+  (function () {
+    var st = document.createElement('style');
+    st.textContent = ST_CSS + '.cms-s-sm{font-size:.85em}.cms-s-lg{font-size:1.2em}.cms-s-xl{font-size:1.5em}';
+    document.head.appendChild(st);
+  })();
+  // Edit mode: the ERP (Website Control) opens this page in a frame with ?cmsedit=1 and edits text in place.
+  var EDIT = window.parent !== window && location.search.indexOf('cmsedit=1') >= 0;
+  function loadEditor() {
+    var s = document.createElement('script');
+    s.src = 'cms-editor.js?v=1';
+    document.body.appendChild(s);
+  }
   var scaled = [];
   function rescale() {
     scaled.forEach(function (it) {
@@ -179,6 +197,7 @@
   fetch('data-pages.json', { cache: 'no-store' })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (p) {
+      if (EDIT) { loadEditor(); return; }
       if (!p) return;
       Object.keys(p).forEach(function (page) {
         var section = p[page];
