@@ -219,3 +219,8 @@ Hidden pages: cms-loader.js removes links to hidden pages, adds noindex,nofollow
 Content rules still apply to anything typed in the ERP (publish is blocked by a rules check): no single-pass/one-pass, 42 cm, print head, ink type, item height limit, 60-140 gsm, cups or prices; "recycled" only for brown kraft, white is virgin.
 
 Production (main) must not be touched or promoted without explicit approval. Next session: wire Home and FAQ first.
+
+
+## Browser tab rule (applies to every session)
+
+Keep ONE browser tab per website and always reuse that same tab for that website. Never open a different website in a tab that belongs to another site, and never load all sites into one tab. Standard tabs: (1) website sandbox https://castle-packaging-website-sandbox-o67at.ondigitalocean.app, (2) ERP sandbox https://erp-castlepkg-sandbox-7bgs8.ondigitalocean.app, (3) GitHub repo castle-packaging-website (this repo), (4) GitHub repo castle-packagingerp-website (ERP), and a DigitalOcean tab when deploys need checking. At the start of a session open each one in its own tab. Open the tabs one at a time (parallel preview_start calls reuse the same tab and overwrite each other), then check with tabs_context that each tab shows the right site.
